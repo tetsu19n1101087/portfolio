@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, ExternalLink } from 'lucide-react';
+import { Code, ExternalLink } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -59,7 +59,7 @@ export default function WorksPage() {
                       </Link>
                       <Link href={project.codeLink}>
                         <Button size='sm' variant='outline' className='gap-1'>
-                          <Github className='h-4 w-4' />
+                          <Code className='h-4 w-4' />
                           コード
                         </Button>
                       </Link>
