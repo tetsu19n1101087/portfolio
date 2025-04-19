@@ -41,7 +41,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 <Image
                   src={work.image || '/placeholder.svg'}
                   alt={work.title}
-                  className='object-cover object-top'
+                  className='object-cover object-top brightness-99'
                   fill
                   priority
                 />

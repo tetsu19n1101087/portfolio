@@ -58,26 +58,30 @@ export default function WorksPage() {
                       ))}
                     </div>
                     <div className='flex gap-4 mt-4'>
-                      <Link
-                        href={project.demoLink}
-                        rel='noopener noreferrer'
-                        target='_blank'
-                      >
-                        <Button size='sm' variant='outline' className='gap-1'>
-                          <ExternalLink className='h-4 w-4' />
-                          デモを見る
-                        </Button>
-                      </Link>
-                      <Link
-                        href={project.codeLink}
-                        rel='noopener noreferrer'
-                        target='_blank'
-                      >
-                        <Button size='sm' variant='outline' className='gap-1'>
-                          <Code className='h-4 w-4' />
-                          コード
-                        </Button>
-                      </Link>
+                      {project.demoLink && (
+                        <Link
+                          href={project.demoLink}
+                          rel='noopener noreferrer'
+                          target='_blank'
+                        >
+                          <Button size='sm' variant='outline' className='gap-1'>
+                            <ExternalLink className='h-4 w-4' />
+                            デモを見る
+                          </Button>
+                        </Link>
+                      )}
+                      {project.codeLink && (
+                        <Link
+                          href={project.codeLink}
+                          rel='noopener noreferrer'
+                          target='_blank'
+                        >
+                          <Button size='sm' variant='outline' className='gap-1'>
+                            <Code className='h-4 w-4' />
+                            コード
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
