@@ -11,9 +11,9 @@ export function Footer() {
         <Link className="text-xs hover:underline underline-offset-4" href="/works">
           Works
         </Link>
-        <Link className="text-xs hover:underline underline-offset-4" href="/contact">
+        {/* <Link className="text-xs hover:underline underline-offset-4" href="/contact">
           Contact
-        </Link>
+        </Link> */}
       </nav>
     </footer>
   )
