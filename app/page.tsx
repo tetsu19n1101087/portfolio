@@ -1,4 +1,4 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 // import { Github, Mail, Linkedin } from "lucide-react"
 
@@ -45,14 +45,189 @@ export default function Home() {
                 </div> */}
               </div>
               <div className='flex items-center justify-center mb-8 md:mb-0'>
-                <Image
+                {/* <Image
                   alt='Profile'
                   className='rounded-full object-cover border-4 border-gray-100 dark:border-gray-800'
                   height={400}
                   width={400}
                   src='/placeholder.svg?height=400&width=400'
                   priority
-                />
+                /> */}
+                <div className='w-full max-w-md h-80 relative'>
+                  <svg
+                    className='w-full h-full'
+                    viewBox='0 0 400 400'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    {/* 背景の円 */}
+                    <circle cx='200' cy='200' r='180' fill='#f3f4f6' />
+
+                    {/* デスクトップ */}
+                    <rect
+                      x='100'
+                      y='200'
+                      width='200'
+                      height='120'
+                      rx='4'
+                      fill='#374151'
+                    />
+                    <rect
+                      x='110'
+                      y='210'
+                      width='180'
+                      height='100'
+                      rx='2'
+                      fill='#60a5fa'
+                    />
+
+                    {/* コード表示 (アニメーション) */}
+                    <g className='animate-pulse'>
+                      <rect
+                        x='120'
+                        y='220'
+                        width='100'
+                        height='6'
+                        rx='1'
+                        fill='white'
+                      />
+                      <rect
+                        x='120'
+                        y='235'
+                        width='80'
+                        height='6'
+                        rx='1'
+                        fill='white'
+                      />
+                      <rect
+                        x='120'
+                        y='250'
+                        width='120'
+                        height='6'
+                        rx='1'
+                        fill='white'
+                      />
+                      <rect
+                        x='120'
+                        y='265'
+                        width='60'
+                        height='6'
+                        rx='1'
+                        fill='white'
+                      />
+                      <rect
+                        x='120'
+                        y='280'
+                        width='90'
+                        height='6'
+                        rx='1'
+                        fill='white'
+                      />
+                    </g>
+
+                    {/* デスクトップスタンド */}
+                    <rect
+                      x='180'
+                      y='320'
+                      width='40'
+                      height='10'
+                      rx='2'
+                      fill='#374151'
+                    />
+                    <rect
+                      x='190'
+                      y='330'
+                      width='20'
+                      height='20'
+                      rx='2'
+                      fill='#374151'
+                    />
+
+                    {/* 浮遊する要素 (アニメーション) */}
+                    <g className='animate-bounce'>
+                      <circle
+                        cx='130'
+                        cy='140'
+                        r='20'
+                        fill='#ec4899'
+                        opacity='0.8'
+                      />
+                    </g>
+                    <g
+                      className='animate-bounce'
+                      style={{ animationDelay: '0.5s' }}
+                    >
+                      <circle
+                        cx='270'
+                        cy='140'
+                        r='20'
+                        fill='#8b5cf6'
+                        opacity='0.8'
+                      />
+                    </g>
+                    <g
+                      className='animate-bounce'
+                      style={{ animationDelay: '1s' }}
+                    >
+                      <circle
+                        cx='200'
+                        cy='140'
+                        r='20'
+                        fill='#10b981'
+                        opacity='0.8'
+                      />
+                    </g>
+
+                    {/* 追加の装飾要素 */}
+                    <g
+                      className='animate-pulse'
+                      style={{ animationDelay: '1.5s' }}
+                    >
+                      <path
+                        d='M80 180 L120 180'
+                        stroke='#f59e0b'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                      <path
+                        d='M70 160 L110 160'
+                        stroke='#f59e0b'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                      <path
+                        d='M75 140 L105 140'
+                        stroke='#f59e0b'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                    </g>
+
+                    <g
+                      className='animate-pulse'
+                      style={{ animationDelay: '0.8s' }}
+                    >
+                      <path
+                        d='M280 180 L320 180'
+                        stroke='#3b82f6'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                      <path
+                        d='M290 160 L330 160'
+                        stroke='#3b82f6'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                      <path
+                        d='M295 140 L325 140'
+                        stroke='#3b82f6'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                      />
+                    </g>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
