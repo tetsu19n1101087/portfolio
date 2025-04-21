@@ -16,12 +16,13 @@ const works: Work[] = [
     title: 'NS-TYPING',
     description: '数字・記号専用のタイピング練習ゲーム',
     image: '/ns-typing.png',
-    tags: ['React', 'Next.js', 'TypeScript', 'styled-components', 'MongoDB'],
+    tags: ['React', 'Next.js', 'TypeScript', 'styled-components', 'MongoDB', 'Kubernetes'],
     demoLink: 'https://tetsu19n1101087-game.vercel.app/',
     codeLink: 'https://github.com/tetsu19n1101087/tetsu19n1101087-game',
     date: '2024年10月',
-    longDescription: `プロジェクト1の詳細な説明。
-    ここにはプロジェクトの目的、使用技術、開発プロセスなどを詳しく記載します。例えば、ReactとNext.jsを使用して、レスポンシブなウェブアプリケーションを開発しました。デザインにはTailwind CSSを採用し、ユーザーインターフェースを直感的にしました。`,
+    longDescription: `学習のアウトプットとして、タイピングゲームを制作。
+    ランダムな数字や記号が1文字ずつ表示され、タイピングの素早さと正確さを測ることができます。結果画面には正解率やミス数などが表示され、過去の結果と比較することができます。
+    Next.jsを使用し、フロントエンドからAPIまでを一貫して開発しました。データベースにはMongoDB Atlasを使用し、ユーザーの結果を保存しています。さらに、コンテナ化されたアプリとして Kubernetes で管理できるよう設計しました。`,
   },
   {
     id: '2',
@@ -32,19 +33,24 @@ const works: Work[] = [
     demoLink: 'https://tetsu19n1101087.github.io/escape-game/',
     codeLink: 'https://github.com/tetsu19n1101087/escape-game',
     date: '2021年9月',
-    longDescription: `オンライン脱出ゲームの制作。HTML、JavaScript、Bootstrapを使用して、ユーザーが謎を解きながらストーリーを進める形式のゲームを作成しました。ゲームのデザインやストーリー展開にも力を入れ、プレイヤーが楽しめるような工夫をしました。`,
+    longDescription: `グループでのオンライン脱出ゲームの制作。
+    ユーザーが謎を解きながらストーリーを進める形式のオンライン脱出ゲームを作成しました。小学校高学年の生徒が複数人で遊ぶことを想定し、ゲームのデザインやストーリー展開を工夫しました。
+    担当範囲：コーディング
+    チーム人数：4人
+    制作期間：1ヶ月`,
   },
   {
     id: '3',
     title: '予定調整くん',
     description: 'スケジュール調整アプリ',
     image: '/schedule-arranger.png',
-    tags: ['JavaScript', 'Express', 'Bootstrap'],
+    tags: ['JavaScript', 'Express', 'Bootstrap', 'PostgreSQL'],
     demoLink: 'https://schedule-arranger-ch6e.onrender.com/',
     codeLink: 'https://github.com/tetsu19n1101087/schedule-arranger',
     date: '2021年4月',
-    longDescription: `プロジェクト1の詳細な説明。
-    ここにはプロジェクトの目的、使用技術、開発プロセスなどを詳しく記載します。例えば、ReactとNext.jsを使用して、レスポンシブなウェブアプリケーションを開発しました。デザインにはTailwind CSSを採用し、ユーザーインターフェースを直感的にしました。`,
+    longDescription: `学習のアウトプットとして、スケジュール調整アプリを制作。
+    GitHubのアカウントでログインでき、予定を作成することができます。作成した予定はリンクを使って他のユーザーと共有することができ、ユーザーは出欠を登録したり、コメントを残したりすることができます。
+    サーバーサイドにExpressを使用し、見た目はBootstrapで整えました。データベースはPostgreSQLを使用しました。また、AJAXを使用することで、出欠の登録をページを読み込まずに即座に反映できるよう工夫しました。`,
   },
 ];
 
