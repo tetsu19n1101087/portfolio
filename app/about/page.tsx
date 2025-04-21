@@ -110,7 +110,7 @@ export default function AboutPage() {
               <div className='space-y-2'>
                 <h3 className='text-xl font-bold'>インフラ</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  AWS / Firebase / Kubernetes / Vercel
+                  AWS / Firebase / Vercel
                 </p>
               </div>
 
@@ -125,7 +125,7 @@ export default function AboutPage() {
               <div className='space-y-2'>
                 <h3 className='text-xl font-bold'>その他ツール</h3>
                 <p className='text-gray-700 dark:text-gray-300'>
-                  VSCode / Git / Docker
+                  VSCode / Git / Docker / Kubernetes
                 </p>
               </div>
             </div>
