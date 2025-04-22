@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { Github, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
+import { GitHubIcon } from '@/components/github-icon';
 
 export default function AboutPage() {
   return (
@@ -148,10 +149,9 @@ export default function AboutPage() {
                 rel='noopener noreferrer'
                 className='flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-md transition-shadow'
               >
-                <Github className='h-8 w-8 mb-3' />
+                <GitHubIcon className='h-8 w-8 mb-3' size={32} />
                 <h3 className='font-medium'>GitHub</h3>
-                <p className='text-sm text-gray-500'>@tetsu19n1101087
-                </p>
+                <p className='text-sm text-gray-500'>@tetsu19n1101087</p>
               </a>
 
               <a
@@ -160,7 +160,9 @@ export default function AboutPage() {
               >
                 <Mail className='h-8 w-8 mb-3' />
                 <h3 className='font-medium'>メール</h3>
-                <p className='text-sm text-gray-500'>22l1073z@student.gs.chiba-u.jp</p>
+                <p className='text-sm text-gray-500'>
+                  22l1073z@student.gs.chiba-u.jp
+                </p>
               </a>
             </div>
           </div>
