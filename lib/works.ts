@@ -15,7 +15,7 @@ const works: Work[] = [
     id: '1',
     title: 'NS-TYPING',
     description: '数字・記号専用のタイピング練習ゲーム',
-    image: '/ns-typing.png',
+    image: '/ns-typing-mock.png',
     tags: ['React', 'Next.js', 'TypeScript', 'styled-components', 'MongoDB', 'Kubernetes'],
     demoLink: 'https://tetsu19n1101087-game.vercel.app/',
     codeLink: 'https://github.com/tetsu19n1101087/tetsu19n1101087-game',
@@ -43,7 +43,7 @@ const works: Work[] = [
     id: '3',
     title: '予定調整くん',
     description: 'スケジュール調整アプリ',
-    image: '/schedule-arranger.png',
+    image: '/schedule-arranger-mock.png',
     tags: ['JavaScript', 'Express', 'Bootstrap', 'PostgreSQL'],
     demoLink: 'https://schedule-arranger-ch6e.onrender.com/',
     codeLink: 'https://github.com/tetsu19n1101087/schedule-arranger',
@@ -56,13 +56,27 @@ const works: Work[] = [
     id: '4',
     title: 'ホットドッグ判定',
     description: '画像を判定するアプリ',
-    image: '/hotdog.png',
+    image: '/hotdog-mock.png',
     tags: ['Python', 'Flask', 'Keras'],
     codeLink:'https://github.com/tetsu19n1101087/flask-hotdog',
     date: '2020年10月',
     longDescription: `学習のアウトプットとして、画像を判定するアプリを制作。
     画像をアップロードすると、それがホットドッグであるかを判定し、ホットドッグである確率を返してくれます。
     ディープラーニングを用いて画像分類モデルを作成し、アプリのバックエンドに組み込んでいます。`
+  },
+  {
+    id: '5',
+    title: '芝居茶屋',
+    description: '日本の伝統芸能を発信するWebサイト',
+    image: '/shibaichaya.png',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    codeLink: 'https://github.com/nagito-hiroshima/SHIBAICHAYA-Web',
+    date: '2021年3月',
+    longDescription: `日本の伝統芸能の奥深さ・楽しさ・素晴らしさを探求し、それを同世代に発信するWebサイトをチームで制作。
+    専門家のインタビューやクイズなどのコンテンツを通じて、演芸や音楽といった伝統芸能の魅力を伝えることを目的としています。また、ページ遷移のたびに色づきが増えるといった工夫を行い、ユーザーに長く留まってもらえるよう心がけました。
+    担当範囲：コーディング
+    チーム人数：10人
+    制作期間：3ヶ月`
   }
 ];
 
