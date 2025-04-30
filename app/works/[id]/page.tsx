@@ -1,12 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Code, ExternalLink, Calendar } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-
 import { getWorkById } from '@/lib/works';
 import { notFound } from 'next/navigation';
 
@@ -34,7 +32,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               作品一覧に戻る
             </Link>
           </div>
-
           <div className='max-w-3xl mx-auto'>
             <div>
               <div className='relative aspect-video overflow-hidden rounded-lg mb-6'>
@@ -46,16 +43,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   priority
                 />
               </div>
-
               <h1 className='text-3xl font-bold tracking-tight mb-4'>
                 {work.title}
               </h1>
-
               <div className='flex items-center text-sm text-gray-500 mb-6'>
                 <Calendar className='h-4 w-4 mr-1' />
                 <span>{work.date}</span>
               </div>
-
               <div className='prose max-w-none dark:prose-invert mb-8'>
                 {/* <p className='text-lg text-gray-700 dark:text-gray-300 mb-4'>
                   {work.description}
@@ -66,7 +60,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   </p>
                 ))}
               </div>
-
               <div className='flex flex-wrap gap-2 mb-8'>
                 {work.tags.map((tag) => (
                   <Badge key={tag} variant='secondary'>
@@ -74,28 +67,31 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   </Badge>
                 ))}
               </div>
-
               <div className='flex flex-wrap gap-4'>
-                <Button asChild className='gap-2'>
-                  <a
-                    href={work.demoLink}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <ExternalLink className='h-4 w-4' />
-                    デモを見る
-                  </a>
-                </Button>
-                <Button asChild variant='outline' className='gap-2'>
-                  <a
-                    href={work.codeLink}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <Code className='h-4 w-4' />
-                    コードを見る
-                  </a>
-                </Button>
+                {work.demoLink && (
+                  <Button asChild className='gap-2'>
+                    <a
+                      href={work.demoLink}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      <ExternalLink className='h-4 w-4' />
+                      デモを見る
+                    </a>
+                  </Button>
+                )}
+                {work.codeLink && (
+                  <Button asChild variant='outline' className='gap-2'>
+                    <a
+                      href={work.codeLink}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      <Code className='h-4 w-4' />
+                      コードを見る
+                    </a>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

@@ -38,7 +38,7 @@ export default function AboutPage() {
               <div className='md:w-1/3'>
                 <div className='relative w-full aspect-square overflow-hidden rounded-full'>
                   <Image
-                    src='/face.png'
+                    src='/profile-public.jpg'
                     alt='プロフィール画像'
                     fill
                     className='object-cover'
