@@ -45,7 +45,7 @@ export default function WorksPage() {
                   </Link>
                   <CardContent className='p-4'>
                     <Link href={`/works/${project.id}`}>
-                      <h3 className='text-xl font-bold font-bold hover:text-primary hover:underline transition-colors'>
+                      <h3 className='text-xl font-bold hover:text-primary hover:underline transition-colors'>
                         {project.title}
                       </h3>
                     </Link>
