@@ -8,8 +8,8 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { getWorks } from '@/lib/works';
 
-export default function WorksPage() {
-  const works = getWorks();
+export default async function WorksPage() {
+  const works = await getWorks();
 
   return (
     <div className='flex flex-col min-h-screen'>
@@ -28,40 +28,40 @@ export default function WorksPage() {
               </div>
             </div>
             <div className='mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 py-12 lg:gap-8'>
-              {works.map((project) => (
+              {works.map((work) => (
                 <Card
-                  key={project.id}
+                  key={work.id}
                   className='overflow-hidden flex flex-col'
                 >
                   <Link
-                    href={`/works/${project.id}`}
+                    href={`/works/${work.id}`}
                     className='block relative aspect-video overflow-hidden'
                   >
                     <Image
-                      src={project.image}
-                      alt={project.title}
+                      src={work.image.url}
+                      alt={work.title}
                       className='object-cover object-top transition-transform duration-300 hover:scale-110'
                       fill
                     />
                   </Link>
                   <CardContent className='p-4 flex flex-col flex-grow'>
-                    <Link href={`/works/${project.id}`}>
+                    <Link href={`/works/${work.id}`}>
                       <h3 className='text-xl font-bold hover:text-primary hover:underline transition-colors'>
-                        {project.title}
+                        {work.title}
                       </h3>
                     </Link>
                     <p className='text-sm truncate text-gray-500 dark:text-gray-400 mt-2'>
-                      {project.description}
+                      {work.description}
                     </p>
                     <div className='flex flex-wrap gap-2 my-4'>
-                      {project.tags.map((tag) => (
-                        <Badge key={tag}>{tag}</Badge>
+                      {work.tags.map((tag) => (
+                        <Badge key={tag.id}>{tag.tag}</Badge>
                       ))}
                     </div>
                     <div className='flex gap-4 mt-auto'>
-                      {project.codeLink && (
+                      {work.codeLink && (
                         <Link
-                          href={project.codeLink}
+                          href={work.codeLink}
                           rel='noopener noreferrer'
                           target='_blank'
                         >
@@ -71,9 +71,9 @@ export default function WorksPage() {
                           </Button>
                         </Link>
                       )}
-                      {project.demoLink && (
+                      {work.demoLink && (
                         <Link
-                          href={project.demoLink}
+                          href={work.demoLink}
                           rel='noopener noreferrer'
                           target='_blank'
                         >

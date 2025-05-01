@@ -12,7 +12,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
 
-  const work = getWorkById(id);
+  const work = await getWorkById(id);
 
   if (!work) {
     notFound();
@@ -36,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <div>
               <div className='relative aspect-video overflow-hidden rounded-lg mb-6'>
                 <Image
-                  src={work.image || '/placeholder.svg'}
+                  src={work.image.url || '/placeholder.svg'}
                   alt={work.title}
                   className='object-cover object-top brightness-99'
                   fill
@@ -62,8 +62,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               </div>
               <div className='flex flex-wrap gap-2 mb-8'>
                 {work.tags.map((tag) => (
-                  <Badge key={tag} variant='secondary'>
-                    {tag}
+                  <Badge key={tag.id} variant='secondary'>
+                    {tag.tag}
                   </Badge>
                 ))}
               </div>
