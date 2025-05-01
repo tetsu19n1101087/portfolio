@@ -4,7 +4,7 @@ type Tag = {
   updatedAt: string;
   publishedAt: string;
   revisedAt: string;
-  tag: string;
+  name: string;
 };
 
 type Image = {

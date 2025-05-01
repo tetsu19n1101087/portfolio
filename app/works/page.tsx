@@ -55,7 +55,7 @@ export default async function WorksPage() {
                     </p>
                     <div className='flex flex-wrap gap-2 my-4'>
                       {work.tags.map((tag) => (
-                        <Badge key={tag.id}>{tag.tag}</Badge>
+                        <Badge key={tag.id}>{tag.name}</Badge>
                       ))}
                     </div>
                     <div className='flex gap-4 mt-auto'>

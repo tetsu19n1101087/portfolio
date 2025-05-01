@@ -63,7 +63,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
               <div className='flex flex-wrap gap-2 mb-8'>
                 {work.tags.map((tag) => (
                   <Badge key={tag.id} variant='secondary'>
-                    {tag.tag}
+                    {tag.name}
                   </Badge>
                 ))}
               </div>
