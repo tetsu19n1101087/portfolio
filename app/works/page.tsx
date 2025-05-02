@@ -22,23 +22,17 @@ export default async function WorksPage() {
                 <h1 className='text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl'>
                   Works
                 </h1>
-                {/* <p className='max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400'>
-                  これまでに手がけたプロジェクトをご紹介します。
-                </p> */}
               </div>
             </div>
             <div className='mx-auto grid max-w-5xl grid-cols-1 sm:grid-cols-2 gap-6 py-12 lg:gap-8'>
               {works.map((work) => (
-                <Card
-                  key={work.id}
-                  className='overflow-hidden flex flex-col'
-                >
+                <Card key={work.id} className='overflow-hidden flex flex-col'>
                   <Link
                     href={`/works/${work.id}`}
                     className='block relative aspect-video overflow-hidden'
                   >
                     <Image
-                      src={work.image.url}
+                      src={work.images[0].url}
                       alt={work.title}
                       className='object-cover object-top transition-transform duration-300 hover:scale-110'
                       fill
