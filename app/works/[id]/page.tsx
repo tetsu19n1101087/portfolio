@@ -7,6 +7,13 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { getWorkById } from '@/lib/works';
 import { notFound } from 'next/navigation';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -34,15 +41,31 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           </div>
           <div className='max-w-3xl mx-auto'>
             <div>
-              <div className='relative aspect-video overflow-hidden rounded-lg mb-6'>
+              {/* <div className='relative aspect-video overflow-hidden rounded-lg mb-6'>
                 <Image
                   src={work.images[1].url || '/placeholder.svg'}
                   alt={work.title}
-                  className='object-cover object-top brightness-99'
+                  className='object-cover object-top'
                   fill
                   priority
                 />
-              </div>
+              </div> */}
+              <Carousel className='relative aspect-video overflow-hidden rounded-lg mb-6'>
+                <CarouselContent>
+                  {work.images.map((image, index) => (
+                    <CarouselItem key={index} className='relative aspect-video'>
+                      <Image
+                        src={image.url || '/placeholder.svg'}
+                        alt={work.title}
+                        className='object-cover object-top'
+                        fill
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className='absolute left-2 top-1/2 -translate-y-1/2' />
+                <CarouselNext className='absolute right-2 top-1/2 -translate-y-1/2' />
+              </Carousel>
               <h1 className='text-3xl font-bold tracking-tight mb-4'>
                 {work.title}
               </h1>
