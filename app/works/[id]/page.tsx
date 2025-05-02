@@ -36,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             <div>
               <div className='relative aspect-video overflow-hidden rounded-lg mb-6'>
                 <Image
-                  src={work.image.url || '/placeholder.svg'}
+                  src={work.images[1].url || '/placeholder.svg'}
                   alt={work.title}
                   className='object-cover object-top brightness-99'
                   fill
