@@ -26,5 +26,5 @@ export type Work = {
   demoLink?: string;
   codeLink?: string;
   date: string;
-  longDescription: string;
+  text: string;
 };

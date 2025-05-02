@@ -50,16 +50,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 <Calendar className='h-4 w-4 mr-1' />
                 <span>{work.date}</span>
               </div>
-              <div className='prose max-w-none dark:prose-invert mb-8'>
-                {/* <p className='text-lg text-gray-700 dark:text-gray-300 mb-4'>
-                  {work.description}
-                </p> */}
-                {work.longDescription.split('\n').map((paragraph, index) => (
-                  <p key={index} className='mb-4'>
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+              <div
+                className='prose max-w-none dark:prose-invert mb-8 flex flex-col gap-4'
+                dangerouslySetInnerHTML={{ __html: work.text }}
+              />
               <div className='flex flex-wrap gap-2 mb-8'>
                 {work.tags.map((tag) => (
                   <Badge key={tag.id} variant='secondary'>
