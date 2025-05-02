@@ -22,9 +22,10 @@ export type Work = {
   title: string;
   description: string;
   image: Image;
+  images: Image[];
   tags: Tag[];
   demoLink?: string;
   codeLink?: string;
   date: string;
-  longDescription: string;
+  text: string;
 };
