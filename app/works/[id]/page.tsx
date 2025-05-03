@@ -57,7 +57,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                       <Image
                         src={image.url || '/placeholder.svg'}
                         alt={work.title}
-                        className='object-cover object-top'
+                        className='object-cover object-top brightness-99'
                         fill
                       />
                     </CarouselItem>
