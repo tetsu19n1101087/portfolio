@@ -50,7 +50,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   priority
                 />
               </div> */}
-              <Carousel className='relative aspect-video overflow-hidden rounded-lg mb-6'>
+              <Carousel className='relative aspect-video overflow-hidden rounded-lg mb-6' opts={{ loop: true }}>
                 <CarouselContent>
                   {work.images.map((image, index) => (
                     <CarouselItem key={index} className='relative aspect-video'>
