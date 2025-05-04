@@ -1,24 +1,28 @@
 import { client } from './client';
 import { Work } from '@/types/work';
 
-async function fetchWorks() {
+export async function getWorks() {
   try {
     const data = await client.get({
       endpoint: 'works',
     });
-    return data.contents;
+    const works: Work[] = data.contents;
+    return works;
   } catch (error) {
     console.error('error: ', error);
     return [];
   }
 }
 
-export async function getWorks() {
-  const works: Work[] = await fetchWorks();
-  return works;
-}
-
-export async function getWorkById(id: string) {
-  const works: Work[] = await fetchWorks();
-  return works.find((work) => work.id === id);
+export async function getWorkById(contentId: string) {
+  try {
+    const work: Work = await client.get({
+      endpoint: 'works',
+      contentId,
+    });
+    return work;
+  } catch (error) {
+    console.error('error: ', error);
+    return null;
+  }
 }
