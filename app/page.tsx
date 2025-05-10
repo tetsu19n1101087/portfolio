@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import { LottieAnimation } from '@/components/lottie';
 
 export default function Home() {
   return (
@@ -26,14 +26,15 @@ export default function Home() {
                 </div>
               </div>
               <div className='flex items-center justify-center mb-8 md:mb-0'>
-                <Image
+                {/* <Image
                   src='/home-image.svg'
                   alt='Progressive App Illustration'
                   width={800}
                   height={600}
                   className='w-full h-auto'
                   priority
-                />
+                /> */}
+                <LottieAnimation />
               </div>
             </div>
           </div>
