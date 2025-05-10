@@ -17,7 +17,6 @@ export default function Home() {
                   <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none'>
                     tetsu19n1101087
                   </h1>
-                  {/* <p className="text-gray-500 md:text-xl dark:text-gray-400">ウェブ開発者 & デザイナー</p> */}
                 </div>
                 <div className='flex flex-col gap-2 min-[400px]:flex-row'>
                   <Button variant='outline'>
@@ -26,14 +25,6 @@ export default function Home() {
                 </div>
               </div>
               <div className='flex items-center justify-center mb-8 md:mb-0'>
-                {/* <Image
-                  src='/home-image.svg'
-                  alt='Progressive App Illustration'
-                  width={800}
-                  height={600}
-                  className='w-full h-auto'
-                  priority
-                /> */}
                 <LottieAnimation />
               </div>
             </div>
