@@ -18,10 +18,10 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.487.0",
     "microcms-js-sdk": "^3.2.0",
-    "next": "15.3.0",
+    "next": "^16.0.10",
     "postcss": "^8.5.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "tailwind-merge": "^3.2.0",
     "tw-animate-css": "^1.2.5"
   },
