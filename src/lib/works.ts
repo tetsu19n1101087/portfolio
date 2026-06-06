@@ -1,5 +1,5 @@
 import { client } from './client';
-import { Work } from '@/types/work';
+import type { Work } from '@/types/work';
 
 export async function getWorks() {
   try {

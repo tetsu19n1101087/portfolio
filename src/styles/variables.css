@@ -1,0 +1,12 @@
+:root {
+  --color-bg: #fff;
+  --color-text: #111827;
+  --color-accent: #0ea5a4;
+  --max-width: 1200px;
+  --gap: 1.5rem;
+  --radius: 0.5rem;
+  --font-sans:
+    -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, 'Helvetica Neue',
+    arial, 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo',
+    sans-serif;
+}

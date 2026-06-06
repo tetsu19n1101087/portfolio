@@ -4,6 +4,9 @@
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
+  "path-autocomplete.pathMappings": {
+    "@": "${workspaceFolder}/src"
+  },
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
   },
