@@ -14,6 +14,7 @@
     "microcms-js-sdk": "^3.4.0"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
     "eslint": "^10.4.1",

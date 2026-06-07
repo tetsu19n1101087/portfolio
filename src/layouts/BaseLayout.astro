@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import styles from './BaseLayout.module.css';
 ---
 
 <html lang='ja'>
@@ -9,6 +10,8 @@ import '@/styles/global.css';
     <title>My Portfolio</title>
   </head>
   <body>
-    <slot />
+    <main class={styles.container}>
+      <slot />
+    </main>
   </body>
 </html>
