@@ -7,11 +7,11 @@ const imageUrl = work.images[0]?.url ?? work.thumbnail?.url ?? '';
 ---
 
 <a class={styles.card} href={id ? `/works/${id}` : '#'}>
-  <div class={styles.imageWrap}>
-    {imageUrl ? <img src={imageUrl} alt={work.title ?? 'work image'} loading="lazy" /> : <div />}
-  </div>
-  <div class={styles.body}>
-    <h3 class={styles.title}>{work.title}</h3>
-    {work.date ? <p class={styles.meta}>{work.date}</p> : null}
-  </div>
+  {
+    imageUrl ? (
+      <img src={imageUrl} alt={work.title ?? 'work image'} loading='lazy' />
+    ) : (
+      <div class={styles.placeholder} />
+    )
+  }
 </a>

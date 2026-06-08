@@ -41,6 +41,11 @@ const featuredWorks = works.slice(0, 5);
           <p class={styles.emptyState}>works はまだ登録されていません。</p>
         )
       }
+
+      <a class={styles.viewAll} href='/works'>
+        View all
+        <span aria-hidden='true'>→</span>
+      </a>
     </section>
   </main>
 </BaseLayout>
