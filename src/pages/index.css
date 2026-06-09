@@ -3,7 +3,8 @@
   gap: 2rem;
   align-items: center;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.95fr);
-  padding: 4rem 0 3rem;
+  /* padding: 4rem 0 3rem; */
+  height: 100vh
 }
 
 .home_hero-copy {
@@ -12,23 +13,26 @@
 }
 
 .home_kicker {
-  font-size: 0.75rem;
+  font-size: clamp(2.5rem, 6vw, 5rem);
   letter-spacing: 0.24em;
   text-transform: uppercase;
+  line-height: 1.5;
   color: var(--color-accent);
 }
 
 .home_site-title {
-  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-size: 6rem;
   line-height: 1;
   letter-spacing: -0.04em;
 }
 
 .home_subtitle {
   max-width: 36rem;
-  color: #4b5563;
+  color: var(--color-accent);
   font-size: 1rem;
   line-height: 1.8;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
 }
 
 .home_cover {

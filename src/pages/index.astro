@@ -12,22 +12,17 @@ const featuredWorks = works.slice(0, 5);
   <main>
     <section class='home_hero' aria-labelledby='site-title'>
       <div class='home_hero-copy'>
-        <p class='home_kicker'>Portfolio</p>
-        <h1 id='site-title' class='home_site-title'>My Portfolio</h1>
-        <p class='home_subtitle'>作品、制作背景、使用技術をまとめたポートフォリオサイトです。</p>
+        <h1 id='site-title' class='home_site-title'>Tetsuro Tsunehara</h1>
+        <p class='home_subtitle'>Portfolio site</p>
       </div>
-
       <div class='home_cover' aria-hidden='true'>
-        <img src='/home-image.svg' alt='' />
+        <!-- <img src='/home-image.svg' alt='' /> -->
       </div>
     </section>
-
     <section class='home_section' aria-labelledby='works-title'>
       <div class='home_section-heading'>
         <p class='home_kicker'>works</p>
-        <h2 id='works-title' class='home_section-title'>Selected Works</h2>
       </div>
-
       {
         featuredWorks.length > 0 ? (
           <div class='home_bento-grid'>
@@ -41,7 +36,6 @@ const featuredWorks = works.slice(0, 5);
           <p class='home_empty-state'>works はまだ登録されていません。</p>
         )
       }
-
       <a class='home_view-all' href='/works'>
         View all
         <span aria-hidden='true'>→</span>

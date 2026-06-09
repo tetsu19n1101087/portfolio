@@ -23,16 +23,19 @@
 }
 
 .works_kicker {
-  font-size: 0.75rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   letter-spacing: 0.24em;
   text-transform: uppercase;
+  line-height: 1.1;
   color: var(--color-accent);
 }
 
 .works_title {
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
 .works_grid {
