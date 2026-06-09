@@ -1,0 +1,66 @@
+---
+export const prerender = false;
+
+import { getWorkById } from '@/lib/works';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import styles from './[id].module.css';
+
+const { id } = Astro.params;
+const work = await getWorkById(id!);
+
+if (!work) return Astro.redirect('/404');
+
+const heroImage = work.image?.url ?? work.images[0]?.url;
+---
+
+<BaseLayout title={`${work.title} | My Portfolio`}>
+  <article class={styles.article}>
+    <header class={styles.header}>
+      <a href='/works' class={styles.back}>← Works</a>
+      <p class={styles.kicker}>works</p>
+      <h1 class={styles.title}>{work.title}</h1>
+      <div class={styles.meta}>
+        <time class={styles.date}>{work.date}</time>
+        {
+          work.tags.length > 0 && (
+            <ul class={styles.tags} aria-label='タグ'>
+              {work.tags.map((tag) => (
+                <li class={styles.tag}>{tag.name}</li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </header>
+
+    {
+      heroImage && (
+        <div class={styles.hero}>
+          <img src={heroImage} alt={work.title} />
+        </div>
+      )
+    }
+
+    <div class={styles.body}>
+      <p class={styles.description}>{work.description}</p>
+      <div class={styles.text} set:html={work.text} />
+    </div>
+
+    {
+      (work.demoLink || work.codeLink) && (
+        <footer class={styles.links}>
+          {work.demoLink && (
+            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class={styles.link}>
+              Demo →
+            </a>
+          )}
+          {work.codeLink && (
+            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class={styles.link}>
+              Code →
+            </a>
+          )}
+        </footer>
+      )
+    }
+  </article>
+</BaseLayout>

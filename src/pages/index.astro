@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkCard from '@/components/WorkCard.astro';
+import { getWorks } from '@/lib/works';
+import styles from './index.module.css';
+
+const works = await getWorks();
+const featuredWorks = works.slice(0, 5);
+---
+
+<BaseLayout>
+  <main>
+    <section class={styles['hero']} aria-labelledby='site-title'>
+      <div class={styles['hero-copy']}>
+        <p class={styles['kicker']}>Portfolio</p>
+        <h1 id='site-title' class={styles['site-title']}>My Portfolio</h1>
+        <p class={styles['subtitle']}>作品、制作背景、使用技術をまとめたポートフォリオサイトです。</p>
+      </div>
+
+      <div class={styles['cover']} aria-hidden='true'>
+        <img src='/home-image.svg' alt='' />
+      </div>
+    </section>
+
+    <section class={styles['section']} aria-labelledby='works-title'>
+      <div class={styles['section-heading']}>
+        <p class={styles['kicker']}>works</p>
+        <h2 id='works-title' class={styles['section-title']}>Selected Works</h2>
+      </div>
+
+      {
+        featuredWorks.length > 0 ? (
+          <div class={styles['bento-grid']}>
+            {featuredWorks.map((work) => (
+              <article>
+                <WorkCard work={work} />
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class={styles['empty-state']}>works はまだ登録されていません。</p>
+        )
+      }
+
+      <a class={styles['view-all']} href='/works'>
+        View all
+        <span aria-hidden='true'>→</span>
+      </a>
+    </section>
+  </main>
+</BaseLayout>
