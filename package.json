@@ -9,6 +9,7 @@
     "lint:fix": "eslint . --fix && stylelint \"**/*.{css,astro}\" --fix"
   },
   "dependencies": {
+    "@astrojs/vercel": "^10.0.8",
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.4.2",
     "microcms-js-sdk": "^3.4.0"

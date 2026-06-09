@@ -1,0 +1,153 @@
+.article {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+}
+
+.header {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  transition: color 160ms ease;
+  width: fit-content;
+}
+
+.back:hover {
+  color: var(--color-accent);
+}
+
+.kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-top: 0.5rem;
+}
+
+.title {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: rgb(14 165 164 / 8%);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
+.hero {
+  border-radius: calc(var(--radius) * 2);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: #f3f4f6;
+  box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.description {
+  font-size: 1.05rem;
+  color: #4b5563;
+  line-height: 1.8;
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+}
+
+.text {
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.text :global(h2),
+.text :global(h3) {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.text :global(p) {
+  margin-bottom: 1rem;
+}
+
+.text :global(img) {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgb(2 6 23 / 80%);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgb(2 6 23 / 15%);
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.link:hover {
+  background: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+@media (width <= 900px) {
+  .article {
+    padding-top: 2rem;
+  }
+}
