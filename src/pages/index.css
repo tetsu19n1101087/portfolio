@@ -1,4 +1,4 @@
-.hero {
+.home_hero {
   display: grid;
   gap: 2rem;
   align-items: center;
@@ -6,103 +6,103 @@
   padding: 4rem 0 3rem;
 }
 
-.hero-copy {
+.home_hero-copy {
   display: grid;
   gap: 1rem;
 }
 
-.kicker {
+.home_kicker {
   font-size: 0.75rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-accent);
 }
 
-.site-title {
+.home_site-title {
   font-size: clamp(2.5rem, 6vw, 5rem);
   line-height: 1;
   letter-spacing: -0.04em;
 }
 
-.subtitle {
+.home_subtitle {
   max-width: 36rem;
   color: #4b5563;
   font-size: 1rem;
   line-height: 1.8;
 }
 
-.cover {
+.home_cover {
   border-radius: calc(var(--radius) * 2);
   overflow: hidden;
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   box-shadow: 0 20px 50px rgb(2 6 23 / 8%);
 }
 
-.cover img {
+.home_cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.section {
+.home_section {
   padding: 2rem 0 4rem;
 }
 
-.section-heading {
+.home_section-heading {
   display: grid;
   gap: 0.35rem;
   margin-bottom: 1.25rem;
 }
 
-.section-title {
+.home_section-title {
   font-size: 1.5rem;
   line-height: 1.2;
 }
 
-.bento-grid {
+.home_bento-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--gap);
 }
 
-.bento-grid > article {
+.home_bento-grid > article {
   min-width: 0;
   min-height: 0;
 }
 
-.bento-grid > :nth-child(1) {
+.home_bento-grid > :nth-child(1) {
   grid-column: 1 / 5;
   grid-row: 1 / 3;
 }
 
-.bento-grid > :nth-child(2) {
+.home_bento-grid > :nth-child(2) {
   grid-column: 5 / 7;
   grid-row: 1 / 2;
 }
 
-.bento-grid > :nth-child(3) {
+.home_bento-grid > :nth-child(3) {
   grid-column: 5 / 7;
   grid-row: 2 / 3;
 }
 
-.bento-grid > :nth-child(4) {
+.home_bento-grid > :nth-child(4) {
   grid-column: 1 / 4;
   grid-row: 3 / 4;
 }
 
-.bento-grid > :nth-child(5) {
+.home_bento-grid > :nth-child(5) {
   grid-column: 4 / 7;
   grid-row: 3 / 4;
 }
 
-.empty-state {
+.home_empty-state {
   color: #6b7280;
   padding: 1rem 0;
 }
 
 /* /works ページへのリンク。グリッドの下に独立して配置（右寄せのピル型） */
-.view-all {
+.home_view-all {
   display: flex;
   gap: 0.35rem;
   align-items: center;
@@ -121,38 +121,38 @@
     background-color 160ms ease;
 }
 
-.view-all:hover {
+.home_view-all:hover {
   background: var(--color-accent);
   transform: translateY(-2px);
 }
 
-.view-all span {
+.home_view-all span {
   transition: transform 160ms ease;
 }
 
-.view-all:hover span {
+.home_view-all:hover span {
   transform: translateX(3px);
 }
 
 @media (width <= 900px) {
-  .hero {
+  .home_hero {
     grid-template-columns: 1fr;
     padding-top: 2rem;
   }
 
-  .bento-grid {
+  .home_bento-grid {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
   }
 
-  .bento-grid > :nth-child(n) {
+  .home_bento-grid > :nth-child(n) {
     grid-column: auto;
     grid-row: auto;
   }
 }
 
 @media (width <= 640px) {
-  .site-title {
+  .home_site-title {
     font-size: clamp(2.25rem, 15vw, 3.5rem);
   }
 }

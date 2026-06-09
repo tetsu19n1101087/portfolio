@@ -1,16 +1,16 @@
-.article {
+.work-detail {
   max-width: 48rem;
   margin: 0 auto;
   padding: 3rem 0 5rem;
 }
 
-.header {
+.work-detail_header {
   display: grid;
   gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
-.back {
+.work-detail_back {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -20,11 +20,11 @@
   width: fit-content;
 }
 
-.back:hover {
+.work-detail_back:hover {
   color: var(--color-accent);
 }
 
-.kicker {
+.work-detail_kicker {
   font-size: 0.75rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -32,13 +32,13 @@
   margin-top: 0.5rem;
 }
 
-.title {
+.work-detail_title {
   font-size: clamp(1.75rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.03em;
 }
 
-.meta {
+.work-detail_meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -46,12 +46,12 @@
   margin-top: 0.25rem;
 }
 
-.date {
+.work-detail_date {
   font-size: 0.85rem;
   color: #6b7280;
 }
 
-.tags {
+.work-detail_tags {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -60,7 +60,7 @@
   gap: 0.4rem;
 }
 
-.tag {
+.work-detail_tag {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-accent);
@@ -69,7 +69,7 @@
   padding: 0.2rem 0.65rem;
 }
 
-.hero {
+.work-detail_hero {
   border-radius: calc(var(--radius) * 2);
   overflow: hidden;
   margin-bottom: 2rem;
@@ -77,19 +77,19 @@
   box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
 }
 
-.hero img {
+.work-detail_hero img {
   display: block;
   width: 100%;
   height: auto;
   object-fit: cover;
 }
 
-.body {
+.work-detail_body {
   display: grid;
   gap: 1.5rem;
 }
 
-.description {
+.work-detail_description {
   font-size: 1.05rem;
   color: #4b5563;
   line-height: 1.8;
@@ -97,35 +97,35 @@
   padding-left: 1rem;
 }
 
-.text {
+.work-detail_text {
   line-height: 1.8;
   color: var(--color-text);
 }
 
-.text :global(h2),
-.text :global(h3) {
+.work-detail_text h2,
+.work-detail_text h3 {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
 }
 
-.text :global(p) {
+.work-detail_text p {
   margin-bottom: 1rem;
 }
 
-.text :global(img) {
+.work-detail_text img {
   max-width: 100%;
   border-radius: var(--radius);
 }
 
-.links {
+.work-detail_links {
   display: flex;
   gap: 0.75rem;
   margin-top: 2.5rem;
   flex-wrap: wrap;
 }
 
-.link {
+.work-detail_link {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -141,13 +141,13 @@
     background-color 160ms ease;
 }
 
-.link:hover {
+.work-detail_link:hover {
   background: var(--color-accent);
   transform: translateY(-2px);
 }
 
 @media (width <= 900px) {
-  .article {
+  .work-detail {
     padding-top: 2rem;
   }
 }
