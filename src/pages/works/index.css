@@ -1,4 +1,4 @@
-.back {
+.works_back {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -8,34 +8,37 @@
   padding-top: 1.5rem;
 }
 
-.back:hover {
+.works_back:hover {
   color: var(--color-accent);
 }
 
-.section {
+.works_section {
   padding: 3rem 0 4rem;
 }
 
-.heading {
+.works_heading {
   display: grid;
   gap: 0.35rem;
   margin-bottom: 2rem;
 }
 
-.kicker {
-  font-size: 0.75rem;
+.works_kicker {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--color-accent);
+}
+
+.works_title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-accent);
 }
 
-.title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-
-.grid {
+.works_grid {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -44,25 +47,25 @@
   gap: var(--gap);
 }
 
-.item {
+.works_item {
   aspect-ratio: 4 / 3;
   min-width: 0;
   min-height: 0;
 }
 
-.empty {
+.works_empty {
   color: #6b7280;
   padding: 1rem 0;
 }
 
 @media (width <= 900px) {
-  .grid {
+  .works_grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (width <= 640px) {
-  .grid {
+  .works_grid {
     grid-template-columns: 1fr;
   }
 }

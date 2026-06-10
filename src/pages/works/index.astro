@@ -4,30 +4,28 @@ export const prerender = false;
 import { getWorks } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import WorkCard from '@/components/WorkCard.astro';
-import styles from './index.module.css';
+import './index.css';
 
 const works = await getWorks();
 ---
 
 <BaseLayout title='Works | My Portfolio'>
-  <a href='/' class={styles.back}>← Home</a>
-  <section class={styles.section} aria-labelledby='works-heading'>
-    <div class={styles.heading}>
-      <p class={styles.kicker}>works</p>
-      <h1 id='works-heading' class={styles.title}>Works</h1>
+  <a href='/' class='works_back'>← Home</a>
+  <section class='works_section' aria-labelledby='works-heading'>
+    <div class='works_heading'>
+      <p class='works_kicker'>works</p>
     </div>
-
     {
       works.length > 0 ? (
-        <ul class={styles.grid}>
+        <ul class='works_grid'>
           {works.map((work) => (
-            <li class={styles.item}>
+            <li class='works_item'>
               <WorkCard work={work} />
             </li>
           ))}
         </ul>
       ) : (
-        <p class={styles.empty}>works はまだ登録されていません。</p>
+        <p class='works_empty'>works はまだ登録されていません。</p>
       )
     }
   </section>

@@ -1,17 +1,17 @@
 ---
 const { work } = Astro.props;
-import styles from './WorkCard.module.css';
+import './WorkCard.css';
 
 const id = work.id ?? work.contentId ?? work.slug ?? '';
 const imageUrl = work.images[0]?.url ?? work.thumbnail?.url ?? '';
 ---
 
-<a class={styles.card} href={id ? `/works/${id}` : '#'}>
+<a class='work-card' href={id ? `/works/${id}` : '#'}>
   {
     imageUrl ? (
       <img src={imageUrl} alt={work.title ?? 'work image'} loading='lazy' />
     ) : (
-      <div class={styles.placeholder} />
+      <div class='work-card_placeholder' />
     )
   }
 </a>

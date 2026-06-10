@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import WorkCard from '@/components/WorkCard.astro';
 import { getWorks } from '@/lib/works';
-import styles from './index.module.css';
+import './index.css';
 
 const works = await getWorks();
 const featuredWorks = works.slice(0, 5);
@@ -10,27 +10,22 @@ const featuredWorks = works.slice(0, 5);
 
 <BaseLayout>
   <main>
-    <section class={styles['hero']} aria-labelledby='site-title'>
-      <div class={styles['hero-copy']}>
-        <p class={styles['kicker']}>Portfolio</p>
-        <h1 id='site-title' class={styles['site-title']}>My Portfolio</h1>
-        <p class={styles['subtitle']}>作品、制作背景、使用技術をまとめたポートフォリオサイトです。</p>
+    <section class='home_hero' aria-labelledby='site-title'>
+      <div class='home_hero-copy'>
+        <h1 id='site-title' class='home_site-title'>Tetsuro Tsunehara</h1>
+        <p class='home_subtitle'>Portfolio site</p>
       </div>
-
-      <div class={styles['cover']} aria-hidden='true'>
-        <img src='/home-image.svg' alt='' />
+      <div class='home_cover' aria-hidden='true'>
+        <!-- <img src='/home-image.svg' alt='' /> -->
       </div>
     </section>
-
-    <section class={styles['section']} aria-labelledby='works-title'>
-      <div class={styles['section-heading']}>
-        <p class={styles['kicker']}>works</p>
-        <h2 id='works-title' class={styles['section-title']}>Selected Works</h2>
+    <section class='home_section' aria-labelledby='works-title'>
+      <div class='home_section-heading'>
+        <p class='home_kicker'>works</p>
       </div>
-
       {
         featuredWorks.length > 0 ? (
-          <div class={styles['bento-grid']}>
+          <div class='home_bento-grid'>
             {featuredWorks.map((work) => (
               <article>
                 <WorkCard work={work} />
@@ -38,11 +33,10 @@ const featuredWorks = works.slice(0, 5);
             ))}
           </div>
         ) : (
-          <p class={styles['empty-state']}>works はまだ登録されていません。</p>
+          <p class='home_empty-state'>works はまだ登録されていません。</p>
         )
       }
-
-      <a class={styles['view-all']} href='/works'>
+      <a class='home_view-all' href='/works'>
         View all
         <span aria-hidden='true'>→</span>
       </a>
