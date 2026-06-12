@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css';
 import './BaseLayout.css';
+import Header from '@/components/Header.astro';
 import Analytics from '@vercel/analytics/astro';
 
 interface Props {
@@ -17,9 +18,12 @@ const { title = 'My Portfolio' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <main class='layout_container'>
-      <slot />
-    </main>
+    <div class='layout_container'>
+      <Header />
+      <main>
+        <slot />
+      </main>
+    </div>
     <Analytics />
   </body>
 </html>
