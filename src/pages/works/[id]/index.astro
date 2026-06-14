@@ -3,6 +3,7 @@ export const prerender = false;
 
 import { getWorkById } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Carousel from '@/components/Carousel.astro';
 import './index.css';
 
 const { id } = Astro.params;
@@ -14,53 +15,57 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
 ---
 
 <BaseLayout title={`${work.title} | My Portfolio`}>
-  <article class='work-detail'>
-    <header class='work-detail_header'>
-      <a href='/works' class='work-detail_back'>← Works</a>
-      <p class='work-detail_kicker'>works</p>
-      <h1 class='work-detail_title'>{work.title}</h1>
-      <div class='work-detail_meta'>
-        <time class='work-detail_date'>{work.date}</time>
+  <article class='work'>
+    <div class='work_header'>
+      <!-- <p class='work_kicker'>works</p> -->
+      <h1 class='work_title'>{work.title}</h1>
+      <div class='work_meta'>
+        <time class='work_date'>{work.date}</time>
         {
           work.tags.length > 0 && (
-            <ul class='work-detail_tags' aria-label='タグ'>
+            <ul class='work_tags' aria-label='タグ'>
               {work.tags.map((tag) => (
-                <li class='work-detail_tag'>{tag.name}</li>
+                <li class='work_tag'>{tag.name}</li>
               ))}
             </ul>
           )
         }
       </div>
-    </header>
-
-    {
-      heroImage && (
-        <div class='work-detail_hero'>
-          <img src={heroImage} alt={work.title} />
-        </div>
-      )
-    }
-
-    <div class='work-detail_body'>
-      <p class='work-detail_description'>{work.description}</p>
-      <div class='work-detail_text' set:html={work.text} />
     </div>
-
-    {
-      (work.demoLink || work.codeLink) && (
-        <footer class='work-detail_links'>
-          {work.demoLink && (
-            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class='work-detail_link'>
+    <div class='work_body'>
+      <div class='work_hero'>
+        {
+          work.images && work.images.length > 0 ? (
+            <Carousel images={work.images} />
+          ) : (
+            heroImage && <img src={heroImage} alt={work.title} />
+          )
+        }
+      </div>
+      <p class='work_description'>{work.description}</p>
+      <div class='work_text' set:html={work.text} />
+      <div class='work_links'>
+        {
+          work.demoLink && (
+            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class='work_link'>
               Demo →
             </a>
-          )}
-          {work.codeLink && (
-            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class='work-detail_link'>
+          )
+        }
+        {
+          work.codeLink && (
+            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class='work_link'>
               Code →
             </a>
-          )}
-        </footer>
-      )
-    }
+          )
+        }
+      </div>
+    </div>
+    <div class='work-footer'>
+      <a href='/works' class='work_back'>← All Works</a>
+    </div>
   </article>
+  <script>
+    import '@/scripts/carousel';
+  </script>
 </BaseLayout>

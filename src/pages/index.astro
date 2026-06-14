@@ -9,37 +9,36 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <main>
-    <section class='home_hero' aria-labelledby='site-title'>
-      <div class='home_hero-copy'>
-        <h1 id='site-title' class='home_site-title'>Tetsuro Tsunehara</h1>
-        <p class='home_subtitle'>Portfolio site</p>
-      </div>
-      <div class='home_cover' aria-hidden='true'>
-        <!-- <img src='/home-image.svg' alt='' /> -->
-      </div>
-    </section>
-    <section class='home_section' aria-labelledby='works-title'>
-      <div class='home_section-heading'>
-        <p class='home_kicker'>works</p>
-      </div>
-      {
-        featuredWorks.length > 0 ? (
-          <div class='home_bento-grid'>
-            {featuredWorks.map((work) => (
-              <article>
-                <WorkCard work={work} />
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p class='home_empty-state'>works はまだ登録されていません。</p>
-        )
-      }
-      <a class='home_view-all' href='/works'>
-        View all
-        <span aria-hidden='true'>→</span>
-      </a>
-    </section>
-  </main>
+  <section class='home_hero' aria-labelledby='site-title'>
+    <div class='home_hero-copy'>
+      <h1 id='site-title' class='home_site-title'>Tetsuro Tsunehara</h1>
+      <p class='home_subtitle'>Portfolio site</p>
+    </div>
+    <div class='home_cover' aria-hidden='true'>
+      <!-- <img src='/home-image.svg' alt='' /> -->
+    </div>
+    <p class='home_scroll-hint' aria-hidden='true'>↓scroll</p>
+  </section>
+  <section class='home_section' aria-labelledby='works-title'>
+    <div class='home_section-heading'>
+      <p class='home_kicker'>works</p>
+    </div>
+    {
+      featuredWorks.length > 0 ? (
+        <div class='home_bento-grid'>
+          {featuredWorks.map((work) => (
+            <article>
+              <WorkCard work={work} />
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class='home_empty-state'>works はまだ登録されていません。</p>
+      )
+    }
+    <a class='home_view-all' href='/works'>
+      View all
+      <span aria-hidden='true'>→</span>
+    </a>
+  </section>
 </BaseLayout>

@@ -10,7 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
+/* .container {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 1rem;
@@ -22,7 +22,7 @@ header.site-header {
 
 main {
   padding-bottom: 4rem;
-}
+} */
 
 /* Utility */
 .sr-only {

@@ -1,0 +1,19 @@
+---
+const { images } = Astro.props;
+---
+
+<div class='carousel'>
+  <!-- <button class='btn btn-prev' aria-label='Previous'> ‹ </button> -->
+  <div class='carousel-view'>
+    <div class='carousel-track'>
+      {
+        images.map((image, i) => (
+          <div class='carousel-item'>
+            <img src={image.url} alt={`${i + 1}`} loading='lazy' />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <!-- <button class='btn btn-next' aria-label='Next'> › </button> -->
+</div>
