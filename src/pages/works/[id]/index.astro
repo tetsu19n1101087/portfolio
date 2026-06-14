@@ -3,6 +3,7 @@ export const prerender = false;
 
 import { getWorkById } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Carousel from '@/components/Carousel.astro';
 import './index.css';
 
 const { id } = Astro.params;
@@ -16,7 +17,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
 <BaseLayout title={`${work.title} | My Portfolio`}>
   <article class='work'>
     <div class='work_header'>
-      <p class='work_kicker'>works</p>
+      <!-- <p class='work_kicker'>works</p> -->
       <h1 class='work_title'>{work.title}</h1>
       <div class='work_meta'>
         <time class='work_date'>{work.date}</time>
@@ -33,7 +34,13 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     </div>
     <div class='work_body'>
       <div class='work_hero'>
-        {heroImage && <img src={heroImage} alt={work.title} />}
+        {
+          work.images && work.images.length > 0 ? (
+            <Carousel images={work.images} />
+          ) : (
+            heroImage && <img src={heroImage} alt={work.title} />
+          )
+        }
       </div>
       <p class='work_description'>{work.description}</p>
       <div class='work_text' set:html={work.text} />
@@ -58,4 +65,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
       <a href='/works' class='work_back'>← All Works</a>
     </div>
   </article>
+  <script>
+    import '@/scripts/carousel';
+  </script>
 </BaseLayout>

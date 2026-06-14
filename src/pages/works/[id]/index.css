@@ -1,7 +1,7 @@
 .work {
   max-width: 48rem;
   margin: 0 auto;
-  padding: 3rem 0 ;
+  padding: 3rem 0;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -70,14 +70,6 @@
   background: rgb(14 165 164 / 8%);
   border-radius: 999px;
   padding: 0.2rem 0.65rem;
-}
-
-.work_hero {
-  border-radius: calc(var(--radius) * 2);
-  overflow: hidden;
-  margin-bottom: 2rem;
-  background: #f3f4f6;
-  box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
 }
 
 .work_hero img {
@@ -153,4 +145,31 @@
   .work {
     padding-top: 2rem;
   }
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+}
+
+.carousel-view {
+  overflow: hidden;
+  border-radius: calc(var(--radius) * 2);
+  background: #f3f4f6;
+  box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
+}
+
+.carousel-track {
+  display: flex;
+}
+
+.carousel-item {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.carousel-item img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
