@@ -4,14 +4,14 @@ import './WorkCard.css';
 
 const id = work.id ?? work.contentId ?? work.slug ?? '';
 const imageUrl = work.images[0]?.url ?? work.thumbnail?.url ?? '';
+const title = work.title ?? 'work title';
 ---
 
 <a class='work-card' href={id ? `/works/${id}` : '#'}>
-  {
-    imageUrl ? (
-      <img src={imageUrl} alt={work.title ?? 'work image'} loading='lazy' />
-    ) : (
-      <div class='work-card_placeholder' />
-    )
-  }
+  <div class='work-card_media'>
+    {imageUrl ? <img src={imageUrl} alt={title} loading='lazy' /> : <div class='work-card_placeholder' />}
+  </div>
+  <div class='work-card_overlay' aria-hidden='true'>
+    <span class='work-card_title'>{title}</span>
+  </div>
 </a>

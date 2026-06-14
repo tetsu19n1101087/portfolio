@@ -1,4 +1,5 @@
 .work-card {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
@@ -12,11 +13,31 @@
 }
 
 .work-card:hover {
-  transform: translateY(-6px);
+  /* transform: translateY(-6px); */
   box-shadow: 0 8px 30px rgb(2 6 23 / 8%);
 }
 
-.work-card img {
+.work-card_media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.work-card_media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(2 6 23 / 0%);
+  transition: background 160ms ease;
+}
+
+.work-card:hover .work-card_media::after,
+.work-card:focus-visible .work-card_media::after {
+  background: rgb(2 6 23 / 38%);
+}
+
+.work-card img,
+.work-card_placeholder {
   display: block;
   width: 100%;
   height: 100%;
@@ -24,7 +45,33 @@
 }
 
 .work-card_placeholder {
-  width: 100%;
-  height: 100%;
   background: #f3f4f6;
+}
+
+.work-card_overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.work-card_title {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+  text-shadow: 0 1px 2px rgb(2 6 23 / 45%);
+}
+
+.work-card:hover .work-card_title,
+.work-card:focus-visible .work-card_title {
+  opacity: 1;
+  transform: translateY(0);
 }
