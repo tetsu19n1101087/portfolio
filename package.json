@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "packageManager": "yarn@4.15.0",
+  "packageManager": "yarn@4.16.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
