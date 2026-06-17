@@ -55,7 +55,8 @@
 
 .home_kicker {
   font-size: clamp(2.5rem, 6vw, 5rem);
-  letter-spacing: 0.1rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   line-height: 1.5;
   color: var(--color-accent);
