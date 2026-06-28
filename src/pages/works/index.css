@@ -24,7 +24,8 @@
 
 .works_kicker {
   font-size: clamp(2rem, 5vw, 3.5rem);
-  letter-spacing: 0.24em;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   line-height: 1.1;
   color: var(--color-accent);

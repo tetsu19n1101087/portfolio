@@ -3,6 +3,7 @@ import '@/styles/global.css';
 import './BaseLayout.css';
 import Header from '@/components/Header.astro';
 import Analytics from '@vercel/analytics/astro';
+import { Font } from 'astro:assets';
 
 interface Props {
   title?: string;
@@ -16,6 +17,8 @@ const { title = 'My Portfolio' } = Astro.props;
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>{title}</title>
+    <Font cssVariable='--font-inter' preload />
+    <Font cssVariable='--font-noto-sans-jp' />
   </head>
   <body>
     <div class='layout_container'>
