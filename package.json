@@ -13,6 +13,7 @@
     "lint:style": "stylelint \"src/**/*.{scss,astro}\"",
     "lint:fix": "eslint . --fix && stylelint \"src/**/*.{scss,astro}\" --fix",
     "lint:markup": "markuplint \"dist/**/*.html\"",
+    "tokens:pull": "node --env-file=.env scripts/sync-tokens.mjs",
     "verify": "yarn build && yarn check && yarn lint && yarn lint:markup"
   },
   "dependencies": {

@@ -1,7 +1,15 @@
 :root {
-  --color-bg: #fff;
-  --color-text: #111827;
+  /* Colors synchronized from Figma (Design Tokens) */
   --color-accent: #0ea5a4;
+  --color-accent-hover: #0d9488;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-bg: #fff;
+  --color-surface: #f3f4f6;
+  --color-border: #e5e7eb;
+  --color-dark: #020617;
+
+  /* Layout & Typography */
   --max-width: 1200px;
   --gap: 1.5rem;
   --radius: 0.5rem;
