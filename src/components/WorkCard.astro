@@ -9,23 +9,23 @@ const height = image?.height ?? 600;
 const title = work.title ?? 'work title';
 ---
 
-<a class='work-card' href={id ? `/works/${id}` : '#'}>
-  <div class='work-card_media'>
+<a class='c-WorkCard' href={id ? `/works/${id}` : '#'}>
+  <div class='c-WorkCard__media'>
     {
       imageUrl ? (
         <img src={imageUrl} alt={title} width={width} height={height} loading='lazy' />
       ) : (
-        <div class='work-card_placeholder' />
+        <div class='c-WorkCard__placeholder' />
       )
     }
   </div>
-  <div class='work-card_overlay' aria-hidden='true'>
-    <span class='work-card_title'>{title}</span>
+  <div class='c-WorkCard__overlay' aria-hidden='true'>
+    <span class='c-WorkCard__title'>{title}</span>
   </div>
 </a>
 
 <style lang='scss'>
-  .work-card {
+  .c-WorkCard {
     position: relative;
     display: block;
     width: 100%;
@@ -41,28 +41,28 @@ const title = work.title ?? 'work title';
     @include hover {
       box-shadow: 0 8px 30px rgb(2 6 23 / 8%);
 
-      .work-card_media::after {
+      .c-WorkCard__media::after {
         background: rgb(2 6 23 / 38%);
       }
 
-      .work-card_title {
+      .c-WorkCard__title {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
     &:focus-visible {
-      .work-card_media::after {
+      .c-WorkCard__media::after {
         background: rgb(2 6 23 / 38%);
       }
 
-      .work-card_title {
+      .c-WorkCard__title {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    &_media {
+    &__media {
       position: relative;
       width: 100%;
       height: 100%;
@@ -77,18 +77,18 @@ const title = work.title ?? 'work title';
     }
 
     img,
-    &_placeholder {
+    &__placeholder {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    &_placeholder {
+    &__placeholder {
       background: #f3f4f6;
     }
 
-    &_overlay {
+    &__overlay {
       position: absolute;
       inset: 0;
       display: flex;
@@ -97,7 +97,7 @@ const title = work.title ?? 'work title';
       pointer-events: none;
     }
 
-    &_title {
+    &__title {
       font-size: rem(15.2);
       font-weight: 600;
       line-height: 1.2;

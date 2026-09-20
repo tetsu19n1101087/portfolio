@@ -10,58 +10,64 @@ const work = await getWorkById(id!);
 
 if (!work) return Astro.redirect('/404');
 
-const heroImage = work.image?.url ?? work.images[0]?.url;
+const heroImage = work.image ?? work.images?.[0];
 ---
 
 <BaseLayout title={`${work.title} | My Portfolio`}>
-  <article class='work'>
-    <div class='work_header'>
-      <!-- <p class='work_kicker'>works</p> -->
-      <h1 class='work_title'>{work.title}</h1>
-      <div class='work_meta'>
-        <time class='work_date'>{work.date}</time>
+  <article class='p-WorkDetail'>
+    <div class='p-WorkDetail__header'>
+      <h1 class='p-WorkDetail__title'>{work.title}</h1>
+      <div class='p-WorkDetail__meta'>
+        <time class='p-WorkDetail__date'>{work.date}</time>
         {
           work.tags.length > 0 && (
-            <ul class='work_tags' aria-label='タグ'>
+            <ul class='p-WorkDetail__tags' aria-label='タグ'>
               {work.tags.map((tag) => (
-                <li class='work_tag'>{tag.name}</li>
+                <li class='p-WorkDetail__tag'>{tag.name}</li>
               ))}
             </ul>
           )
         }
       </div>
     </div>
-    <div class='work_body'>
-      <div class='work_hero'>
+    <div class='p-WorkDetail__body'>
+      <div class='p-WorkDetail__hero'>
         {
           work.images && work.images.length > 0 ? (
             <Carousel images={work.images} />
           ) : (
-            heroImage && <img src={heroImage} alt={work.title} />
+            heroImage && (
+              <img
+                src={heroImage.url}
+                width={heroImage.width}
+                height={heroImage.height}
+                alt={work.title}
+              />
+            )
           )
         }
       </div>
-      <p class='work_description'>{work.description}</p>
-      <div class='work_text' set:html={work.text} />
-      <div class='work_links'>
+      <p class='p-WorkDetail__description'>{work.description}</p>
+      <div class='p-WorkDetail__text' set:html={work.text} />
+      <div class='p-WorkDetail__links'>
         {
           work.demoLink && (
-            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class='work_link'>
+            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class='p-WorkDetail__link'>
               Demo →
             </a>
           )
         }
         {
           work.codeLink && (
-            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class='work_link'>
+            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class='p-WorkDetail__link'>
               Code →
             </a>
           )
         }
       </div>
     </div>
-    <div class='work-footer'>
-      <a href='/works' class='work_back'>← All Works</a>
+    <div class='p-WorkDetail__footer'>
+      <a href='/works' class='p-WorkDetail__back'>← All Works</a>
     </div>
   </article>
   <script>
@@ -70,7 +76,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
 </BaseLayout>
 
 <style lang='scss'>
-  .work {
+  .p-WorkDetail {
     display: flex;
     flex-direction: column;
     gap: rem(32);
@@ -83,13 +89,13 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     }
   }
 
-  .work_header {
+  .p-WorkDetail__header {
     display: grid;
     gap: rem(12);
     margin-bottom: rem(32);
   }
 
-  .work_back {
+  .p-WorkDetail__back {
     display: inline-flex;
     gap: rem(4);
     align-items: center;
@@ -103,7 +109,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     }
   }
 
-  .work_kicker {
+  .p-WorkDetail__kicker {
     margin-top: rem(8);
     font-size: rem(12);
     color: var(--color-accent);
@@ -111,13 +117,13 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     letter-spacing: 0.24em;
   }
 
-  .work_title {
+  .p-WorkDetail__title {
     font-size: clamp(1.75rem, 4vw, 3rem);
     line-height: 1.1;
     letter-spacing: -0.03em;
   }
 
-  .work_meta {
+  .p-WorkDetail__meta {
     display: flex;
     flex-wrap: wrap;
     gap: rem(12);
@@ -125,12 +131,12 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     margin-top: rem(4);
   }
 
-  .work_date {
+  .p-WorkDetail__date {
     font-size: rem(13.6);
     color: #6b7280;
   }
 
-  .work_tags {
+  .p-WorkDetail__tags {
     display: flex;
     flex-wrap: wrap;
     gap: rem(6.4);
@@ -139,7 +145,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     list-style: none;
   }
 
-  .work_tag {
+  .p-WorkDetail__tag {
     padding: rem(3.2) rem(10.4);
     font-size: rem(12);
     font-weight: 600;
@@ -148,19 +154,19 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     border-radius: 999px;
   }
 
-  .work_hero img {
+  .p-WorkDetail__hero img {
     display: block;
     width: 100%;
     height: auto;
     object-fit: cover;
   }
 
-  .work_body {
+  .p-WorkDetail__body {
     display: grid;
     gap: rem(24);
   }
 
-  .work_description {
+  .p-WorkDetail__description {
     padding-left: rem(16);
     font-size: rem(16.8);
     line-height: 1.8;
@@ -168,7 +174,7 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     border-left: 3px solid var(--color-accent);
   }
 
-  .work_text {
+  .p-WorkDetail__text {
     line-height: 1.8;
     color: var(--color-text);
 
@@ -189,13 +195,13 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     }
   }
 
-  .work_links {
+  .p-WorkDetail__links {
     display: flex;
     flex-wrap: wrap;
     gap: rem(12);
   }
 
-  .work_link {
+  .p-WorkDetail__link {
     display: inline-flex;
     gap: rem(4);
     align-items: center;
@@ -216,28 +222,32 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     }
   }
 
-  :global(.carousel) {
+  .p-WorkDetail__footer {
+    padding-top: rem(16);
+  }
+
+  :global(.c-Carousel) {
     display: flex;
     align-items: center;
   }
 
-  :global(.carousel-view) {
+  :global(.c-Carousel__view) {
     overflow: hidden;
     background: #f3f4f6;
     border-radius: calc(var(--radius) * 2);
     box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
   }
 
-  :global(.carousel-track) {
+  :global(.c-Carousel__track) {
     display: flex;
   }
 
-  :global(.carousel-item) {
+  :global(.c-Carousel__item) {
     flex: 0 0 100%;
     min-width: 0;
   }
 
-  :global(.carousel-item img) {
+  :global(.c-Carousel__item img) {
     display: block;
     width: 100%;
     height: auto;

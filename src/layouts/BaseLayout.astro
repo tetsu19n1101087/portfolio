@@ -17,9 +17,9 @@ const { title = 'My Portfolio' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <div class='layout_container'>
+    <div class='l-Container'>
       <Header />
-      <main>
+      <main class='l-Main'>
         <slot />
       </main>
     </div>
@@ -28,7 +28,7 @@ const { title = 'My Portfolio' } = Astro.props;
 </html>
 
 <style lang='scss'>
-  .layout_container {
+  .l-Container {
     padding: 0 rem(24);
 
     @include min-screen(pc) {

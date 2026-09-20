@@ -8,23 +8,23 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <section class='home_hero' aria-labelledby='site-title'>
-    <div class='home_hero-copy'>
-      <h1 id='site-title' class='home_site-title'>Tetsuro Tsunehara</h1>
-      <p class='home_subtitle'>Portfolio site</p>
+  <section class='p-HomeHero' aria-labelledby='site-title'>
+    <div class='p-HomeHero__copy'>
+      <h1 id='site-title' class='p-HomeHero__siteTitle'>Tetsuro Tsunehara</h1>
+      <p class='p-HomeHero__subtitle'>Portfolio site</p>
     </div>
-    <div class='home_cover' aria-hidden='true'>
+    <div class='p-HomeHero__cover' aria-hidden='true'>
       <!-- <img src='/home-image.svg' alt='' /> -->
     </div>
-    <p class='home_scroll-hint' aria-hidden='true'>↓scroll</p>
+    <p class='p-HomeHero__scrollHint' aria-hidden='true'>↓scroll</p>
   </section>
-  <section class='home_section' aria-labelledby='works-title'>
-    <div class='home_section-heading'>
-      <h2 id='works-title' class='home_kicker'>works</h2>
+  <section class='p-HomeWorks' aria-labelledby='works-title'>
+    <div class='p-HomeWorks__heading'>
+      <h2 id='works-title' class='p-HomeWorks__kicker'>works</h2>
     </div>
     {
       featuredWorks.length > 0 ? (
-        <div class='home_bento-grid'>
+        <div class='p-HomeWorks__bentoGrid'>
           {featuredWorks.map((work) => (
             <article>
               <WorkCard work={work} />
@@ -32,33 +32,33 @@ const featuredWorks = works.slice(0, 5);
           ))}
         </div>
       ) : (
-        <p class='home_empty-state'>works はまだ登録されていません。</p>
+        <p class='p-HomeWorks__emptyState'>works はまだ登録されていません。</p>
       )
     }
-    <a class='home_view-all' href='/works'>
+    <a class='p-HomeWorks__viewAll' href='/works'>
       View all
       <span aria-hidden='true'>→</span>
     </a>
   </section>
-  <section class='home_section home_about' aria-labelledby='about-title'>
-    <div class='home_section-heading'>
-      <h2 id='about-title' class='home_kicker'>about</h2>
+  <section class='p-HomeAbout' aria-labelledby='about-title'>
+    <div class='p-HomeAbout__heading'>
+      <h2 id='about-title' class='p-HomeAbout__kicker'>about</h2>
     </div>
-    <dl class='home_about-body'>
-      <div class='home_about-item'>
-        <dt class='home_about-label'>tool</dt>
+    <dl class='p-HomeAbout__body'>
+      <div class='p-HomeAbout__item'>
+        <dt class='p-HomeAbout__label'>tool</dt>
         <dd>
-          <ul class='home_about-list'>
+          <ul class='p-HomeAbout__list'>
             <li>VSCode</li>
             <li>Figma</li>
             <li>macOS</li>
           </ul>
         </dd>
       </div>
-      <div class='home_about-item'>
-        <dt class='home_about-label'>skill</dt>
+      <div class='p-HomeAbout__item'>
+        <dt class='p-HomeAbout__label'>skill</dt>
         <dd>
-          <ul class='home_about-list'>
+          <ul class='p-HomeAbout__list'>
             <li>HTML</li>
             <li>CSS</li>
             <li>JavaScript</li>
@@ -73,7 +73,7 @@ const featuredWorks = works.slice(0, 5);
 </BaseLayout>
 
 <style lang='scss'>
-  .home_hero {
+  .p-HomeHero {
     display: flex;
     flex-direction: column;
     gap: rem(32);
@@ -84,180 +84,200 @@ const featuredWorks = works.slice(0, 5);
     @media (width <= 900px) {
       padding-top: rem(32);
     }
-  }
 
-  .home_hero-copy {
-    display: flex;
-    flex: auto;
-    flex-direction: column;
-    gap: rem(16);
-    justify-content: center;
-    width: 100%;
-  }
-
-  .home_site-title {
-    font-size: clamp(2.25rem, 15vw, 6rem);
-    line-height: 1;
-    letter-spacing: -0.04em;
-  }
-
-  .home_subtitle {
-    max-width: rem(576);
-    font-size: rem(16);
-    line-height: 1.8;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
-  }
-
-  .home_cover {
-    overflow: hidden;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    border-radius: calc(var(--radius) * 2);
-    box-shadow: 0 20px 50px rgb(2 6 23 / 8%);
-
-    img {
-      display: block;
+    &__copy {
+      display: flex;
+      flex: auto;
+      flex-direction: column;
+      gap: rem(16);
+      justify-content: center;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
-  }
 
-  .home_scroll-hint {
-    padding: rem(5.6) rem(12.8);
-    font-size: rem(12);
-    color: var(--color-accent);
-    letter-spacing: 0.22em;
-  }
+    &__siteTitle {
+      font-size: clamp(2.25rem, 15vw, 6rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
 
-  .home_kicker {
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    line-height: 1.5;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: rem(1.6);
-  }
+    &__subtitle {
+      max-width: rem(576);
+      font-size: rem(16);
+      line-height: 1.8;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+    }
 
-  .home_section {
-    padding: rem(32) 0 rem(64);
-  }
+    &__cover {
+      overflow: hidden;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border-radius: calc(var(--radius) * 2);
+      box-shadow: 0 20px 50px rgb(2 6 23 / 8%);
 
-  .home_section-heading {
-    display: grid;
-    gap: rem(5.6);
-    margin-bottom: rem(20);
-  }
-
-  .home_bento-grid {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: var(--gap);
-
-    @media (width <= 900px) {
-      grid-template-columns: 1fr;
-      grid-auto-rows: auto;
-
-      > :nth-child(n) {
-        grid-row: auto;
-        grid-column: auto;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
-    > article {
-      min-width: 0;
-      min-height: 0;
-    }
-
-    > :nth-child(1) {
-      grid-row: 1 / 3;
-      grid-column: 1 / 5;
-    }
-
-    > :nth-child(2) {
-      grid-row: 1 / 2;
-      grid-column: 5 / 7;
-    }
-
-    > :nth-child(3) {
-      grid-row: 2 / 3;
-      grid-column: 5 / 7;
-    }
-
-    > :nth-child(4) {
-      grid-row: 3 / 4;
-      grid-column: 1 / 4;
-    }
-
-    > :nth-child(5) {
-      grid-row: 3 / 4;
-      grid-column: 4 / 7;
+    &__scrollHint {
+      padding: rem(5.6) rem(12.8);
+      font-size: rem(12);
+      color: var(--color-accent);
+      letter-spacing: 0.22em;
     }
   }
 
-  .home_empty-state {
-    padding: rem(16) 0;
-    color: #6b7280;
-  }
+  .p-HomeWorks {
+    padding: rem(32) 0 rem(64);
 
-  .home_view-all {
-    display: flex;
-    gap: rem(5.6);
-    align-items: center;
-    width: fit-content;
-    padding: rem(8.8) rem(17.6);
-    margin-top: var(--gap);
-    margin-left: auto;
-    font-size: rem(13.6);
-    font-weight: 600;
-    color: #fff;
-    background: rgb(2 6 23 / 80%);
-    border-radius: 999px;
-    box-shadow: 0 4px 14px rgb(2 6 23 / 25%);
-    transition:
-      transform 160ms ease,
-      background-color 160ms ease;
-
-    span {
-      transition: transform 160ms ease;
+    &__heading {
+      display: grid;
+      gap: rem(5.6);
+      margin-bottom: rem(20);
     }
 
-    @include hover {
-      background: var(--color-accent);
-      transform: translateY(rem(-2));
+    &__kicker {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1.5;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: rem(1.6);
+    }
+
+    &__bentoGrid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: var(--gap);
+
+      @media (width <= 900px) {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+
+        > :nth-child(n) {
+          grid-row: auto;
+          grid-column: auto;
+        }
+      }
+
+      > article {
+        min-width: 0;
+        min-height: 0;
+      }
+
+      > :nth-child(1) {
+        grid-row: 1 / 3;
+        grid-column: 1 / 5;
+      }
+
+      > :nth-child(2) {
+        grid-row: 1 / 2;
+        grid-column: 5 / 7;
+      }
+
+      > :nth-child(3) {
+        grid-row: 2 / 3;
+        grid-column: 5 / 7;
+      }
+
+      > :nth-child(4) {
+        grid-row: 3 / 4;
+        grid-column: 1 / 4;
+      }
+
+      > :nth-child(5) {
+        grid-row: 3 / 4;
+        grid-column: 4 / 7;
+      }
+    }
+
+    &__emptyState {
+      padding: rem(16) 0;
+      color: #6b7280;
+    }
+
+    &__viewAll {
+      display: flex;
+      gap: rem(5.6);
+      align-items: center;
+      width: fit-content;
+      padding: rem(8.8) rem(17.6);
+      margin-top: var(--gap);
+      margin-left: auto;
+      font-size: rem(13.6);
+      font-weight: 600;
+      color: #fff;
+      background: rgb(2 6 23 / 80%);
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgb(2 6 23 / 25%);
+      transition:
+        transform 160ms ease,
+        background-color 160ms ease;
 
       span {
-        transform: translateX(rem(3));
+        transition: transform 160ms ease;
+      }
+
+      @include hover {
+        background: var(--color-accent);
+        transform: translateY(rem(-2));
+
+        span {
+          transform: translateX(rem(3));
+        }
       }
     }
   }
 
-  .home_about-body {
-    display: grid;
-    gap: rem(32);
-  }
+  .p-HomeAbout {
+    padding: rem(32) 0 rem(64);
 
-  .home_about-item {
-    display: grid;
-    gap: rem(12);
-  }
+    &__heading {
+      display: grid;
+      gap: rem(5.6);
+      margin-bottom: rem(20);
+    }
 
-  .home_about-label {
-    font-size: rem(12);
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-  }
+    &__kicker {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1.5;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: rem(1.6);
+    }
 
-  .home_about-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: rem(8) rem(24);
-    list-style: none;
+    &__body {
+      display: grid;
+      gap: rem(32);
+    }
 
-    li {
-      font-size: rem(15.2);
-      line-height: 1.4;
+    &__item {
+      display: grid;
+      gap: rem(12);
+    }
+
+    &__label {
+      font-size: rem(12);
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: rem(8) rem(24);
+      padding: 0;
+      margin: 0;
+      list-style: none;
+
+      li {
+        font-size: rem(15.2);
+        line-height: 1.4;
+      }
     }
   }
 </style>

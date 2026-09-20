@@ -9,60 +9,38 @@ const works = await getWorks();
 ---
 
 <BaseLayout title='Works | My Portfolio'>
-  <section class='works_section' aria-labelledby='works-heading'>
-    <div class='works_heading'>
-      <p class='works_kicker'>works</p>
+  <section class='p-WorksIndex' aria-labelledby='works-heading'>
+    <div class='p-WorksIndex__heading'>
+      <h1 id='works-heading' class='p-WorksIndex__title'>works</h1>
     </div>
     {
       works.length > 0 ? (
-        <ul class='works_grid'>
+        <ul class='p-WorksIndex__grid'>
           {works.map((work) => (
-            <li class='works_item'>
+            <li class='p-WorksIndex__item'>
               <WorkCard work={work} />
             </li>
           ))}
         </ul>
       ) : (
-        <p class='works_empty'>works はまだ登録されていません。</p>
+        <p class='p-WorksIndex__empty'>works はまだ登録されていません。</p>
       )
     }
   </section>
 </BaseLayout>
 
 <style lang='scss'>
-  .works_back {
-    display: inline-flex;
-    gap: rem(4);
-    align-items: center;
-    padding-top: rem(24);
-    font-size: rem(13.6);
-    color: #6b7280;
-    transition: color 160ms ease;
-
-    @include hover {
-      color: var(--color-accent);
-    }
-  }
-
-  .works_section {
+  .p-WorksIndex {
     padding: rem(48) 0 rem(64);
   }
 
-  .works_heading {
+  .p-WorksIndex__heading {
     display: grid;
     gap: rem(5.6);
     margin-bottom: rem(32);
   }
 
-  .works_kicker {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.1;
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: rem(1.6);
-  }
-
-  .works_title {
+  .p-WorksIndex__title {
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.1;
     color: var(--color-accent);
@@ -70,7 +48,7 @@ const works = await getWorks();
     letter-spacing: 0.24em;
   }
 
-  .works_grid {
+  .p-WorksIndex__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--gap);
@@ -87,14 +65,28 @@ const works = await getWorks();
     }
   }
 
-  .works_item {
+  .p-WorksIndex__item {
     min-width: 0;
     min-height: 0;
     aspect-ratio: 4 / 3;
   }
 
-  .works_empty {
+  .p-WorksIndex__empty {
     padding: rem(16) 0;
     color: #6b7280;
+  }
+
+  .p-WorksIndex__back {
+    display: inline-flex;
+    gap: rem(4);
+    align-items: center;
+    padding-top: rem(24);
+    font-size: rem(13.6);
+    color: #6b7280;
+    transition: color 160ms ease;
+
+    @include hover {
+      color: var(--color-accent);
+    }
   }
 </style>
