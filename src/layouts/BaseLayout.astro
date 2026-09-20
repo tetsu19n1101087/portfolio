@@ -1,6 +1,5 @@
 ---
-import '@/styles/global.css';
-import './BaseLayout.css';
+import '@/styles/global.scss';
 import Header from '@/components/Header.astro';
 import Analytics from '@vercel/analytics/astro';
 
@@ -27,3 +26,13 @@ const { title = 'My Portfolio' } = Astro.props;
     <Analytics />
   </body>
 </html>
+
+<style lang='scss'>
+  .layout_container {
+    padding: 0 rem(24);
+
+    @include min-screen(pc) {
+      padding: 0 rem(96);
+    }
+  }
+</style>

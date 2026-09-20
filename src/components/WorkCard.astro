@@ -1,17 +1,113 @@
 ---
 const { work } = Astro.props;
-import './WorkCard.css';
 
 const id = work.id ?? work.contentId ?? work.slug ?? '';
-const imageUrl = work.images[0]?.url ?? work.thumbnail?.url ?? '';
+const image = work.images?.[0] ?? work.thumbnail;
+const imageUrl = image?.url ?? '';
+const width = image?.width ?? 800;
+const height = image?.height ?? 600;
 const title = work.title ?? 'work title';
 ---
 
 <a class='work-card' href={id ? `/works/${id}` : '#'}>
   <div class='work-card_media'>
-    {imageUrl ? <img src={imageUrl} alt={title} loading='lazy' /> : <div class='work-card_placeholder' />}
+    {
+      imageUrl ? (
+        <img src={imageUrl} alt={title} width={width} height={height} loading='lazy' />
+      ) : (
+        <div class='work-card_placeholder' />
+      )
+    }
   </div>
   <div class='work-card_overlay' aria-hidden='true'>
     <span class='work-card_title'>{title}</span>
   </div>
 </a>
+
+<style lang='scss'>
+  .work-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #f3f4f6;
+    border-radius: var(--radius);
+    box-shadow: 0 1px 4px rgb(2 6 23 / 6%);
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease;
+
+    @include hover {
+      box-shadow: 0 8px 30px rgb(2 6 23 / 8%);
+
+      .work-card_media::after {
+        background: rgb(2 6 23 / 38%);
+      }
+
+      .work-card_title {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &:focus-visible {
+      .work-card_media::after {
+        background: rgb(2 6 23 / 38%);
+      }
+
+      .work-card_title {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &_media {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      &::after {
+        position: absolute;
+        inset: 0;
+        content: '';
+        background: rgb(2 6 23 / 0%);
+        transition: background-color 160ms ease;
+      }
+    }
+
+    img,
+    &_placeholder {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &_placeholder {
+      background: #f3f4f6;
+    }
+
+    &_overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: rem(16);
+      pointer-events: none;
+    }
+
+    &_title {
+      font-size: rem(15.2);
+      font-weight: 600;
+      line-height: 1.2;
+      color: #fff;
+      text-shadow: 0 1px 2px rgb(2 6 23 / 45%);
+      opacity: 0;
+      transform: translateY(rem(8));
+      transition:
+        opacity 160ms ease,
+        transform 160ms ease;
+    }
+  }
+</style>

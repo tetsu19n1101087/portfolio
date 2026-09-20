@@ -17,4 +17,13 @@ export default defineConfig({
       CMS_API_KEY: envField.string({ context: 'server', access: 'secret' }),
     },
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "/src/styles/develop" as *;`,
+        },
+      },
+    },
+  },
 });

@@ -1,17 +1,31 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-  "path-autocomplete.pathMappings": {
-    "@": "${workspaceFolder}/src"
-  },
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
   },
-  "[css]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  "eslint.validate": ["javascript", "typescript", "astro"],
+  "stylelint.validate": ["css", "scss", "astro"],
+  "stylelint.snippet": ["css", "scss", "astro"],
+  "stylelint.packageManager": "yarn",
+  "css.validate": false,
+  "scss.validate": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
   },
-  "stylelint.validate": ["css", "astro"]
+  "path-autocomplete.pathMappings": {
+    "@": "${workspaceFolder}/src"
+  }
 }

@@ -1,0 +1,27 @@
+@use 'sass:map';
+
+$breakpoints: (
+  pc: 40.0625em, // 641px
+);
+
+@function get-breakpoint($name) {
+  $min: map.get($breakpoints, $name);
+
+  @if $min != 0 {
+    @return $min;
+  }
+
+  @return null;
+}
+
+@mixin min-screen($name) {
+  $min: get-breakpoint($name);
+
+  @if $min {
+    @media (width >= $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}

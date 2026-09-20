@@ -4,7 +4,6 @@ export const prerender = false;
 import { getWorks } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import WorkCard from '@/components/WorkCard.astro';
-import './index.css';
 
 const works = await getWorks();
 ---
@@ -29,3 +28,73 @@ const works = await getWorks();
     }
   </section>
 </BaseLayout>
+
+<style lang='scss'>
+  .works_back {
+    display: inline-flex;
+    gap: rem(4);
+    align-items: center;
+    padding-top: rem(24);
+    font-size: rem(13.6);
+    color: #6b7280;
+    transition: color 160ms ease;
+
+    @include hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .works_section {
+    padding: rem(48) 0 rem(64);
+  }
+
+  .works_heading {
+    display: grid;
+    gap: rem(5.6);
+    margin-bottom: rem(32);
+  }
+
+  .works_kicker {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: rem(1.6);
+  }
+
+  .works_title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+  }
+
+  .works_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    @media (width <= 900px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width <= 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .works_item {
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .works_empty {
+    padding: rem(16) 0;
+    color: #6b7280;
+  }
+</style>

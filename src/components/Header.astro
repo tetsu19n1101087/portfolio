@@ -1,5 +1,4 @@
 ---
-import './Header.css';
 ---
 
 <header class='site-header'>
@@ -10,3 +9,41 @@ import './Header.css';
     </nav>
   </div>
 </header>
+
+<style lang='scss'>
+  .site-header {
+    height: rem(72);
+    padding: rem(24) 0;
+
+    &_inner {
+      display: flex;
+      gap: var(--gap);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &_brand {
+      font-size: rem(18);
+      font-weight: 700;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &_nav {
+      display: flex;
+      gap: var(--gap);
+      align-items: center;
+    }
+
+    &_link {
+      font-size: rem(15.2);
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color 160ms ease;
+
+      @include hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+</style>

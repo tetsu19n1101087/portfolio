@@ -4,7 +4,6 @@ export const prerender = false;
 import { getWorkById } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Carousel from '@/components/Carousel.astro';
-import './index.css';
 
 const { id } = Astro.params;
 const work = await getWorkById(id!);
@@ -69,3 +68,178 @@ const heroImage = work.image?.url ?? work.images[0]?.url;
     import '@/scripts/carousel';
   </script>
 </BaseLayout>
+
+<style lang='scss'>
+  .work {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+    max-width: rem(768);
+    padding: rem(48) 0;
+    margin: 0 auto;
+
+    @media (width <= 900px) {
+      padding-top: rem(32);
+    }
+  }
+
+  .work_header {
+    display: grid;
+    gap: rem(12);
+    margin-bottom: rem(32);
+  }
+
+  .work_back {
+    display: inline-flex;
+    gap: rem(4);
+    align-items: center;
+    width: fit-content;
+    font-size: rem(13.6);
+    color: #6b7280;
+    transition: color 160ms ease;
+
+    @include hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .work_kicker {
+    margin-top: rem(8);
+    font-size: rem(12);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+  }
+
+  .work_title {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .work_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(12);
+    align-items: center;
+    margin-top: rem(4);
+  }
+
+  .work_date {
+    font-size: rem(13.6);
+    color: #6b7280;
+  }
+
+  .work_tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(6.4);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .work_tag {
+    padding: rem(3.2) rem(10.4);
+    font-size: rem(12);
+    font-weight: 600;
+    color: var(--color-accent);
+    background: rgb(14 165 164 / 8%);
+    border-radius: 999px;
+  }
+
+  .work_hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .work_body {
+    display: grid;
+    gap: rem(24);
+  }
+
+  .work_description {
+    padding-left: rem(16);
+    font-size: rem(16.8);
+    line-height: 1.8;
+    color: #4b5563;
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .work_text {
+    line-height: 1.8;
+    color: var(--color-text);
+
+    :global(h2),
+    :global(h3) {
+      margin-top: rem(32);
+      margin-bottom: rem(12);
+      letter-spacing: -0.02em;
+    }
+
+    :global(p) {
+      margin-bottom: rem(16);
+    }
+
+    :global(img) {
+      max-width: 100%;
+      border-radius: var(--radius);
+    }
+  }
+
+  .work_links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(12);
+  }
+
+  .work_link {
+    display: inline-flex;
+    gap: rem(4);
+    align-items: center;
+    padding: rem(8.8) rem(17.6);
+    font-size: rem(13.6);
+    font-weight: 600;
+    color: #fff;
+    background: rgb(2 6 23 / 80%);
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgb(2 6 23 / 15%);
+    transition:
+      transform 160ms ease,
+      background-color 160ms ease;
+
+    @include hover {
+      background: var(--color-accent);
+      transform: translateY(rem(-2));
+    }
+  }
+
+  :global(.carousel) {
+    display: flex;
+    align-items: center;
+  }
+
+  :global(.carousel-view) {
+    overflow: hidden;
+    background: #f3f4f6;
+    border-radius: calc(var(--radius) * 2);
+    box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
+  }
+
+  :global(.carousel-track) {
+    display: flex;
+  }
+
+  :global(.carousel-item) {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  :global(.carousel-item img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
