@@ -149,5 +149,12 @@ yarn verify     # build + check + lint + lint:markup（一括通し検証）
 ## コミット規約
 
 - コミットは意味のある論理的な単位に分割する。
-- コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/)（`feat:`, `fix:`, `refactor:`, `chore:`, `style:` 等）に従う。
+- コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/) 形式に従い、**プレフィックスの後ろ（説明部分）は日本語で記述**する。
+- 形式: `<type>: <日本語の説明>`
+  - `feat`: 新機能・コンポーネント追加（例: `feat: カルーセルコンポーネントを追加`）
+  - `fix`: バグ修正・表示崩れ修正（例: `fix: モバイル表示時の余白を修正`）
+  - `refactor`: リファクタリング（例: `refactor: クラス命名規則をFLOCSSに統一`）
+  - `style`: スタイル調整（例: `style: ボタンのホバー色を微調整`）
+  - `docs`: ドキュメント更新（例: `docs: コミット規約に日本語記述ルールを追記`）
+  - `chore`: 設定ファイル・依存関係更新（例: `chore: commitlint を導入`）
 - Husky の `commit-msg` フック（commitlint）により、規約外のメッセージは自動でコミットが弾かれます。
