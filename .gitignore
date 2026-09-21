@@ -30,3 +30,6 @@ yarn-error.log*
 # env files
 .env*
 !.env.example
+
+# content drafts (untracked)
+/drafts/
