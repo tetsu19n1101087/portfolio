@@ -8,6 +8,7 @@ Tetsuro Tsunehara のポートフォリオサイト。
 |---|---|
 | [AGENTS.md](AGENTS.md) | AIエージェントへの指示書・開発規約 |
 | [docs/coding-rules.md](docs/coding-rules.md) | コーディング規約（SCSS二層構成、a11y、HTML、JS） |
+| [docs/draft-rules.md](docs/draft-rules.md) | 記事下書き執筆ルール（太字禁止、構造化方針） |
 
 ## 技術構成
 
