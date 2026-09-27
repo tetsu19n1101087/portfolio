@@ -16,7 +16,10 @@ const featuredWorks = works.slice(0, 5);
     <div class='p-HomeHero__cover' aria-hidden='true'>
       <!-- <img src='/home-image.svg' alt='' /> -->
     </div>
-    <p class='p-HomeHero__scrollHint' aria-hidden='true'>↓scroll</p>
+    <div class='p-HomeHero__scrollHint' aria-hidden='true'>
+      <span class='p-HomeHero__scrollText'>Scroll</span>
+      <span class='p-HomeHero__scrollLine'></span>
+    </div>
   </section>
   <section class='p-HomeWorks' aria-labelledby='works-title'>
     <div class='p-HomeWorks__heading'>
@@ -125,11 +128,51 @@ const featuredWorks = works.slice(0, 5);
     }
 
     &__scrollHint {
-      padding: rem(5.6) rem(12.8);
+      display: flex;
+      flex-direction: column;
+      gap: rem(8);
+      align-items: center;
+    }
+
+    &__scrollText {
       font-family: var(--font-heading);
       font-size: rem(12);
       color: var(--color-accent);
+      text-transform: uppercase;
       letter-spacing: 0.22em;
+    }
+
+    &__scrollLine {
+      position: relative;
+      width: rem(1);
+      height: rem(40);
+      overflow: hidden;
+      background-color: var(--color-border);
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background-color: var(--color-accent);
+        animation: scroll-line 1.6s ease-in-out infinite;
+
+        @media (prefers-reduced-motion: reduce) {
+          animation: none;
+        }
+      }
+    }
+  }
+
+  @keyframes scroll-line {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(100%);
     }
   }
 
