@@ -11,63 +11,71 @@ const work = await getWorkById(id!);
 if (!work) return Astro.redirect('/404');
 
 const heroImage = work.image ?? work.images?.[0];
+const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 ---
 
-<BaseLayout title={`${work.title} | My Portfolio`}>
-  <article class='p-WorkDetail'>
-    <div class='p-WorkDetail__header'>
-      <h1 class='p-WorkDetail__title'>{work.title}</h1>
-      <div class='p-WorkDetail__meta'>
-        <time class='p-WorkDetail__date'>{work.date}</time>
+<BaseLayout title={`${work.title} | Tetsuro Tsunehara`}>
+  <article class="p-WorkDetail">
+    <div class="p-WorkDetail__header">
+      <h1 class="p-WorkDetail__title">{work.title}</h1>
+      <div class="p-WorkDetail__meta">
+        <time class="p-WorkDetail__date">{work.date}</time>
         {
           work.tags.length > 0 && (
-            <ul class='p-WorkDetail__tags' aria-label='タグ'>
+            <ul class="p-WorkDetail__tags" aria-label="タグ">
               {work.tags.map((tag) => (
-                <li class='p-WorkDetail__tag'>{tag.name}</li>
+                <li class="p-WorkDetail__tag">{tag.name}</li>
               ))}
             </ul>
           )
         }
       </div>
     </div>
-    <div class='p-WorkDetail__body'>
-      <div class='p-WorkDetail__hero'>
+    <div class="p-WorkDetail__body">
+      <div class="p-WorkDetail__hero">
         {
           work.images && work.images.length > 0 ? (
             <Carousel images={work.images} />
           ) : (
-            heroImage && (
-              <img
-                src={heroImage.url}
-                width={heroImage.width}
-                height={heroImage.height}
-                alt={work.title}
-              />
-            )
+            heroImage && <img src={heroImage.url} width={heroImage.width} height={heroImage.height} alt={work.title} />
           )
         }
       </div>
-      <p class='p-WorkDetail__description'>{work.description}</p>
-      <div class='p-WorkDetail__text' set:html={work.text} />
-      <div class='p-WorkDetail__links'>
-        {
-          work.demoLink && (
-            <a href={work.demoLink} target='_blank' rel='noopener noreferrer' class='p-WorkDetail__link'>
-              Demo →
-            </a>
-          )
-        }
-        {
-          work.codeLink && (
-            <a href={work.codeLink} target='_blank' rel='noopener noreferrer' class='p-WorkDetail__link'>
-              Code →
-            </a>
-          )
-        }
-      </div>
+      {
+        (work.demoLink || work.codeLink) && (
+          <div class="p-WorkDetail__links">
+            {
+              work.demoLink && (
+                <div class="p-WorkDetail__linkItem">
+                  <span class="p-WorkDetail__linkLabel">Site:</span>
+                  <a href={work.demoLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
+                    <span class="p-WorkDetail__linkText">{displayDemoUrl}</span>
+                    <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
+                    <span class="u-srOnly">（新しいタブで開きます）</span>
+                  </a>
+                </div>
+              )
+            }
+            {
+              work.codeLink && (
+                <div class="p-WorkDetail__linkItem">
+                  <span class="p-WorkDetail__linkLabel">Code:</span>
+                  <a href={work.codeLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
+                    <span class="p-WorkDetail__linkText">GitHub</span>
+                    <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
+                    <span class="u-srOnly">（新しいタブで開きます）</span>
+                  </a>
+                </div>
+              )
+            }
+          </div>
+        )
+      }
+      <!-- <p class='p-WorkDetail__description'>{work.description}</p> -->
+      <div class="p-WorkDetail__text" set:html={work.text} />
     </div>
-    <div class='p-WorkDetail__footer'>
-      <a href='/works' class='p-WorkDetail__back'>← All Works</a>
+    <div class="p-WorkDetail__footer">
+      <a href="/works" class="p-WorkDetail__back">← All Works</a>
     </div>
   </article>
   <script>
@@ -75,7 +83,7 @@ const heroImage = work.image ?? work.images?.[0];
   </script>
 </BaseLayout>
 
-<style lang='scss'>
+<style lang="scss">
   .p-WorkDetail {
     display: flex;
     flex-direction: column;
@@ -100,7 +108,7 @@ const heroImage = work.image ?? work.images?.[0];
     gap: rem(4);
     align-items: center;
     width: fit-content;
-    font-size: rem(13.6);
+    font-size: rem(14);
     color: #6b7280;
     transition: color 160ms ease;
 
@@ -109,14 +117,14 @@ const heroImage = work.image ?? work.images?.[0];
     }
   }
 
-  .p-WorkDetail__kicker {
-    margin-top: rem(8);
-    font-family: var(--font-heading);
-    font-size: rem(12);
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
-  }
+  // .p-WorkDetail__kicker {
+  //   margin-top: rem(8);
+  //   font-family: var(--font-heading);
+  //   font-size: rem(12);
+  //   color: var(--color-accent);
+  //   text-transform: capitalize;
+  //   letter-spacing: 0.24em;
+  // }
 
   .p-WorkDetail__title {
     font-size: clamp(1.75rem, 4vw, 3rem);
@@ -133,7 +141,7 @@ const heroImage = work.image ?? work.images?.[0];
   }
 
   .p-WorkDetail__date {
-    font-size: rem(13.6);
+    font-size: rem(14);
     color: #6b7280;
   }
 
@@ -169,7 +177,7 @@ const heroImage = work.image ?? work.images?.[0];
 
   .p-WorkDetail__description {
     padding-left: rem(16);
-    font-size: rem(16.8);
+    font-size: rem(16);
     line-height: 1.8;
     color: #4b5563;
     border-left: 3px solid var(--color-accent);
@@ -190,22 +198,24 @@ const heroImage = work.image ?? work.images?.[0];
 
     :global(h2) {
       padding-bottom: rem(8);
-      font-size: rem(22);
+      font-size: rem(24);
       border-bottom: 1px solid #e5e7eb;
-    }
-
-    :global(h3) {
-      font-size: rem(18);
     }
 
     :global(p) {
       margin-bottom: rem(16);
     }
 
-    :global(ul),
+    :global(ul) {
+      padding-left: rem(24);
+      margin-bottom: rem(16);
+      list-style-type: disc;
+    }
+
     :global(ol) {
       padding-left: rem(24);
       margin-bottom: rem(16);
+      list-style-type: decimal;
     }
 
     :global(li) {
@@ -248,14 +258,14 @@ const heroImage = work.image ?? work.images?.[0];
       padding: rem(16);
       margin: rem(20) 0;
       overflow-x: auto;
-      font-size: rem(13.6);
+      font-size: rem(14);
       line-height: 1.6;
       border-radius: var(--radius);
     }
 
     :global(code:not(pre code)) {
       padding: rem(2) rem(6);
-      font-size: rem(13.6);
+      font-size: rem(14);
       color: #eb5757;
       background: rgb(2 6 23 / 5%);
       border-radius: rem(4);
@@ -276,29 +286,53 @@ const heroImage = work.image ?? work.images?.[0];
 
   .p-WorkDetail__links {
     display: flex;
-    flex-wrap: wrap;
-    gap: rem(12);
+    flex-direction: column;
+    gap: rem(10);
+  }
+
+  .p-WorkDetail__linkItem {
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+  }
+
+  .p-WorkDetail__linkLabel {
+    display: inline-block;
+    flex-shrink: 0;
+    width: rem(52);
+    font-size: rem(15);
+    font-weight: 500;
+    color: var(--color-text-muted);
   }
 
   .p-WorkDetail__link {
     display: inline-flex;
     gap: rem(4);
     align-items: center;
-    padding: rem(8.8) rem(17.6);
-    font-size: rem(13.6);
+    font-size: rem(15);
     font-weight: 600;
-    color: #fff;
-    background: rgb(2 6 23 / 80%);
-    border-radius: 999px;
-    box-shadow: 0 4px 14px rgb(2 6 23 / 15%);
-    transition:
-      transform 160ms ease,
-      background-color 160ms ease;
+    color: var(--color-accent);
+    text-decoration: underline;
+    transition: color 160ms ease;
 
     @include hover {
-      background: var(--color-accent);
-      transform: translateY(rem(-2));
+      color: var(--color-accent-hover);
+
+      .p-WorkDetail__linkIcon {
+        opacity: 0.8;
+      }
     }
+  }
+
+  .p-WorkDetail__linkText {
+    word-break: break-all;
+  }
+
+  .p-WorkDetail__linkIcon {
+    flex-shrink: 0;
+    width: rem(16);
+    height: rem(16);
+    transition: opacity 160ms ease;
   }
 
   .p-WorkDetail__footer {
