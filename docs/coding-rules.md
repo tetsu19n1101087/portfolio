@@ -82,7 +82,12 @@ SPの値をベースに書き、`@include min-screen(pc)` でPC値を上書き�
 - **SCSS変数（`develop/`）**: ビルド時に計算・展開される値（ブレークポイント、計算用定数など）
 - **CSSカスタムプロパティ（`variables.scss`）**: 実行時に参照・上書きされる値（テーマカラー、フォントファミリー、ギャップなど）
 
-#### ⑤ Stylelint と Astro 固有疑似クラス
+#### ⑤ クラス命名規則 (FLOCSS + BEM)
+- FLOCSS 接頭辞（`l-`, `c-`, `p-`, `u-`, `is-`, `js-`）またはケバブケース＋BEM記法を使用する。
+- Stylelint（`selector-class-pattern`）により、Block は UpperCamelCase（例: `.p-Card`）、Element は `__lowerCamel`、Modifier は `--lowerCamel` が強制される。
+- セクションや汎用パーツ固有のスタイルは各 `.astro` の `<style lang="scss">` に記述し、スコープを効かせる。
+
+#### ⑥ Stylelint と Astro 固有疑似クラス
 - microCMS の動的 HTML や外部コンポーネントに親からスタイルを当てるため Astro の `:global(...)` を使う場合、`stylelint.config.js` の `selector-pseudo-class-no-unknown` で `ignorePseudoClasses: ['global']` のホワイトリスト指定が必要。
 
 ---
@@ -120,7 +125,27 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 5. 品質検証コマンド
+## 5. 記事下書き（drafts）執筆規約
+
+`drafts/` 配下で記事・実績紹介などの Markdown 下書きを作成・編集する際は、詳細ルール（`docs/draft-rules.md`）に従うこと。
+
+- **太字（Bold）の禁止**: 記事本文、リスト、テーブル等で太字（`**...**`、`__...__`、`<strong>`、`<b>`）を一切使用しない。
+- **水平線（`---` / `<hr>`）の禁止**: セクションの区切りに水平線（`---`）を挿入しない（frontmatter 除く）。
+- **構造化による表現**: 強調したい場合は太字に頼らず、見出しの適切な設計、箇条書きリスト、カギ括弧（「」）、インラインコードなどの構造化によって表現する。
+- **技術スタックの 5 区分・採用技術のみ列挙**: 「言語」「フレームワーク」「OS」「インフラ」「その他」の 5 区分で記述し、選定理由などの解説文は入れず採用技術のみ列挙する。
+- **コードブロック内の非コード記述禁止**: コードブロック（```）はプログラムコードやシェルコマンド専用とし、フロー図やアスキーアートなどは入れない。
+
+---
+
+## 6. 依存関係とツールチェーンの注意点
+
+- **Yarn Berry + Astro 7**: `@astrojs/check` 等が要求する `@emnapi/runtime` は peerDependency のため、Yarn Berry（nodeLinker）環境では `devDependencies` に明示追加して解決する。
+- **Vercel アダプターの互換性**: Astro 7 には `@astrojs/vercel: ^11.x` を採用する。
+- **テレメトリ抑止**: CI やサンドボックス環境で書き込みエラーが出る場合は、コマンド実行時に `ASTRO_TELEMETRY_DISABLED=1` を指定する。
+
+---
+
+## 7. 品質検証コマンド
 
 コード変更後は以下のコマンドで品質を検査する。
 
@@ -140,7 +165,7 @@ yarn verify
 
 ---
 
-## 6. コミット規約
+## 8. コミット規約
 
 コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/) 形式に従い、**プレフィックスの後ろ（説明部分）は日本語で記述**する。
 
