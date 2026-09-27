@@ -8,23 +8,23 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <section class='p-HomeHero' aria-labelledby='site-title'>
-    <div class='p-HomeHero__copy'>
-      <h1 id='site-title' class='p-HomeHero__siteTitle'>Tetsuro Tsunehara</h1>
-      <p class='p-HomeHero__subtitle'>Portfolio site</p>
+  <section class="p-HomeHero" aria-labelledby="site-title">
+    <div class="p-HomeHero__copy">
+      <h1 id="site-title" class="p-HomeHero__siteTitle">Tetsuro Tsunehara</h1>
+      <p class="p-HomeHero__subtitle">Portfolio site</p>
     </div>
-    <div class='p-HomeHero__cover' aria-hidden='true'>
+    <div class="p-HomeHero__cover" aria-hidden="true">
       <!-- <img src='/home-image.svg' alt='' /> -->
     </div>
-    <p class='p-HomeHero__scrollHint' aria-hidden='true'>↓scroll</p>
+    <p class="p-HomeHero__scrollHint" aria-hidden="true">↓scroll</p>
   </section>
-  <section class='p-HomeWorks' aria-labelledby='works-title'>
-    <div class='p-HomeWorks__heading'>
-      <h2 id='works-title' class='p-HomeWorks__kicker'>works</h2>
+  <section class="p-HomeWorks" aria-labelledby="works-title">
+    <div class="p-HomeWorks__heading">
+      <h2 id="works-title" class="p-HomeWorks__kicker">Works</h2>
     </div>
     {
       featuredWorks.length > 0 ? (
-        <div class='p-HomeWorks__bentoGrid'>
+        <div class="p-HomeWorks__bentoGrid">
           {featuredWorks.map((work) => (
             <article>
               <WorkCard work={work} />
@@ -32,39 +32,65 @@ const featuredWorks = works.slice(0, 5);
           ))}
         </div>
       ) : (
-        <p class='p-HomeWorks__emptyState'>works はまだ登録されていません。</p>
+        <p class="p-HomeWorks__emptyState">works はまだ登録されていません。</p>
       )
     }
-    <a class='p-HomeWorks__viewAll' href='/works'>
+    <a class="p-HomeWorks__viewAll" href="/works">
       View all
-      <span aria-hidden='true'>→</span>
+      <span aria-hidden="true">→</span>
     </a>
   </section>
-  <section class='p-HomeAbout' aria-labelledby='about-title'>
-    <div class='p-HomeAbout__heading'>
-      <h2 id='about-title' class='p-HomeAbout__kicker'>about</h2>
+  <section class="p-HomeAbout" aria-labelledby="about-title">
+    <div class="p-HomeAbout__heading">
+      <h2 id="about-title" class="p-HomeAbout__kicker">About</h2>
     </div>
-    <dl class='p-HomeAbout__body'>
-      <div class='p-HomeAbout__item'>
-        <dt class='p-HomeAbout__label'>tool</dt>
+    <dl class="p-HomeAbout__body">
+      <div class="p-HomeAbout__item">
+        <dt class="p-HomeAbout__label">Language</dt>
         <dd>
-          <ul class='p-HomeAbout__list'>
-            <li>VSCode</li>
-            <li>Figma</li>
-            <li>macOS</li>
-          </ul>
-        </dd>
-      </div>
-      <div class='p-HomeAbout__item'>
-        <dt class='p-HomeAbout__label'>skill</dt>
-        <dd>
-          <ul class='p-HomeAbout__list'>
+          <ul class="p-HomeAbout__list">
             <li>HTML</li>
             <li>CSS</li>
             <li>JavaScript</li>
             <li>TypeScript</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="p-HomeAbout__item">
+        <dt class="p-HomeAbout__label">Framework</dt>
+        <dd>
+          <ul class="p-HomeAbout__list">
             <li>Next.js</li>
             <li>Astro</li>
+            <li>React</li>
+            <li>Tailwind CSS</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="p-HomeAbout__item">
+        <dt class="p-HomeAbout__label">OS</dt>
+        <dd>
+          <ul class="p-HomeAbout__list">
+            <li>macOS</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="p-HomeAbout__item">
+        <dt class="p-HomeAbout__label">Infrastructure</dt>
+        <dd>
+          <ul class="p-HomeAbout__list">
+            <li>Vercel</li>
+            <li>microCMS</li>
+          </ul>
+        </dd>
+      </div>
+      <div class="p-HomeAbout__item">
+        <dt class="p-HomeAbout__label">Other</dt>
+        <dd>
+          <ul class="p-HomeAbout__list">
+            <li>Git / GitHub</li>
+            <li>Figma</li>
+            <li>VSCode</li>
           </ul>
         </dd>
       </div>
@@ -72,7 +98,7 @@ const featuredWorks = works.slice(0, 5);
   </section>
 </BaseLayout>
 
-<style lang='scss'>
+<style lang="scss">
   .p-HomeHero {
     display: flex;
     flex-direction: column;
@@ -146,7 +172,7 @@ const featuredWorks = works.slice(0, 5);
       font-size: clamp(2.5rem, 6vw, 5rem);
       line-height: 1.5;
       color: var(--color-accent);
-      text-transform: uppercase;
+      text-transform: capitalize;
       letter-spacing: rem(1.6);
     }
 
@@ -209,7 +235,7 @@ const featuredWorks = works.slice(0, 5);
       padding: rem(8.8) rem(17.6);
       margin-top: var(--gap);
       margin-left: auto;
-      font-size: rem(13.6);
+      font-size: rem(16);
       font-weight: 600;
       color: #fff;
       background: rgb(2 6 23 / 80%);
@@ -247,7 +273,7 @@ const featuredWorks = works.slice(0, 5);
       font-size: clamp(2.5rem, 6vw, 5rem);
       line-height: 1.5;
       color: var(--color-accent);
-      text-transform: uppercase;
+      text-transform: capitalize;
       letter-spacing: rem(1.6);
     }
 
@@ -277,7 +303,7 @@ const featuredWorks = works.slice(0, 5);
       list-style: none;
 
       li {
-        font-size: rem(15.2);
+        font-size: rem(16);
         line-height: 1.4;
       }
     }

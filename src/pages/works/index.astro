@@ -8,28 +8,28 @@ import WorkCard from '@/components/WorkCard.astro';
 const works = await getWorks();
 ---
 
-<BaseLayout title='Works | My Portfolio'>
-  <section class='p-WorksIndex' aria-labelledby='works-heading'>
-    <div class='p-WorksIndex__heading'>
-      <h1 id='works-heading' class='p-WorksIndex__title'>works</h1>
+<BaseLayout title="Works | My Portfolio">
+  <section class="p-WorksIndex" aria-labelledby="works-heading">
+    <div class="p-WorksIndex__heading">
+      <h1 id="works-heading" class="p-WorksIndex__title">Works</h1>
     </div>
     {
       works.length > 0 ? (
-        <ul class='p-WorksIndex__grid'>
+        <ul class="p-WorksIndex__grid">
           {works.map((work) => (
-            <li class='p-WorksIndex__item'>
+            <li class="p-WorksIndex__item">
               <WorkCard work={work} />
             </li>
           ))}
         </ul>
       ) : (
-        <p class='p-WorksIndex__empty'>works はまだ登録されていません。</p>
+        <p class="p-WorksIndex__empty">works はまだ登録されていません。</p>
       )
     }
   </section>
 </BaseLayout>
 
-<style lang='scss'>
+<style lang="scss">
   .p-WorksIndex {
     padding: rem(48) 0 rem(64);
   }
@@ -44,8 +44,8 @@ const works = await getWorks();
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.1;
     color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
+    text-transform: capitalize;
+    letter-spacing: rem(0.1);
   }
 
   .p-WorksIndex__grid {
@@ -81,7 +81,7 @@ const works = await getWorks();
     gap: rem(4);
     align-items: center;
     padding-top: rem(24);
-    font-size: rem(13.6);
+    font-size: rem(14);
     color: #6b7280;
     transition: color 160ms ease;
 
