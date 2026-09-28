@@ -1,10 +1,10 @@
 import EmblaCarousel from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 
-const carouselElements = document.querySelectorAll<HTMLElement>('.carousel');
+const carouselElements = document.querySelectorAll<HTMLElement>('.js-carousel');
 
 carouselElements.forEach((carousel) => {
-  const carouselView = carousel.querySelector<HTMLElement>('.carousel-view');
+  const carouselView = carousel.querySelector<HTMLElement>('.js-carouselView');
 
   if (!carouselView) {
     return;

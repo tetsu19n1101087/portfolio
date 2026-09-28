@@ -1,12 +1,50 @@
 ---
-import './Header.css';
 ---
 
-<header class='site-header'>
-  <div class='site-header_inner'>
-    <a class='site-header_brand' href='/'>Tetsuro Tsunehara</a>
-    <nav class='site-header_nav' aria-label='メインナビゲーション'>
-      <a class='site-header_link' href='/works'>Works</a>
+<header class='l-Header'>
+  <div class='l-Header__inner'>
+    <a class='l-Header__brand' href='/'>Tetsuro Tsunehara</a>
+    <nav class='l-Header__nav' aria-label='メインナビゲーション'>
+      <a class='l-Header__link' href='/works'>Works</a>
     </nav>
   </div>
 </header>
+
+<style lang='scss'>
+  .l-Header {
+    height: rem(72);
+    padding: rem(24) 0;
+
+    &__inner {
+      display: flex;
+      gap: var(--gap);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__brand {
+      font-family: var(--font-heading);
+      font-size: rem(18);
+      font-weight: 700;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &__nav {
+      display: flex;
+      gap: var(--gap);
+      align-items: center;
+    }
+
+    &__link {
+      font-size: rem(16);
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color 160ms ease;
+
+      @include hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+</style>

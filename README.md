@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Tetsuro Tsunehara のポートフォリオサイト。
 
-First, run the development server:
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [AGENTS.md](AGENTS.md) | AIエージェントへの指示書・開発規約 |
+| [docs/coding-rules.md](docs/coding-rules.md) | コーディング規約（SCSS二層構成、a11y、HTML、JS） |
+| [docs/draft-rules.md](docs/draft-rules.md) | 記事下書き執筆ルール（太字禁止、構造化方針） |
+
+## 技術構成
+
+- **Framework**: Astro 7.x (`@astrojs/vercel`)
+- **Language**: TypeScript 6.x
+- **Styles**: SCSS 二層構成（コンポーネント内 `<style lang="scss">` ＋ グローバルSCSS）
+- **Headless CMS**: microCMS (`microcms-js-sdk`)
+- **Node.js**: 24.20.0 (`.node-version`)
+- **Package Manager**: Yarn 4.x (Berry)
+
+## セットアップ
 
 ```bash
-npm run dev
-# or
+yarn install
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## コマンド一覧
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+yarn dev        # 開発サーバー起動
+yarn build      # プロダクションビルド
+yarn preview    # ビルド結果プレビュー
+yarn check      # Astro / TypeScript 型チェック
+yarn lint       # ESLint + Stylelint 検査
+yarn lint:fix   # ESLint + Stylelint 自動修正
+yarn lint:markup # ビルド後HTMLの markuplint 検査
+yarn verify     # build + check + lint + lint:markup（通し検証）
+```

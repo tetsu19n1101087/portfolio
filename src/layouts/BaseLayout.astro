@@ -1,9 +1,7 @@
 ---
-import '@/styles/global.css';
-import './BaseLayout.css';
+import '@/styles/global.scss';
 import Header from '@/components/Header.astro';
 import Analytics from '@vercel/analytics/astro';
-import { Font } from 'astro:assets';
 
 interface Props {
   title?: string;
@@ -17,16 +15,30 @@ const { title = 'My Portfolio' } = Astro.props;
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>{title}</title>
-    <Font cssVariable='--font-inter' preload />
-    <Font cssVariable='--font-noto-sans-jp' />
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      href='https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap'
+      rel='stylesheet'
+    />
   </head>
   <body>
-    <div class='layout_container'>
+    <div class='l-Container'>
       <Header />
-      <main>
+      <main class='l-Main'>
         <slot />
       </main>
     </div>
     <Analytics />
   </body>
 </html>
+
+<style lang='scss'>
+  .l-Container {
+    padding: 0 rem(24);
+
+    @include min-screen(pc) {
+      padding: 0 rem(96);
+    }
+  }
+</style>
