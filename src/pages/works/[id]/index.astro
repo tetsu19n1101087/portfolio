@@ -43,32 +43,36 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       </div>
       {
         (work.demoLink || work.codeLink) && (
-          <div class="p-WorkDetail__links">
+          <dl class="p-WorkDetail__links">
             {
               work.demoLink && (
                 <div class="p-WorkDetail__linkItem">
-                  <span class="p-WorkDetail__linkLabel">Site:</span>
-                  <a href={work.demoLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
-                    <span class="p-WorkDetail__linkText">{displayDemoUrl}</span>
-                    <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
-                    <span class="u-srOnly">（新しいタブで開きます）</span>
-                  </a>
+                  <dt class="p-WorkDetail__linkLabel">Site:</dt>
+                  <dd class="p-WorkDetail__linkValue">
+                    <a href={work.demoLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
+                      <span class="p-WorkDetail__linkText">{displayDemoUrl}</span>
+                      <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
+                      <span class="u-srOnly">（新しいタブで開きます）</span>
+                    </a>
+                  </dd>
                 </div>
               )
             }
             {
               work.codeLink && (
                 <div class="p-WorkDetail__linkItem">
-                  <span class="p-WorkDetail__linkLabel">Code:</span>
-                  <a href={work.codeLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
-                    <span class="p-WorkDetail__linkText">GitHub</span>
-                    <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
-                    <span class="u-srOnly">（新しいタブで開きます）</span>
-                  </a>
+                  <dt class="p-WorkDetail__linkLabel">Code:</dt>
+                  <dd class="p-WorkDetail__linkValue">
+                    <a href={work.codeLink} target="_blank" rel="noopener noreferrer" class="p-WorkDetail__link">
+                      <span class="p-WorkDetail__linkText">GitHub</span>
+                      <img src="/images/open_in_new.svg" alt="" width="16" height="16" class="p-WorkDetail__linkIcon" />
+                      <span class="u-srOnly">（新しいタブで開きます）</span>
+                    </a>
+                  </dd>
                 </div>
               )
             }
-          </div>
+          </dl>
         )
       }
       <!-- <p class='p-WorkDetail__description'>{work.description}</p> -->
@@ -285,24 +289,30 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
   }
 
   .p-WorkDetail__links {
-    display: flex;
-    flex-direction: column;
-    gap: rem(10);
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: rem(10) rem(8);
+    padding: 0;
+    margin: 0;
   }
 
   .p-WorkDetail__linkItem {
-    display: flex;
-    gap: rem(8);
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
     align-items: center;
   }
 
   .p-WorkDetail__linkLabel {
-    display: inline-block;
-    flex-shrink: 0;
-    width: rem(52);
+    margin: 0;
     font-size: rem(15);
     font-weight: 500;
     color: var(--color-text-muted);
+  }
+
+  .p-WorkDetail__linkValue {
+    min-width: 0;
+    margin: 0;
   }
 
   .p-WorkDetail__link {
