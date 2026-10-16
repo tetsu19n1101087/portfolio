@@ -1,10 +1,18 @@
 @use 'sass:map';
 
+// Tailwind CSS のデフォルト値に揃える（min-width）
 $breakpoints: (
-  pc: 40.0625em, // 641px
+  sm: 40em, // 640px
+  md: 48em, // 768px
+  lg: 64em, // 1024px
+  xl: 80em, // 1280px
 );
 
 @function get-breakpoint($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error 'Unknown breakpoint `#{$name}`. Expected one of: #{map.keys($breakpoints)}';
+  }
+
   $min: map.get($breakpoints, $name);
 
   @if $min != 0 {
