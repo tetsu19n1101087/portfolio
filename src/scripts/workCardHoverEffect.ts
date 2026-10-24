@@ -101,7 +101,7 @@ export function createWorkCardHoverEffect(
   mesh.frustumCulled = false;
   const camera = new Camera();
 
-  const textures = new Map<HTMLImageElement, CanvasTexture>();
+  const textures = new Map<HTMLImageElement, { texture: CanvasTexture; width: number }>();
   const failedImages = new WeakSet<HTMLImageElement>();
   const pointerTarget = new Vector2(0.5, 0.5);
 
@@ -118,6 +118,8 @@ export function createWorkCardHoverEffect(
   const resizeObserver = new ResizeObserver(() => {
     if (media && image) {
       resize(media, image);
+      // setSize で描画バッファが消えるため、次の tick を待たずに描き直す
+      renderer.render(mesh, camera);
     }
   });
 
@@ -125,26 +127,60 @@ export function createWorkCardHoverEffect(
     isLost = true;
     hide();
     canvas.remove();
+    textures.forEach(({ texture }) => texture.dispose());
+    textures.clear();
+    geometry.dispose();
+    material.dispose();
+    renderer.dispose();
     onContextLost();
   });
 
-  function createTexture(target: HTMLElement, img: HTMLImageElement) {
-    const pixelRatio = renderer.getPixelRatio();
-    const scale = Math.min(
-      1,
-      Math.max(target.clientWidth / img.naturalWidth, target.clientHeight / img.naturalHeight) *
-        pixelRatio *
-        1.05,
+  // object-fit: cover で表示するのに足りる幅（元画像より大きくはしない）
+  function getTextureWidth(target: HTMLElement, img: HTMLImageElement) {
+    const scale = Math.max(
+      target.clientWidth / img.naturalWidth,
+      target.clientHeight / img.naturalHeight,
     );
+    return Math.min(img.naturalWidth, Math.ceil(img.naturalWidth * scale * renderer.getPixelRatio()));
+  }
+
+  function createTexture(img: HTMLImageElement, width: number) {
     const source = document.createElement('canvas');
-    source.width = Math.max(1, Math.round(img.naturalWidth * scale));
-    source.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    source.width = Math.max(1, width);
+    source.height = Math.max(1, Math.round((img.naturalHeight * width) / img.naturalWidth));
     source.getContext('2d')?.drawImage(img, 0, 0, source.width, source.height);
 
     const texture = new CanvasTexture(source);
     texture.colorSpace = SRGBColorSpace;
-    // CORS が通っていない画像はここで SecurityError になる
-    renderer.initTexture(texture);
+
+    try {
+      // CORS が通っていない画像はここで SecurityError になる
+      renderer.initTexture(texture);
+    } catch (error) {
+      texture.dispose();
+      throw error;
+    } finally {
+      // GPU へ転送済みなので CPU 側のビットマップは手放す
+      source.width = 0;
+      source.height = 0;
+    }
+
+    return texture;
+  }
+
+  function getTexture(target: HTMLElement, img: HTMLImageElement) {
+    const width = getTextureWidth(target, img);
+    const cached = textures.get(img);
+
+    // カードが初回より大きく表示されたときだけ作り直す
+    if (cached && cached.width >= width * 0.8) {
+      return cached.texture;
+    }
+
+    cached?.texture.dispose();
+    textures.delete(img);
+    const texture = createTexture(img, width);
+    textures.set(img, { texture, width });
     return texture;
   }
 
@@ -189,11 +225,12 @@ export function createWorkCardHoverEffect(
   }
 
   function tick(now: number) {
-    const delta = Math.min((now - lastTime) / 1000, 0.1);
+    // rAF の時刻は enter 時の performance.now() より前になることがあるため 0 未満を切る
+    const delta = Math.max(0, Math.min((now - lastTime) / 1000, 0.1));
     lastTime = now;
 
     const duration = progressTo > progressFrom ? ENTER_DURATION : LEAVE_DURATION;
-    const t = Math.min((now - tweenStart) / 1000 / duration, 1);
+    const t = Math.max(0, Math.min((now - tweenStart) / 1000 / duration, 1));
     uniforms.uProgress.value = progressFrom + (progressTo - progressFrom) * easeOut(t);
     uniforms.uTime.value += delta;
     uniforms.uPointer.value.lerp(pointerTarget, 1 - Math.exp(-delta * 10));
@@ -227,7 +264,11 @@ export function createWorkCardHoverEffect(
         await img.decode();
       } catch {
         failedImages.add(img);
-        hide();
+
+        if (media === target) {
+          hide();
+        }
+
         return;
       }
 
@@ -237,22 +278,19 @@ export function createWorkCardHoverEffect(
       }
     }
 
-    let texture = textures.get(img);
+    const now = performance.now();
 
-    if (!texture) {
+    if (!frameId) {
+      let texture: CanvasTexture;
+
       try {
-        texture = createTexture(target, img);
-        textures.set(img, texture);
+        texture = getTexture(target, img);
       } catch {
         failedImages.add(img);
         hide();
         return;
       }
-    }
 
-    const now = performance.now();
-
-    if (!frameId) {
       uniforms.uTexture.value = texture;
       uniforms.uPointer.value.copy(pointerTarget);
       target.append(canvas);

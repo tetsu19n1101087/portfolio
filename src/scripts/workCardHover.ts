@@ -7,6 +7,7 @@ type HoveredCard = {
   clientY: number;
 };
 
+// canvas を全カードで 1 枚共有するため、ページ内のカードをまとめて扱う
 const cards = document.querySelectorAll<HTMLElement>('.js-workCard');
 const pointerQuery = window.matchMedia('(any-hover: hover) and (pointer: fine)');
 const motionQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
@@ -53,6 +54,7 @@ function load() {
     })
     .catch(() => {
       isUnsupported = true;
+      context.getExtension('WEBGL_lose_context')?.loseContext();
     });
 
   return loading;
