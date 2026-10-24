@@ -125,7 +125,51 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 5. 記事下書き（drafts）執筆規約
+## 5. アニメーション
+
+モーションは GSAP（ScrollTrigger / SplitText）で実装する。演出が作品より前に出ないよう、0.8〜1.0 秒・`expo.out` 系・移動量 24px 以下を目安にする。
+
+### 5-1. ファイル構成
+```
+src/scripts/motion/
+├── core.ts    # プラグイン登録・既定値・matchMedia 条件・フォント読み込み後の refresh を 1 か所にまとめる
+├── split.ts   # 見出しを 1 文字ずつせり上げる部品（SplitText）
+├── reveal.ts  # ページ共通のスクロール表示（BaseLayout から .l-Main を起点に 1 回だけ初期化）
+└── hero.ts    # トップの Hero 登場
+```
+- `gsap.registerPlugin()` や `gsap.defaults()` は `core.ts` 以外で呼ばない。gsap・ScrollTrigger・SplitText も `core.ts` から import する。
+- ページ固有の演出は、その `.astro` の `<script>` から `src/scripts/motion/` の関数を import し、ルート要素を渡して初期化する。
+
+### 5-2. フックの命名
+| フック | 用途 |
+|---|---|
+| `.js-reveal` | 単体の要素をスクロール表示する |
+| `.js-revealGroup` | 直下の子要素を順番にスクロール表示する |
+| `.js-splitHeading` | 見出しを画面に入ったときに 1 文字ずつ表示する |
+| `.js-hero*` | トップの Hero 登場（`js-heroIntro` がルート） |
+| `.is-revealed` | 表示し終えた要素に JS が付ける状態クラス |
+
+- フックは `js-` の lowerCamel で付け、見た目のクラス（`p-` / `c-`）とは分ける。
+- `<p>` など `aria-label` を付けられない要素は文字分割しない（SplitText が付ける `aria-label` が無効になるため）。分割した見出しは完了後に `revert()` で元の DOM に戻す。
+
+### 5-3. `prefers-reduced-motion` は `gsap.matchMedia()` で必ず扱う
+- アニメーションは `core.ts` の `withMotion()`（`gsap.matchMedia()` で `prefers-reduced-motion: no-preference` のときだけ実行）の中で作る。
+- OS の設定が切り替わると、`matchMedia` の中で作ったアニメーションは自動で元に戻る。`matchMedia` の外でアニメーションを作らない。
+
+### 5-4. 初期非表示のパターン
+- 初期非表示は `src/styles/motion.scss` だけに書く。条件は「`<html>` に `is-motionReady` が付いている」「`prefers-reduced-motion: no-preference`」「`.is-revealed` が付いていない」の 3 つ。
+- `is-motionReady` は BaseLayout の `<head>` の inline スクリプトで付ける。モーションのスクリプトが 3 秒以内に始まらなければ（`is-motionStarted` が付かなければ）外して内容を見せる。
+- JS 無効・読み込み失敗・動きを減らす設定のいずれでも、内容が隠れたままにならないこと。新しいフックを足すときは `motion.scss` のセレクタにも追加する。
+
+### 5-5. 動かしてよいプロパティ
+- 動かすのは `transform`（`x` / `y` / `yPercent` / `scale` など）・`opacity`・`clip-path` だけ。`width` / `height` / `top` / `margin` などレイアウトに影響するプロパティは動かさない（CLS 0 を保つ）。
+- CSS の `transition` を持つ要素（`.c-WorkCard` など）の `transform` を GSAP で上書きしない。外側のラッパー（`<li>` や `<article>`）を動かす。
+- スクロール表示は一度きり（`once: true`）。スムーズスクロール（ScrollSmoother など）は入れない。
+- LCP 要素（トップは h1）の表示を遅らせる開始遅延は付けない。
+
+---
+
+## 6. 記事下書き（drafts）執筆規約
 
 `drafts/` 配下で記事・実績紹介などの Markdown 下書きを作成・編集する際は、詳細ルール（`docs/draft-rules.md`）に従うこと。
 
@@ -137,7 +181,7 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 6. 依存関係とツールチェーンの注意点
+## 7. 依存関係とツールチェーンの注意点
 
 - **Yarn Berry + Astro 7**: `@astrojs/check` 等が要求する `@emnapi/runtime` は peerDependency のため、Yarn Berry（nodeLinker）環境では `devDependencies` に明示追加して解決する。
 - **Vercel アダプターの互換性**: Astro 7 には `@astrojs/vercel: ^11.x` を採用する。
@@ -145,7 +189,7 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 7. 品質検証コマンド
+## 8. 品質検証コマンド
 
 コード変更後は以下のコマンドで品質を検査する。
 
@@ -165,7 +209,7 @@ yarn verify
 
 ---
 
-## 8. コミット規約
+## 9. コミット規約
 
 コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/) 形式に従い、**プレフィックスの後ろ（説明部分）は日本語で記述**する。
 
