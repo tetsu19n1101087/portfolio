@@ -1,4 +1,5 @@
 import { gsap, MOTION_QUERY } from '@/scripts/motion/core';
+import '@/scripts/motion/scrollTrigger';
 
 /**
  * Hero のスクロールアウト。スクロール量に合わせてコピーを少し上へ動かして薄くし、scrollHint を消す。

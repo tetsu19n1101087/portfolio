@@ -1,7 +1,4 @@
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 /** モーションを再生してよい条件。OS 設定の切り替えには gsap.matchMedia() で追従する */
 export const MOTION_QUERY = '(prefers-reduced-motion: no-preference)';
@@ -23,4 +20,4 @@ export const releaseMotionReady = () => {
   html.classList.remove(READY_CLASS);
 };
 
-export { gsap, ScrollTrigger };
+export { gsap };

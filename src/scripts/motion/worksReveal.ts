@@ -1,4 +1,5 @@
-import { gsap, ScrollTrigger, MOTION_QUERY, hasMotionReady } from '@/scripts/motion/core';
+import { gsap, MOTION_QUERY, hasMotionReady } from '@/scripts/motion/core';
+import { ScrollTrigger } from '@/scripts/motion/scrollTrigger';
 
 const CLIP_HIDDEN = 'inset(100% 0% 0% 0%)';
 const CLIP_SHOWN = 'inset(0% 0% 0% 0%)';
