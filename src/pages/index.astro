@@ -38,9 +38,11 @@ const featuredWorks = works.slice(0, 5);
         <p class="p-HomeWorks__emptyState">works はまだ登録されていません。</p>
       )
     }
-    <a class="p-HomeWorks__viewAll" href="/works">
-      View all
-      <span aria-hidden="true">→</span>
+    <a class="p-HomeWorks__viewAll js-magnetic" href="/works">
+      <span class="p-HomeWorks__viewAllInner js-magneticInner">
+        View all
+        <span class="p-HomeWorks__viewAllArrow" aria-hidden="true">→</span>
+      </span>
     </a>
   </section>
   <section class="p-HomeAbout" aria-labelledby="about-title">
@@ -104,11 +106,13 @@ const featuredWorks = works.slice(0, 5);
 <script>
   import { releaseMotionReady } from '@/scripts/motion/core';
   import { initWorksReveal } from '@/scripts/motion/worksReveal';
+  import { initMagnetic } from '@/scripts/motion/magnetic';
 
   const works = document.querySelector<HTMLElement>('.js-homeWorks');
 
   if (works) {
     initWorksReveal(works);
+    works.querySelectorAll<HTMLElement>('.js-magnetic').forEach(initMagnetic);
   }
 
   releaseMotionReady();
@@ -289,9 +293,7 @@ const featuredWorks = works.slice(0, 5);
     }
 
     &__viewAll {
-      display: flex;
-      gap: rem(5.6);
-      align-items: center;
+      display: block;
       width: fit-content;
       padding: rem(8.8) rem(17.6);
       margin-top: var(--gap);
@@ -306,18 +308,25 @@ const featuredWorks = works.slice(0, 5);
         transform 160ms ease,
         background-color 160ms ease;
 
-      span {
-        transition: transform 160ms ease;
-      }
-
       @include hover {
         background: var(--color-accent);
         transform: translateY(rem(-2));
 
-        span {
+        .p-HomeWorks__viewAllArrow {
           transform: translateX(rem(3));
         }
       }
+    }
+
+    // マグネティックで GSAP が動かす要素。CSS transition は持たせない
+    &__viewAllInner {
+      display: flex;
+      gap: rem(5.6);
+      align-items: center;
+    }
+
+    &__viewAllArrow {
+      transition: transform 160ms ease;
     }
   }
 
