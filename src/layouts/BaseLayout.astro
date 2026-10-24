@@ -15,6 +15,18 @@ const { title = 'My Portfolio' } = Astro.props;
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>{title}</title>
+    <script is:inline>
+      // モーション用の初期非表示を有効にする。スクリプトが 3 秒以内に始まらなければ外して内容を見せる
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('is-motionReady');
+        setTimeout(() => {
+          if (!root.classList.contains('is-motionStarted')) {
+            root.classList.remove('is-motionReady');
+          }
+        }, 3000);
+      })();
+    </script>
     <link rel='preconnect' href='https://fonts.googleapis.com' />
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
     <link
