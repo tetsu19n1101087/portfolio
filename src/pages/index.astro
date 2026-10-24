@@ -8,15 +8,15 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <section class="p-HomeHero" aria-labelledby="site-title">
+  <section class="p-HomeHero js-heroIntro" aria-labelledby="site-title">
     <div class="p-HomeHero__copy">
-      <h1 id="site-title" class="p-HomeHero__siteTitle">Tetsuro Tsunehara</h1>
-      <p class="p-HomeHero__subtitle">Portfolio site</p>
+      <h1 id="site-title" class="p-HomeHero__siteTitle js-heroTitle">Tetsuro Tsunehara</h1>
+      <p class="p-HomeHero__subtitle js-heroSubtitle">Portfolio site</p>
     </div>
     <div class="p-HomeHero__cover" aria-hidden="true">
       <!-- <img src='/home-image.svg' alt='' /> -->
     </div>
-    <div class="p-HomeHero__scrollHint" aria-hidden="true">
+    <div class="p-HomeHero__scrollHint js-heroScrollHint" aria-hidden="true">
       <span class="p-HomeHero__scrollText">Scroll</span>
       <span class="p-HomeHero__scrollLine"></span>
     </div>
@@ -99,6 +99,15 @@ const featuredWorks = works.slice(0, 5);
       </div>
     </dl>
   </section>
+  <script>
+    import { initHeroIntro } from '@/scripts/motion/hero';
+
+    const hero = document.querySelector<HTMLElement>('.js-heroIntro');
+
+    if (hero) {
+      initHeroIntro(hero);
+    }
+  </script>
 </BaseLayout>
 
 <style lang="scss">
