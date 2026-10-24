@@ -93,13 +93,13 @@ void main() {
   vec3 color = mix(uColorBase, uColorMint, mint);
   color = mix(color, uColorTeal, teal * 0.55);
 
-  // コピーの周辺は白寄りに保つ（角丸矩形の距離でぼかす）
+  // コピーの周辺は白寄りに保ち、文字の範囲は白にする（角丸矩形の距離でぼかす）
   vec2 maskCenter = vec2(uMask.x * aspect, uMask.y);
   vec2 maskHalf = vec2(uMask.z * aspect, uMask.w);
   vec2 maskOffset = abs(position - maskCenter) - maskHalf;
   float maskDistance = length(max(maskOffset, 0.0)) + min(max(maskOffset.x, maskOffset.y), 0.0);
   float keepWhite = 1.0 - smoothstep(-0.04, 0.32, maskDistance);
-  color = mix(uColorBase, color, clamp(uIntensity, 0.0, 1.0) * (1.0 - keepWhite * 0.85));
+  color = mix(uColorBase, color, clamp(uIntensity, 0.0, 1.0) * (1.0 - keepWhite));
 
   gl_FragColor = vec4(color, 1.0);
   #include <colorspace_fragment>

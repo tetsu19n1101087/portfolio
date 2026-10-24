@@ -36,9 +36,15 @@ export interface HeroGradientOptions {
   canvas: HTMLCanvasElement;
   context: WebGL2RenderingContext;
   copyTargets: HTMLElement[];
+  /** abort されたら、初期化の途中でも破棄する */
+  signal: AbortSignal;
+  /** コンテキスト喪失などで内部から破棄されたときに呼ぶ */
+  onDispose?: () => void;
 }
 
 export interface HeroGradientRenderer {
+  /** ユーザー操作による一時停止。止めた位置の絵を残す */
+  setPaused(paused: boolean): void;
   dispose(): void;
 }
 
@@ -59,6 +65,8 @@ export const createHeroGradient = async ({
   canvas,
   context,
   copyTargets,
+  signal: abortSignal,
+  onDispose,
 }: HeroGradientOptions): Promise<HeroGradientRenderer | null> => {
   const renderer = new WebGLRenderer({
     canvas,
@@ -99,6 +107,7 @@ export const createHeroGradient = async ({
   let ready = false;
   let disposed = false;
   let running = false;
+  let paused = false;
   let inView = true;
   let pageVisible = document.visibilityState === 'visible';
   let elapsed = 0;
@@ -171,15 +180,18 @@ export const createHeroGradient = async ({
     draw();
   };
 
-  /** 最初の 60 フレームの平均が重ければ描画倍率を一段下げ、また 60 フレーム測る */
+  /**
+   * 最初の 60 フレームの平均が重ければ描画倍率を一段下げ、また 60 フレーム測る。
+   * 倍率を下げて canvas の中身が消えたときは true を返す
+   */
   const probe = (delta: number) => {
     if (!probing) {
-      return;
+      return false;
     }
     probeTotal += delta;
     probeCount += 1;
     if (probeCount < PROBE_FRAMES) {
-      return;
+      return false;
     }
     const slow = probeTotal / probeCount > SLOW_FRAME_MS;
     probeTotal = 0;
@@ -187,9 +199,10 @@ export const createHeroGradient = async ({
     if (slow && renderScale > MIN_SCALE) {
       renderScale = Math.max(MIN_SCALE, renderScale * SCALE_STEP);
       applySize();
-    } else {
-      probing = false;
+      return true;
     }
+    probing = false;
+    return false;
   };
 
   const updatePointer = (dt: number) => {
@@ -224,9 +237,10 @@ export const createHeroGradient = async ({
       lastTick = now;
       lastRender = now;
     } else {
-      probe(now - lastTick);
+      const resized = probe(now - lastTick);
       lastTick = now;
-      if (coarsePointer.matches && now - lastRender < TOUCH_FRAME_MS - 1) {
+      // 30fps に間引くが、倍率を下げた直後は空の canvas を見せないよう必ず描く
+      if (!resized && coarsePointer.matches && now - lastRender < TOUCH_FRAME_MS - 1) {
         return;
       }
     }
@@ -257,11 +271,23 @@ export const createHeroGradient = async ({
     if (!ready || disposed) {
       return;
     }
-    const shouldRun = !reducedMotion.matches && inView && pageVisible;
+    const shouldRun = !paused && !reducedMotion.matches && inView && pageVisible;
     if (shouldRun && !running) {
       start();
     } else if (!shouldRun && running) {
       stop();
+    }
+  };
+
+  /** ループが止まっているときに、今の uniform で 1 フレーム描き直す */
+  const redrawIfIdle = () => {
+    if (!ready || disposed || running) {
+      return;
+    }
+    if (reducedMotion.matches) {
+      drawStatic();
+    } else {
+      draw();
     }
   };
 
@@ -287,25 +313,28 @@ export const createHeroGradient = async ({
   intersectionObserver.observe(canvas);
 
   const resizeObserver = new ResizeObserver(() => {
-    cssWidth = canvas.clientWidth;
-    cssHeight = canvas.clientHeight;
-    applySize();
     measureMask();
+    const resized = canvas.clientWidth !== cssWidth || canvas.clientHeight !== cssHeight;
+    if (resized) {
+      cssWidth = canvas.clientWidth;
+      cssHeight = canvas.clientHeight;
+      applySize();
+    }
     // シェーダーの非同期コンパイルが終わるまでは描かない
     if (!ready || disposed) {
       return;
     }
-    // setSize で canvas の中身が消えるので、同じフレームのうちに描き直す
-    if (reducedMotion.matches) {
-      drawStatic();
-    } else {
+    if (resized && running) {
+      // setSize で canvas の中身が消えるので、同じフレームのうちに描き直す
       draw();
+    } else {
+      redrawIfIdle();
     }
   });
   resizeObserver.observe(canvas);
   copyTargets.forEach((target) => resizeObserver.observe(target));
 
-  const dispose = () => {
+  const dispose = (contextLost = false) => {
     if (disposed) {
       return;
     }
@@ -318,13 +347,19 @@ export const createHeroGradient = async ({
     canvas.classList.remove('is-ready');
     geometry.dispose();
     material.dispose();
+    // コンテキストも手放す（ページ内で作り直したときに溜まらないように）
+    if (!contextLost) {
+      renderer.forceContextLoss();
+    }
     renderer.dispose();
+    onDispose?.();
   };
 
   // Web フォントの読み込みで文字の範囲が変わるので測り直す
   document.fonts.ready.then(() => {
     if (!disposed) {
       measureMask();
+      redrawIfIdle();
     }
   });
 
@@ -354,15 +389,22 @@ export const createHeroGradient = async ({
     { signal },
   );
   // コンテキストを失ったら止めて、背面の CSS グラデーションに戻す
-  canvas.addEventListener('webglcontextlost', dispose, { signal });
+  canvas.addEventListener('webglcontextlost', () => dispose(true), { signal });
+  abortSignal.addEventListener('abort', () => dispose(), { once: true, signal });
 
   cssWidth = canvas.clientWidth;
   cssHeight = canvas.clientHeight;
   applySize();
   measureMask();
 
-  await renderer.compileAsync(scene, camera);
-  if (disposed) {
+  try {
+    await renderer.compileAsync(scene, camera);
+  } catch {
+    dispose();
+    return null;
+  }
+  if (disposed || abortSignal.aborted) {
+    dispose();
     return null;
   }
 
@@ -376,5 +418,11 @@ export const createHeroGradient = async ({
   ready = true;
   update();
 
-  return { dispose };
+  return {
+    setPaused(value) {
+      paused = value;
+      update();
+    },
+    dispose: () => dispose(),
+  };
 };

@@ -39,6 +39,15 @@ const createContext = (canvas: HTMLCanvasElement) => {
   }
 };
 
+/** abort 済みなら即座に、そうでなければ abort されたときに呼ぶ */
+const onAbort = (signal: AbortSignal, callback: () => void) => {
+  if (signal.aborted) {
+    callback();
+    return;
+  }
+  signal.addEventListener('abort', callback, { once: true });
+};
+
 // 以下の待機はどれも、破棄（abort）されたら即座に解決する
 const whenLoaded = (signal: AbortSignal) =>
   new Promise<void>((resolve) => {
@@ -47,32 +56,24 @@ const whenLoaded = (signal: AbortSignal) =>
       return;
     }
     window.addEventListener('load', () => resolve(), { once: true, signal });
-    signal.addEventListener('abort', () => resolve(), { once: true });
+    onAbort(signal, resolve);
   });
 
 const whenIdle = (signal: AbortSignal) =>
   new Promise<void>((resolve) => {
     if (typeof requestIdleCallback === 'function') {
       const id = requestIdleCallback(() => resolve(), { timeout: IDLE_TIMEOUT_MS });
-      signal.addEventListener(
-        'abort',
-        () => {
-          cancelIdleCallback(id);
-          resolve();
-        },
-        { once: true },
-      );
+      onAbort(signal, () => {
+        cancelIdleCallback(id);
+        resolve();
+      });
       return;
     }
     const id = setTimeout(resolve, 1);
-    signal.addEventListener(
-      'abort',
-      () => {
-        clearTimeout(id);
-        resolve();
-      },
-      { once: true },
-    );
+    onAbort(signal, () => {
+      clearTimeout(id);
+      resolve();
+    });
   });
 
 const whenVisible = (target: Element, signal: AbortSignal) =>
@@ -84,55 +85,83 @@ const whenVisible = (target: Element, signal: AbortSignal) =>
       }
     });
     observer.observe(target);
-    signal.addEventListener(
-      'abort',
-      () => {
-        observer.disconnect();
-        resolve();
-      },
-      { once: true },
-    );
+    onAbort(signal, () => {
+      observer.disconnect();
+      resolve();
+    });
   });
+
+/** 一時停止ボタン（WCAG 2.2.2）。動いているときだけ見せる */
+const setupToggle = (button: HTMLButtonElement | null, renderer: HeroGradientRenderer, signal: AbortSignal) => {
+  if (!button) {
+    return;
+  }
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const syncVisibility = () => {
+    button.hidden = signal.aborted || reducedMotion.matches;
+  };
+  syncVisibility();
+  reducedMotion.addEventListener('change', syncVisibility, { signal });
+  button.addEventListener(
+    'click',
+    () => {
+      const paused = button.getAttribute('aria-pressed') !== 'true';
+      button.setAttribute('aria-pressed', String(paused));
+      renderer.setPaused(paused);
+    },
+    { signal },
+  );
+  onAbort(signal, syncVisibility);
+};
 
 export const initHeroGradient = (root: HTMLElement): HeroGradientHandle => {
   const abort = new AbortController();
   const { signal } = abort;
-  let renderer: HeroGradientRenderer | null = null;
 
   const start = async () => {
     const canvas = root.querySelector<HTMLCanvasElement>('.js-heroGradientCanvas');
     if (!canvas || prefersSaveData()) {
       return false;
     }
+
+    await whenLoaded(signal);
+    await whenIdle(signal);
+    if (signal.aborted) {
+      return false;
+    }
+    // コンテキスト生成は GPU プロセスの起動を伴うので、読み込みとアイドルを待ってから行う。
     // ソフトウェア描画など重い環境では null が返る（failIfMajorPerformanceCaveat）
     const context = createContext(canvas);
     if (!context) {
       return false;
     }
+    const releaseContext = () => context.getExtension('WEBGL_lose_context')?.loseContext();
 
-    await whenLoaded(signal);
-    await whenIdle(signal);
     await whenVisible(canvas, signal);
     if (signal.aborted) {
+      releaseContext();
       return false;
     }
 
     const { createHeroGradient } = await import('./heroGradient/renderer');
     if (signal.aborted) {
+      releaseContext();
       return false;
     }
-    renderer = await createHeroGradient({
+    const renderer = await createHeroGradient({
       root,
       canvas,
       context,
       copyTargets: [...root.querySelectorAll<HTMLElement>('.js-heroGradientCopy')],
+      signal,
+      // コンテキスト喪失で内部から破棄されたら、ボタンなどもまとめて片付ける
+      onDispose: () => abort.abort(),
     });
-    if (signal.aborted) {
-      renderer?.dispose();
-      renderer = null;
+    if (!renderer) {
       return false;
     }
-    return renderer !== null;
+    setupToggle(root.querySelector<HTMLButtonElement>('.js-heroGradientToggle'), renderer, signal);
+    return true;
   };
 
   const ready = start().catch(() => false);
@@ -141,8 +170,6 @@ export const initHeroGradient = (root: HTMLElement): HeroGradientHandle => {
     ready,
     dispose() {
       abort.abort();
-      renderer?.dispose();
-      renderer = null;
     },
   };
 };
