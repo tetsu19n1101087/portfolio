@@ -27,7 +27,7 @@ const featuredWorks = works.slice(0, 5);
     </div>
     {
       featuredWorks.length > 0 ? (
-        <div class="p-HomeWorks__bentoGrid">
+        <div class="p-HomeWorks__bentoGrid js-revealGroup">
           {featuredWorks.map((work) => (
             <article>
               <WorkCard work={work} />
@@ -47,7 +47,7 @@ const featuredWorks = works.slice(0, 5);
     <div class="p-HomeAbout__heading">
       <h2 id="about-title" class="p-HomeAbout__kicker">About</h2>
     </div>
-    <dl class="p-HomeAbout__body">
+    <dl class="p-HomeAbout__body js-revealGroup">
       <div class="p-HomeAbout__item">
         <dt class="p-HomeAbout__label">Language</dt>
         <dd>

@@ -15,7 +15,7 @@ const works = await getWorks();
     </div>
     {
       works.length > 0 ? (
-        <ul class="p-WorksIndex__grid">
+        <ul class="p-WorksIndex__grid js-revealGroup">
           {works.map((work) => (
             <li class="p-WorksIndex__item">
               <WorkCard work={work} />

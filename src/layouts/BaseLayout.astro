@@ -45,6 +45,16 @@ const { title = 'My Portfolio' } = Astro.props;
   </body>
 </html>
 
+<script>
+  import { initReveal } from '@/scripts/motion/reveal';
+
+  const main = document.querySelector<HTMLElement>('.l-Main');
+
+  if (main) {
+    initReveal(main);
+  }
+</script>
+
 <style lang='scss'>
   .l-Container {
     padding: 0 rem(24);
