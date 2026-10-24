@@ -1,4 +1,5 @@
 import { gsap, ScrollTrigger, isRevealed, markRevealed, withMotion } from './core';
+import { animateCharsIn } from './split';
 
 /**
  * 'top 85%'（要素の上端が画面の 85% の位置に来たとき）と同じ発火位置。
@@ -14,6 +15,7 @@ const START = (self: ScrollTrigger) => {
 /**
  * ページ共通のスクロール表示。root（.l-Main）配下の次のフックを対象にする。
  * - .js-reveal / .js-revealGroup > * : 下から 24px 浮き上がりながらフェードイン
+ * - .js-splitHeading : 1 文字ずつマスクの下からせり上げ
  */
 export const initReveal = (root: HTMLElement) => {
   withMotion(() => {
@@ -37,5 +39,21 @@ export const initReveal = (root: HTMLElement) => {
         },
       });
     }
+
+    gsap.utils
+      .toArray<HTMLElement>(root.querySelectorAll('.js-splitHeading'))
+      .filter((el) => !isRevealed(el))
+      .forEach((heading) => {
+        ScrollTrigger.create({
+          trigger: heading,
+          start: START,
+          once: true,
+          onEnter: () => {
+            animateCharsIn(heading, {
+              onComplete: () => markRevealed(heading),
+            });
+          },
+        });
+      });
   });
 };
