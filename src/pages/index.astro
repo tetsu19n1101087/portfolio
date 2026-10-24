@@ -8,13 +8,13 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <section class="p-HomeHero" aria-labelledby="site-title">
+  <section class="p-HomeHero js-heroGradient" aria-labelledby="site-title">
     <div class="p-HomeHero__copy">
-      <h1 id="site-title" class="p-HomeHero__siteTitle">Tetsuro Tsunehara</h1>
-      <p class="p-HomeHero__subtitle">Portfolio site</p>
-    </div>
-    <div class="p-HomeHero__cover" aria-hidden="true">
-      <!-- <img src='/home-image.svg' alt='' /> -->
+      <div class="p-HomeHero__cover" aria-hidden="true">
+        <canvas class="p-HomeHero__canvas js-heroGradientCanvas"></canvas>
+      </div>
+      <h1 id="site-title" class="p-HomeHero__siteTitle js-heroGradientCopy">Tetsuro Tsunehara</h1>
+      <p class="p-HomeHero__subtitle js-heroGradientCopy">Portfolio site</p>
     </div>
     <div class="p-HomeHero__scrollHint" aria-hidden="true">
       <span class="p-HomeHero__scrollText">Scroll</span>
@@ -115,12 +115,19 @@ const featuredWorks = works.slice(0, 5);
     }
 
     &__copy {
+      position: relative;
       display: flex;
       flex: auto;
       flex-direction: column;
       gap: rem(16);
       justify-content: center;
       width: 100%;
+      padding: rem(32) rem(24);
+      isolation: isolate;
+
+      @include min-screen(pc) {
+        padding: rem(64);
+      }
     }
 
     &__siteTitle {
@@ -139,17 +146,30 @@ const featuredWorks = works.slice(0, 5);
       letter-spacing: 0.24em;
     }
 
+    // コピーの背面に敷くパネル。WebGL が使えないときは CSS グラデーションのまま見せる
     &__cover {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
       overflow: hidden;
       background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
       border-radius: calc(var(--radius) * 2);
       box-shadow: 0 20px 50px rgb(2 6 23 / 8%);
+    }
 
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    &__canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+
+      &.is-ready {
+        opacity: 1;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
       }
     }
 
