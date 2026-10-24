@@ -4316,6 +4316,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.15.0":
+  version: 3.15.0
+  resolution: "gsap@npm:3.15.0"
+  checksum: 10c0/5d86de72cb0bd6b20502c34c329a83a7d679979731bb465164407b7a5225aa61d612beee740eea36258622897c116cd2ca35320d530b7cf68bad62522361fcf7
+  languageName: node
+  linkType: hard
+
 "h3@npm:^1.15.10":
   version: 1.15.11
   resolution: "h3@npm:1.15.11"
@@ -6192,6 +6199,7 @@ __metadata:
     eslint: "npm:^10.9.1"
     eslint-plugin-astro: "npm:^3.1.0"
     gray-matter: "npm:^4.0.3"
+    gsap: "npm:^3.15.0"
     husky: "npm:^9.1.7"
     lint-staged: "npm:^17.4.1"
     markuplint: "npm:^4.18.3"
