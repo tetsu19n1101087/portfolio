@@ -13,9 +13,9 @@ const title = work.title ?? 'work title';
   <div class='c-WorkCard__media'>
     {
       imageUrl ? (
-        <img src={imageUrl} alt={title} width={width} height={height} loading='lazy' />
+        <img class='js-revealMedia' src={imageUrl} alt={title} width={width} height={height} loading='lazy' />
       ) : (
-        <div class='c-WorkCard__placeholder' />
+        <div class='c-WorkCard__placeholder js-revealMedia' />
       )
     }
   </div>

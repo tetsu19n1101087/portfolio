@@ -21,7 +21,7 @@ const featuredWorks = works.slice(0, 5);
       <span class="p-HomeHero__scrollLine"></span>
     </div>
   </section>
-  <section class="p-HomeWorks" aria-labelledby="works-title">
+  <section class="p-HomeWorks js-homeWorks" aria-labelledby="works-title">
     <div class="p-HomeWorks__heading">
       <h2 id="works-title" class="p-HomeWorks__kicker">Works</h2>
     </div>
@@ -29,7 +29,7 @@ const featuredWorks = works.slice(0, 5);
       featuredWorks.length > 0 ? (
         <div class="p-HomeWorks__bentoGrid">
           {featuredWorks.map((work) => (
-            <article>
+            <article class="js-revealItem">
               <WorkCard work={work} />
             </article>
           ))}
@@ -100,6 +100,19 @@ const featuredWorks = works.slice(0, 5);
     </dl>
   </section>
 </BaseLayout>
+
+<script>
+  import { releaseMotionReady } from '@/scripts/motion/core';
+  import { initWorksReveal } from '@/scripts/motion/worksReveal';
+
+  const works = document.querySelector<HTMLElement>('.js-homeWorks');
+
+  if (works) {
+    initWorksReveal(works);
+  }
+
+  releaseMotionReady();
+</script>
 
 <style lang="scss">
   .p-HomeHero {
@@ -237,6 +250,11 @@ const featuredWorks = works.slice(0, 5);
       > article {
         min-width: 0;
         min-height: 0;
+
+        // GSAP が引き継ぐまでの初期状態。JS 無効時は is-motionReady が付かないので隠れない
+        :global(.is-motionReady) & {
+          clip-path: inset(100% 0 0 0);
+        }
       }
 
       > :nth-child(1) {
