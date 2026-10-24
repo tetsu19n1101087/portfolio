@@ -101,6 +101,16 @@ const featuredWorks = works.slice(0, 5);
   </section>
 </BaseLayout>
 
+<script>
+  import { initHeroGradient } from '@/scripts/heroGradient';
+
+  const heroGradientRoot = document.querySelector<HTMLElement>('.js-heroGradient');
+
+  if (heroGradientRoot) {
+    initHeroGradient(heroGradientRoot);
+  }
+</script>
+
 <style lang="scss">
   .p-HomeHero {
     display: flex;
