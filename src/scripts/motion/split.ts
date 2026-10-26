@@ -54,6 +54,27 @@ const keepKerning = (split: SplitText, glyphs: DOMRect[]) => {
 };
 
 /**
+ * text-transform: capitalize は inline-block に分けた各文字を単語の先頭とみなし、全文字を大文字にする。
+ * 単語の 2 文字目以降だけ打ち消して、分割前と同じ表記を保つ。
+ */
+const keepCapitalize = (el: HTMLElement, split: SplitText) => {
+  if (getComputedStyle(el).textTransform !== 'capitalize') {
+    return;
+  }
+
+  split.words.forEach((word) => {
+    split.chars
+      .filter((char) => word.contains(char))
+      .slice(1)
+      .forEach((char) => {
+        if (char instanceof HTMLElement) {
+          char.style.textTransform = 'none';
+        }
+      });
+  });
+};
+
+/**
  * 見出しを 1 文字ずつマスクの下からせり上げる。
  * 単語単位でも包んで単語途中の改行を防ぎ、完了後は revert() で元の DOM に戻す。
  */
@@ -71,6 +92,8 @@ export const animateCharsIn = (el: HTMLElement, vars: gsap.TweenVars = {}) => {
     }
   });
 
+  // 文字幅が変わるので、字送りの補正より先に表記を戻す
+  keepCapitalize(el, split);
   keepKerning(split, glyphs);
 
   // 文字は全てマスクの下にあるので、見出し自体の初期非表示を外しても見えない
