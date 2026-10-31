@@ -93,11 +93,11 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     flex-direction: column;
     gap: rem(32);
     max-width: rem(768);
-    padding: rem(48) 0;
+    padding: rem(32) 0 rem(48);
     margin: 0 auto;
 
-    @media (width <= 900px) {
-      padding-top: rem(32);
+    @include min-screen(lg) {
+      padding-top: rem(48);
     }
   }
 
@@ -176,6 +176,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
 
   .p-WorkDetail__body {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: rem(24);
   }
 
@@ -190,6 +191,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
   .p-WorkDetail__text {
     line-height: 1.8;
     color: var(--color-text);
+    overflow-wrap: anywhere;
 
     :global(h2),
     :global(h3),
@@ -239,8 +241,10 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       }
     }
 
+    // CMS 本文はラッパーを挟めないため、table 自体をスクロールコンテナにする
     :global(table) {
-      width: 100%;
+      display: block;
+      max-width: 100%;
       margin: rem(24) 0;
       overflow-x: auto;
       border-collapse: collapse;
@@ -355,6 +359,8 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
   }
 
   :global(.c-Carousel__view) {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     background: #f3f4f6;
     border-radius: calc(var(--radius) * 2);
