@@ -124,6 +124,7 @@ const featuredWorks = works.slice(0, 5);
     }
 
     &__siteTitle {
+      font-family: var(--font-heading);
       font-size: clamp(2.25rem, 15vw, 6rem);
       line-height: 1;
       letter-spacing: -0.04em;
@@ -161,7 +162,6 @@ const featuredWorks = works.slice(0, 5);
     }
 
     &__scrollText {
-      font-family: var(--font-heading);
       font-size: rem(12);
       color: var(--color-accent);
       text-transform: uppercase;
@@ -343,7 +343,7 @@ const featuredWorks = works.slice(0, 5);
     &__label {
       font-size: rem(12);
       color: var(--color-accent);
-      text-transform: uppercase;
+      text-transform: capitalize;
       letter-spacing: 0.22em;
     }
 
