@@ -37,7 +37,11 @@ const { title = 'My Portfolio' } = Astro.props;
   .l-Container {
     padding: 0 rem(24);
 
-    @include min-screen(pc) {
+    @include min-screen(md) {
+      padding: 0 rem(48);
+    }
+
+    @include min-screen(lg) {
       padding: 0 rem(96);
     }
   }

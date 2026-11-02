@@ -52,14 +52,28 @@ px 値をそのまま書かず、`rem()` 計算関数を使う。
 ```
 
 #### ② レスポンシブはモバイルファースト
-SPの値をベースに書き、`@include min-screen(pc)` でPC値を上書きする。
+SPの値をベースに書き、`@include min-screen(<name>)` で広い画面の値を上書きする。
 メディアクエリは範囲記法（`width >= $min`）で自動出力される。
+`max-width` 方向のメディアクエリやピクセル値の直書きはしない。
+
+ブレークポイントは Tailwind CSS のデフォルト値に揃えている（いずれも min-width）。
+
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+
+最小保証幅は 375px とする。未定義の名前を渡すとビルドエラーになる。
 
 ```scss
 .p-Section {
   padding: rem(24) 0;
 
-  @include min-screen(pc) {
+  @include min-screen(md) {
+    padding: rem(48) 0;
+  }
+
+  @include min-screen(lg) {
     padding: rem(64) 0;
   }
 }
