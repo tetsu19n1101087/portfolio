@@ -11,11 +11,11 @@ const works = await getWorks();
 <BaseLayout title="Works | My Portfolio">
   <section class="p-WorksIndex" aria-labelledby="works-heading">
     <div class="p-WorksIndex__heading">
-      <h1 id="works-heading" class="p-WorksIndex__title">Works</h1>
+      <h1 id="works-heading" class="p-WorksIndex__title js-splitHeading">Works</h1>
     </div>
     {
       works.length > 0 ? (
-        <ul class="p-WorksIndex__grid">
+        <ul class="p-WorksIndex__grid js-revealGroup">
           {works.map((work) => (
             <li class="p-WorksIndex__item">
               <WorkCard work={work} />

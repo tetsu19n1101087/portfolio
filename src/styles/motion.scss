@@ -1,0 +1,17 @@
+// モーションの初期非表示。
+// <html> に JS で付けた is-motionReady の配下かつ、動きを減らす設定でないときだけ隠す。
+// JS が無効・読み込みに失敗した場合は is-motionReady が付かない（または保険のタイマーで外れる）ので内容は隠れない。
+@media (prefers-reduced-motion: no-preference) {
+  .is-motionReady {
+    :is(
+      .js-reveal,
+      .js-revealGroup > *,
+      .js-splitHeading,
+      .js-heroTitle,
+      .js-heroSubtitle,
+      .js-heroScrollHint
+    ):not(.is-revealed) {
+      opacity: 0;
+    }
+  }
+}
