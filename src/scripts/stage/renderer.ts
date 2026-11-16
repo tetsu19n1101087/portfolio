@@ -5,6 +5,8 @@
 import { screenUV } from 'three/tsl';
 import { Color, PerspectiveCamera, Scene, WebGPURenderer } from 'three/webgpu';
 import { createGradient, withGrain } from './background';
+import { createCarouselDistortionLayer } from './carouselDistortion';
+import type { CarouselDistortionLayer, CarouselDistortionOptions } from './carouselDistortion';
 import { createImageRevealLayer } from './imageReveal';
 import type { ImageRevealLayer, ImageRevealOptions } from './imageReveal';
 import { createOrb } from './orb';
@@ -36,8 +38,16 @@ export interface StageRenderer {
    * 使えない環境（WebGL2 に切り替わった場合など）では null を返す。呼び出し側は CSS の出現に切り替える
    */
   createImageReveal(options: ImageRevealOptions): Promise<ImageReveal | null>;
+  /**
+   * カルーセルが動いている間のゆがみを、渡した canvas に描く。
+   * 使えない環境では null を返す。呼び出し側は演出なしで動かす
+   */
+  createCarouselDistortion(options: CarouselDistortionOptions): CarouselDistortion | null;
   dispose(): void;
 }
+
+/** 描画側の内部用メソッド（render）を除いた、呼び出し側へ渡す操作 */
+export type CarouselDistortion = Omit<CarouselDistortionLayer, 'render'>;
 
 export interface ImageReveal {
   /** 0 で何も見えず、1 で画像がすべて見える */
@@ -188,7 +198,7 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
   // 背景とは別の canvas に描く層。1 つのレンダラーで複数の canvas に描けるのは WebGPU のときだけ
   const supportsLayers = (renderer.backend as { isWebGPUBackend?: boolean }).isWebGPUBackend === true;
   const mainTarget = renderer.getCanvasTarget();
-  const layers = new Set<ImageRevealLayer>();
+  const layers = new Set<ImageRevealLayer | CarouselDistortionLayer>();
 
   let disposed = false;
   let running = false;
@@ -317,6 +327,24 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
       layers.add(layer);
       return {
         setProgress: (value) => layer.setProgress(value),
+        dispose() {
+          if (layers.delete(layer)) {
+            layer.dispose();
+          }
+        },
+      };
+    },
+    createCarouselDistortion(layerOptions) {
+      if (!supportsLayers || disposed || !running) {
+        return null;
+      }
+      const layer = createCarouselDistortionLayer(layerOptions);
+      layers.add(layer);
+      return {
+        resize: layer.resize,
+        setSlideImage: layer.setSlideImage,
+        hasSlide: layer.hasSlide,
+        setFrame: layer.setFrame,
         dispose() {
           if (layers.delete(layer)) {
             layer.dispose();

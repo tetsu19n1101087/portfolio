@@ -366,6 +366,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
   }
 
   :global(.c-Carousel__view) {
+    position: relative;
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -387,5 +388,23 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  // 動いている間のゆがみを描く canvas。演出の間だけ見せ、その間は元の画像を透明にする
+  :global(.c-Carousel__canvas) {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  :global(.c-Carousel__view.is-distorting .c-Carousel__canvas) {
+    visibility: visible;
+  }
+
+  :global(.c-Carousel__view.is-distorting .c-Carousel__track) {
+    opacity: 0;
   }
 </style>
