@@ -14,7 +14,7 @@ const heroImage = work.image ?? work.images?.[0];
 const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 ---
 
-<BaseLayout title={`${work.title} | Tetsuro Tsunehara`}>
+<BaseLayout title={`${work.title} | Tetsuro Tsunehara`} stage="workDetail">
   <article class="p-WorkDetail">
     <div class="p-WorkDetail__header">
       <h1 class="p-WorkDetail__title">{work.title}</h1>

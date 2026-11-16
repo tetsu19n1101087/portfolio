@@ -1,11 +1,13 @@
 ---
+import MotionToggle from '@/components/MotionToggle.astro';
 ---
 
-<header class='l-Header'>
+<header class='l-Header' transition:persist='header'>
   <div class='l-Header__inner'>
     <a class='l-Header__brand' href='/'>Tetsuro Tsunehara</a>
     <nav class='l-Header__nav' aria-label='メインナビゲーション'>
       <a class='l-Header__link' href='/works'>Works</a>
+      <MotionToggle />
     </nav>
   </div>
 </header>

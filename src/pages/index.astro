@@ -8,7 +8,7 @@ const featuredWorks = works.slice(0, 5);
 ---
 
 <BaseLayout>
-  <section class="p-HomeHero" aria-labelledby="site-title">
+  <section class="p-HomeHero" aria-labelledby="site-title" data-stage="hero">
     <div class="p-HomeHero__copy">
       <h1 id="site-title" class="p-HomeHero__siteTitle">Tetsuro Tsunehara</h1>
       <p class="p-HomeHero__subtitle">Portfolio site</p>
@@ -21,7 +21,7 @@ const featuredWorks = works.slice(0, 5);
       <span class="p-HomeHero__scrollLine"></span>
     </div>
   </section>
-  <section class="p-HomeWorks" aria-labelledby="works-title">
+  <section class="p-HomeWorks" aria-labelledby="works-title" data-stage="works">
     <div class="p-HomeWorks__heading">
       <h2 id="works-title" class="p-HomeWorks__kicker">Works</h2>
     </div>
@@ -43,7 +43,7 @@ const featuredWorks = works.slice(0, 5);
       <span aria-hidden="true">→</span>
     </a>
   </section>
-  <section class="p-HomeAbout" aria-labelledby="about-title">
+  <section class="p-HomeAbout" aria-labelledby="about-title" data-stage="about">
     <div class="p-HomeAbout__heading">
       <h2 id="about-title" class="p-HomeAbout__kicker">About</h2>
     </div>
