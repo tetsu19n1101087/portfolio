@@ -84,7 +84,8 @@ const ORB_POINTER_PULL = 0.04;
 
 /** 描画解像度の倍率を下げるかどうかを判定する間隔（フレーム数）と基準 */
 const QUALITY_WINDOW = 90;
-const SLOW_FRAME_SECONDS = 1 / 42;
+// 省電力モードなどで 30fps に抑えられている端末は「遅い」とみなさない
+const SLOW_FRAME_SECONDS = 1 / 27;
 const QUALITY_STEPS = [1, 0.75, 0.5];
 
 const follow = (rate: number, delta: number) => 1 - Math.exp(-rate * delta);

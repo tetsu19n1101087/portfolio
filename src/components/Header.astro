@@ -108,8 +108,9 @@ import MotionToggle from '@/components/MotionToggle.astro';
       translate: 0 -100%;
     }
 
-    // キーボードで中のリンクやボタンに移動したときは、隠れていても必ず見せる
-    &:focus-within {
+    // キーボードで中のリンクやボタンに移動したときは、隠れていても必ず見せる。
+    // :focus-within だとマウスで押した後も当てはまり続け、スクロールしても隠れなくなる
+    &:has(:focus-visible) {
       translate: 0 0;
     }
 

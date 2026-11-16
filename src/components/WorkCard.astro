@@ -48,7 +48,11 @@ const title = work.title ?? 'work title';
           <canvas class='c-WorkCard__canvas js-workCardCanvas' aria-hidden='true' />
         </>
       ) : (
-        <div class='c-WorkCard__placeholder' />
+        <>
+          <div class='c-WorkCard__placeholder' />
+          {/* 画像の代替テキストが無いぶん、リンクの名前をここで補う */}
+          <span class='u-srOnly'>{title}</span>
+        </>
       )
     }
   </div>

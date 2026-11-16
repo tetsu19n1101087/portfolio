@@ -13,8 +13,9 @@
   display: inline-block;
 }
 
+// is-revealDone: このページで一度でも動きを止めた印。再生に戻しても、出現をやり直さない
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.is-motionPaused) {
+  html:not(.is-motionPaused, .is-revealDone) {
     // 1 文字ずつ、下から起き上がるように現れる
     .c-SplitText[data-reveal='load'] .c-SplitText__char {
       animation: split-rise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;

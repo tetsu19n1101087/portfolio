@@ -38,18 +38,30 @@ const build = () => {
         duration: 0.9,
         ease: 'power3.out',
         stagger: 0.035,
+        // 終わったらインラインの指定を消す
+        clearProps: 'opacity,transform',
         scrollTrigger: { trigger: target, start: 'top 88%', once: true },
       });
     });
 
     if (blocks.length > 0) {
-      gsap.set(blocks, { opacity: 0, y: 32 });
+      // 要素自身が transform の transition を持っていると、GSAP が毎フレーム書く値にも効いて動きが鈍る。
+      // 出現の間だけ切り、終わったらインラインの指定をすべて消して CSS（ホバーなど）に戻す
+      gsap.set(blocks, { opacity: 0, y: 32, transition: 'none' });
       // 同時に画面へ入った要素は、少しずつずらして順に出す
       ScrollTrigger.batch(blocks, {
         start: 'top 90%',
         once: true,
         onEnter: (batch) => {
-          gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, overwrite: true });
+          gsap.to(batch, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            stagger: 0.08,
+            overwrite: true,
+            clearProps: 'opacity,transform,transition',
+          });
         },
       });
     }

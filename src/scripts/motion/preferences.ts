@@ -6,6 +6,8 @@
 
 const STORAGE_KEY = 'motion-paused';
 const PAUSED_CLASS = 'is-motionPaused';
+/** このページで一度でも動きを止めた印。再生に戻したときに、出現アニメーションをやり直さないために付ける */
+const REVEAL_DONE_CLASS = 'is-revealDone';
 
 type Listener = () => void;
 
@@ -35,8 +37,13 @@ const writeStored = (value: boolean) => {
 
 let paused = readStored();
 
+// ページ遷移で <html> の属性は置き換わるので、REVEAL_DONE_CLASS は次のページには持ち越されない
 const syncRootClass = () => {
-  document.documentElement.classList.toggle(PAUSED_CLASS, paused);
+  const root = document.documentElement;
+  root.classList.toggle(PAUSED_CLASS, paused);
+  if (paused || reducedQuery.matches) {
+    root.classList.add(REVEAL_DONE_CLASS);
+  }
 };
 
 const notify = () => {

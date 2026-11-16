@@ -28,6 +28,16 @@ const setupDistortion = (view: HTMLElement, embla: EmblaCarouselType) => {
   let settled = true;
   let smoothed = 0;
   let warmup = 0;
+  // 表示領域の左端・幅・高さ。動き始めと大きさが変わったときにだけ読む
+  let viewLeft = 0;
+  let viewWidth = 1;
+  let viewHeight = 1;
+  const measureView = () => {
+    const rect = view.getBoundingClientRect();
+    viewLeft = rect.left;
+    viewWidth = Math.max(rect.width, 1);
+    viewHeight = Math.max(rect.height, 1);
+  };
 
   // 背景の描画側は遅れて読み込まれるので、初めて動いたときに用意する
   const ensureLayer = () => {
@@ -71,10 +81,9 @@ const setupDistortion = (view: HTMLElement, embla: EmblaCarouselType) => {
     if (!layer) {
       return;
     }
-    const viewRect = view.getBoundingClientRect();
     const visible = [];
     for (const [index, { node, image }] of slides.entries()) {
-      const left = (node.getBoundingClientRect().left - viewRect.left) / viewRect.width;
+      const left = (node.getBoundingClientRect().left - viewLeft) / viewWidth;
       if (left <= -1 || left >= 1 || !image) {
         continue;
       }
@@ -83,10 +92,10 @@ const setupDistortion = (view: HTMLElement, embla: EmblaCarouselType) => {
         deactivate();
         return;
       }
-      visible.push({ index, left, height: image.clientHeight / viewRect.height });
+      visible.push({ index, left, height: image.clientHeight / viewHeight });
     }
 
-    const speed = ((embla.internalEngine().scrollBody.velocity() / viewRect.width) * 60) / FULL_SPEED;
+    const speed = ((embla.internalEngine().scrollBody.velocity() / viewWidth) * 60) / FULL_SPEED;
     smoothed += (Math.max(-1, Math.min(1, speed)) - smoothed) * 0.2;
     layer.setFrame(visible.slice(0, 2), smoothed);
 
@@ -107,6 +116,7 @@ const setupDistortion = (view: HTMLElement, embla: EmblaCarouselType) => {
     }
     active = true;
     warmup = 0;
+    measureView();
     gsap.ticker.add(frame);
   };
   const onSettle = () => {
@@ -115,7 +125,10 @@ const setupDistortion = (view: HTMLElement, embla: EmblaCarouselType) => {
   embla.on('scroll', onScroll);
   embla.on('settle', onSettle);
 
-  const resizeObserver = new ResizeObserver(() => layer?.resize());
+  const resizeObserver = new ResizeObserver(() => {
+    measureView();
+    layer?.resize();
+  });
   resizeObserver.observe(view);
   // 途中で止められたら、すぐ元の画像へ戻す
   const unsubscribe = motionPreference.subscribe(() => {

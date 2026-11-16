@@ -174,10 +174,12 @@ const featuredWorks = works.slice(0, 5);
         height: 100%;
         content: '';
         background-color: var(--color-accent);
-        animation: scroll-line 1.6s ease-in-out infinite;
 
-        @media (prefers-reduced-motion: reduce) {
-          animation: none;
+        // 動かしてよいときだけ流す。「動きを減らす」設定・停止ボタンのときは、線が見えたまま止まる
+        @media (prefers-reduced-motion: no-preference) {
+          :global(html:not(.is-motionPaused)) & {
+            animation: scroll-line 1.6s ease-in-out infinite;
+          }
         }
       }
     }

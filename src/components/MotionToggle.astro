@@ -1,9 +1,10 @@
 ---
 // アニメーションの一時停止ボタン（WCAG 2.2.2 一時停止、停止、非表示）。
-// 動きが出る環境でだけ表示する。「動きを減らす」設定のときは最初から何も動かないので出さない。
+// 「動きを減らす」設定のときは最初から何も動かないので出さない（CSS で隠し、切り替わったら JS でも合わせる）。
+// 後から現れるとナビの位置がずれるので、最初から表示しておく。
 ---
 
-<button type="button" class="c-MotionToggle js-motionToggle" hidden>
+<button type="button" class="c-MotionToggle js-motionToggle">
   <svg class="c-MotionToggle__icon c-MotionToggle__icon--pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
     <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path>
   </svg>
@@ -57,6 +58,10 @@
 
     // hidden 属性より display: grid が勝ってしまうため、明示的に消す
     &[hidden] {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
       display: none;
     }
 
