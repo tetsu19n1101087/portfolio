@@ -5,7 +5,8 @@
 import { screenUV } from 'three/tsl';
 import { Color, PerspectiveCamera, Scene, WebGPURenderer } from 'three/webgpu';
 import { createGradient, withGrain } from './background';
-import type { StageInput, StageScene } from './presets';
+import { createOrb } from './orb';
+import type { OrbPose, StageInput, StageScene } from './presets';
 import { createStageUniforms } from './uniforms';
 
 export interface StageRendererOptions {
@@ -17,6 +18,8 @@ export interface StageRendererOptions {
   onFirstFrame?: () => void;
   /** GPU との接続が切れて描けなくなったときに呼ぶ */
   onLost?: () => void;
+  /** WebGPU が使える環境でも WebGL2 で描く。フォールバックの見た目を確認するためのもの */
+  forceWebGL?: boolean;
 }
 
 export interface StageRenderer {
@@ -32,6 +35,7 @@ export interface StageRenderer {
 /** 値が目標に近づく速さ。大きいほど速い */
 const FOLLOW = {
   scene: 1.4,
+  orb: 2.2,
   pointer: 5,
   pointerForce: 2.2,
   scroll: 6,
@@ -42,6 +46,18 @@ const STILL_TIME = 24;
 
 /** 1 フレームに進める時間の上限。タブを離れて戻った直後に絵が飛ばないようにする */
 const MAX_DELTA = 0.1;
+
+/** これより縦長の画面では、球体に縦長用の位置（orbNarrow）を使う */
+const NARROW_ASPECT = 0.85;
+
+/** カメラの画角（度）と、原点からの距離 */
+const CAMERA_FOV = 35;
+const CAMERA_DISTANCE = 6;
+/** 原点を通る平面で、画面の上端が来る高さ */
+const VIEW_HALF_HEIGHT = Math.tan((CAMERA_FOV * Math.PI) / 360) * CAMERA_DISTANCE;
+
+/** ポインタに引かれて球体がずれる量（画面の半分を 1 とする） */
+const ORB_POINTER_PULL = 0.04;
 
 /** 描画解像度の倍率を下げるかどうかを判定する間隔（フレーム数）と基準 */
 const QUALITY_WINDOW = 90;
@@ -56,21 +72,27 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
   let renderer: WebGPURenderer;
   try {
     // WebGPU が使えない環境では、three.js が自動で WebGL2 に切り替える
-    renderer = new WebGPURenderer({ canvas, antialias: true, alpha: false });
+    renderer = new WebGPURenderer({ canvas, antialias: true, alpha: false, forceWebGL: options.forceWebGL === true });
     await renderer.init();
   } catch {
     return null;
   }
 
   const uniforms = createStageUniforms();
+  const gradient = createGradient(uniforms);
+  const grain = withGrain(uniforms);
   const scene = new Scene();
-  scene.backgroundNode = withGrain(uniforms)(createGradient(uniforms)(screenUV));
+  scene.backgroundNode = grain(gradient(screenUV));
 
-  const camera = new PerspectiveCamera(35, 1, 0.1, 50);
-  camera.position.z = 6;
+  const orb = createOrb(uniforms, gradient, grain);
+  scene.add(orb.mesh);
 
-  // タッチ端末は GPU が弱いことが多いので、描画解像度の上限を下げる
-  const maxPixelRatio = window.matchMedia('(pointer: coarse)').matches ? 1.25 : 1.5;
+  const camera = new PerspectiveCamera(CAMERA_FOV, 1, 0.1, 50);
+  camera.position.z = CAMERA_DISTANCE;
+
+  // 描画解像度の上限。画面の広いデスクトップは画素数が多いので低めにする。
+  // タッチ端末は画面が小さいぶん高めにして、球体の縁のギザギザを抑える
+  const maxPixelRatio = window.matchMedia('(pointer: coarse)').matches ? 2 : 1.5;
   let qualityStep = 0;
 
   const applySize = () => {
@@ -92,6 +114,9 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
   const targetColorA = new Color();
   const targetColorB = new Color();
   let flow = 0;
+  // 球体のいまの位置と大きさ。最初のフレームで目標に合わせる
+  const pose: OrbPose = { x: 0, y: 0, size: 0 };
+  let poseReady = false;
 
   const update = (delta: number, snap: boolean) => {
     options.onBeforeFrame?.();
@@ -107,9 +132,17 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     uniforms.colorA.value.lerp(targetColorA, sceneRate);
     uniforms.colorB.value.lerp(targetColorB, sceneRate);
     uniforms.intensity.value += (target.intensity - uniforms.intensity.value) * sceneRate;
-    uniforms.focus.value.x += (target.focus[0] - uniforms.focus.value.x) * sceneRate;
-    uniforms.focus.value.y += (target.focus[1] - uniforms.focus.value.y) * sceneRate;
     flow += (target.flow - flow) * sceneRate;
+
+    const aspect = uniforms.aspect.value;
+    const targetPose = aspect < NARROW_ASPECT ? target.orbNarrow : target.orb;
+    const poseRate = snap || !poseReady ? 1 : follow(FOLLOW.orb, delta);
+    poseReady = true;
+    pose.x += (targetPose.x - pose.x) * poseRate;
+    pose.y += (targetPose.y - pose.y) * poseRate;
+    pose.size += (targetPose.size - pose.size) * poseRate;
+    // 背景の色は球体の位置で最も明るくする（画面左上を [0, 0] とする座標へ直す）
+    uniforms.focus.value.set((pose.x + 1) / 2, (1 - pose.y) / 2);
 
     const pointerRate = snap ? 1 : follow(FOLLOW.pointer, delta);
     uniforms.pointer.value.x += (input.pointer[0] - uniforms.pointer.value.x) * pointerRate;
@@ -118,6 +151,23 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     const force = snap ? 0 : input.pointerActive;
     uniforms.pointerForce.value += (force - uniforms.pointerForce.value) * (snap ? 1 : follow(FOLLOW.pointerForce, delta));
     uniforms.scroll.value += (input.scroll - uniforms.scroll.value) * (snap ? 1 : follow(FOLLOW.scroll, delta));
+
+    // 球体: 画面上の位置（-1〜1）を、カメラから見た 3D 空間の位置へ直す
+    const pointerX = uniforms.pointer.value.x * 2 - 1;
+    const pointerY = 1 - uniforms.pointer.value.y * 2;
+    const pull = uniforms.pointerForce.value * ORB_POINTER_PULL;
+    const orbX = pose.x + (pointerX - pose.x) * pull;
+    const orbY = pose.y + (pointerY - pose.y) * pull;
+    orb.mesh.position.set(orbX * VIEW_HALF_HEIGHT * aspect, orbY * VIEW_HALF_HEIGHT, 0);
+    orb.mesh.scale.setScalar(Math.max(pose.size * 2 * VIEW_HALF_HEIGHT, 0.0001));
+
+    // ポインタが球体に近いほど、その側を強くへこませる。距離は球体の半径を 1 として測る
+    const radius = Math.max(pose.size * 2, 0.0001);
+    const towardX = ((pointerX - orbX) * aspect) / radius;
+    const towardY = (pointerY - orbY) / radius;
+    const distance = Math.hypot(towardX, towardY);
+    uniforms.orbPointer.value.set(towardX, towardY, 0.9).normalize();
+    uniforms.orbDent.value = uniforms.pointerForce.value * Math.exp(-distance * distance * 0.35);
 
     uniforms.time.value += delta * flow;
   };
@@ -199,6 +249,7 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     stop();
     disposed = true;
     resizeObserver.disconnect();
+    orb.dispose();
     void renderer.dispose();
   };
 

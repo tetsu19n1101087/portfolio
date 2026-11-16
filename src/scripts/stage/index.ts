@@ -88,6 +88,8 @@ export const initStage = async (root: HTMLElement) => {
     onBeforeFrame: readPage,
     onFirstFrame: () => root.classList.add('is-ready'),
     onLost: () => root.classList.remove('is-ready'),
+    // ?renderer=webgl2 を付けて開くと、WebGPU が使える環境でもフォールバック側の描画を確認できる
+    forceWebGL: new URLSearchParams(window.location.search).get('renderer') === 'webgl2',
   });
   if (!renderer) {
     return;

@@ -2,7 +2,7 @@
  * 背景のシェーダーへ渡す値（uniform）。描画側が毎フレーム書き換える。
  */
 import { uniform } from 'three/tsl';
-import { Color, Vector2 } from 'three/webgpu';
+import { Color, Vector2, Vector3 } from 'three/webgpu';
 import { STAGE_BASE_COLOR } from './presets';
 
 export const createStageUniforms = () => ({
@@ -22,6 +22,12 @@ export const createStageUniforms = () => ({
   colorB: uniform(new Color(STAGE_BASE_COLOR)),
   /** 色の強さ。0 でベース色一色になる */
   intensity: uniform(0),
+  /** 球体の表面のうねりの大きさ */
+  orbWobble: uniform(1),
+  /** 球体の中心から見たポインタの向き */
+  orbPointer: uniform(new Vector3(0, 0, 1)),
+  /** ポインタの側のへこみの強さ。0 でへこみなし */
+  orbDent: uniform(0),
 });
 
 export type StageUniforms = ReturnType<typeof createStageUniforms>;

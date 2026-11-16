@@ -57,4 +57,9 @@ const { title = 'My Portfolio', stage = 'default' } = Astro.props;
       padding: 0 rem(96);
     }
   }
+
+  // ヘッダーは画面上部に固定して重ねるため、その高さだけ本文を下げる
+  .l-Main {
+    padding-top: var(--header-height);
+  }
 </style>

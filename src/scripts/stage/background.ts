@@ -49,7 +49,7 @@ export const createGradient = (uniforms: StageUniforms) =>
 
     // 焦点から離れるほど暗くして、文字の載る場所の明るさを抑える
     const fromFocus = position.sub(uniforms.focus.sub(0.5).mul(ratio));
-    const glow = mix(0.3, 1, exp(dot(fromFocus, fromFocus).mul(-1.6)));
+    const glow = mix(0.24, 1, exp(dot(fromFocus, fromFocus).mul(-1.8)));
     const strength = uniforms.intensity.mul(glow);
 
     const withA = mix(uniforms.base, uniforms.colorA, smoothstep(0.3, 0.9, fieldA).mul(strength));

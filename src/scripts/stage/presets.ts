@@ -12,8 +12,19 @@ export interface StageScene {
   intensity: number;
   /** 流れの速さの倍率 */
   flow: number;
-  /** 色が最も明るくなる位置。画面左上を [0, 0]、右下を [1, 1] とする */
-  focus: [number, number];
+  /** 球体の位置と大きさ。背景の色も、この位置で最も明るくなる */
+  orb: OrbPose;
+  /** 縦長の画面（スマートフォンなど）での球体の位置と大きさ */
+  orbNarrow: OrbPose;
+}
+
+export interface OrbPose {
+  /** 画面中央を 0、左端を -1、右端を 1 とする横位置 */
+  x: number;
+  /** 画面中央を 0、下端を -1、上端を 1 とする縦位置 */
+  y: number;
+  /** 半径。画面の高さを 1 とする */
+  size: number;
 }
 
 /** ベース色。variables.scss の --color-dark と同じ値にする */
@@ -25,35 +36,40 @@ export const stageScenes = {
     colorB: '#1b2a6b',
     intensity: 0.6,
     flow: 0.6,
-    focus: [0.85, 0.2],
+    orb: { x: 0.84, y: 0.6, size: 0.1 },
+    orbNarrow: { x: 0.8, y: 0.74, size: 0.07 },
   },
   hero: {
-    colorA: '#0c6b70',
-    colorB: '#2a2f8f',
+    colorA: '#0a565c',
+    colorB: '#272c86',
     intensity: 1,
     flow: 1,
-    focus: [0.72, 0.45],
+    orb: { x: 0.6, y: 0.02, size: 0.27 },
+    orbNarrow: { x: 0.42, y: 0.46, size: 0.17 },
   },
   works: {
     colorA: '#0b4f6c',
     colorB: '#1b2a6b',
     intensity: 0.7,
     flow: 0.7,
-    focus: [0.12, 0.3],
+    orb: { x: 0.9, y: 0.68, size: 0.13 },
+    orbNarrow: { x: 0.82, y: 0.78, size: 0.08 },
   },
   about: {
     colorA: '#3b2a7a',
     colorB: '#0c5a63',
     intensity: 0.75,
     flow: 0.6,
-    focus: [0.82, 0.6],
+    orb: { x: 0.7, y: -0.2, size: 0.2 },
+    orbNarrow: { x: 0.75, y: -0.55, size: 0.12 },
   },
   worksIndex: {
     colorA: '#0b4f6c',
     colorB: '#1b2a6b',
     intensity: 0.7,
     flow: 0.7,
-    focus: [0.85, 0.2],
+    orb: { x: 0.84, y: 0.6, size: 0.1 },
+    orbNarrow: { x: 0.8, y: 0.74, size: 0.07 },
   },
   // 本文を読むページ。色も動きも抑える
   workDetail: {
@@ -61,7 +77,8 @@ export const stageScenes = {
     colorB: '#1a1f55',
     intensity: 0.45,
     flow: 0.4,
-    focus: [0.9, 0.12],
+    orb: { x: 0.93, y: 0.72, size: 0.07 },
+    orbNarrow: { x: 0.85, y: 0.8, size: 0.05 },
   },
 } satisfies Record<string, StageScene>;
 
