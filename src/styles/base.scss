@@ -1,3 +1,8 @@
+// ダーク単一のテーマ。スクロールバーなどブラウザ標準の UI も暗色に揃える
+html {
+  color-scheme: dark;
+}
+
 html,
 body {
   font-family: var(--font-sans);

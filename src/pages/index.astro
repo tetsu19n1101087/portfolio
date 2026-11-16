@@ -277,7 +277,7 @@ const featuredWorks = works.slice(0, 5);
 
     &__emptyState {
       padding: rem(16) 0;
-      color: #6b7280;
+      color: var(--color-text-muted);
     }
 
     &__viewAll {
@@ -290,10 +290,10 @@ const featuredWorks = works.slice(0, 5);
       margin-left: auto;
       font-size: rem(16);
       font-weight: 600;
-      color: #fff;
-      background: rgb(2 6 23 / 80%);
+      color: var(--color-bg);
+      background: var(--color-text);
       border-radius: 999px;
-      box-shadow: 0 4px 14px rgb(2 6 23 / 25%);
+      box-shadow: 0 4px 14px color-mix(in srgb, var(--color-dark) 60%, transparent);
       transition:
         transform 160ms ease,
         background-color 160ms ease;

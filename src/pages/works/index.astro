@@ -73,7 +73,7 @@ const works = await getWorks();
 
   .p-WorksIndex__empty {
     padding: rem(16) 0;
-    color: #6b7280;
+    color: var(--color-text-muted);
   }
 
   .p-WorksIndex__back {
@@ -82,7 +82,7 @@ const works = await getWorks();
     align-items: center;
     padding-top: rem(24);
     font-size: rem(14);
-    color: #6b7280;
+    color: var(--color-text-muted);
     transition: color 160ms ease;
 
     @include hover {
