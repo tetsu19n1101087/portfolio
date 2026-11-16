@@ -4,6 +4,7 @@ export const prerender = false;
 import { getWorkById } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Carousel from '@/components/Carousel.astro';
+import SplitText from '@/components/SplitText.astro';
 
 const { id } = Astro.params;
 const work = await getWorkById(id!);
@@ -17,8 +18,10 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
 <BaseLayout title={`${work.title} | Tetsuro Tsunehara`} stage="workDetail">
   <article class="p-WorkDetail">
     <div class="p-WorkDetail__header">
-      <h1 class="p-WorkDetail__title">{work.title}</h1>
-      <div class="p-WorkDetail__meta">
+      <h1 class="p-WorkDetail__title"><SplitText text={work.title} /></h1>
+      <div class="p-WorkDetail__meta" data-reveal="load" style="
+
+--reveal-order: 2">
         <time class="p-WorkDetail__date">{work.date}</time>
         {
           work.tags.length > 0 && (
@@ -32,7 +35,9 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       </div>
     </div>
     <div class="p-WorkDetail__body">
-      <div class="p-WorkDetail__hero">
+      <div class="p-WorkDetail__hero" data-reveal="load" style="
+
+--reveal-order: 3">
         {
           work.images && work.images.length > 0 ? (
             <Carousel images={work.images} />
@@ -43,7 +48,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       </div>
       {
         (work.demoLink || work.codeLink) && (
-          <dl class="p-WorkDetail__links">
+          <dl class="p-WorkDetail__links" data-reveal="scroll">
             {
               work.demoLink && (
                 <div class="p-WorkDetail__linkItem">

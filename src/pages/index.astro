@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import SplitText from '@/components/SplitText.astro';
 import WorkCard from '@/components/WorkCard.astro';
 import { getWorks } from '@/lib/works';
 
@@ -9,18 +10,22 @@ const featuredWorks = works.slice(0, 5);
 
 <BaseLayout>
   <section class="p-HomeHero" aria-labelledby="site-title" data-stage="hero">
-    <div class="p-HomeHero__copy">
-      <h1 id="site-title" class="p-HomeHero__siteTitle">Tetsuro Tsunehara</h1>
-      <p class="p-HomeHero__subtitle">Portfolio site</p>
+    <div class="p-HomeHero__copy" data-scroll-fade>
+      <h1 id="site-title" class="p-HomeHero__siteTitle"><SplitText text="Tetsuro Tsunehara" /></h1>
+      <p class="p-HomeHero__subtitle" data-reveal="load" style="
+
+--reveal-order: 3">Portfolio site</p>
     </div>
-    <div class="p-HomeHero__scrollHint" aria-hidden="true">
+    <div class="p-HomeHero__scrollHint" aria-hidden="true" data-reveal="load" style="
+
+--reveal-order: 6">
       <span class="p-HomeHero__scrollText">Scroll</span>
       <span class="p-HomeHero__scrollLine"></span>
     </div>
   </section>
   <section class="p-HomeWorks" aria-labelledby="works-title" data-stage="works">
     <div class="p-HomeWorks__heading">
-      <h2 id="works-title" class="p-HomeWorks__kicker">Works</h2>
+      <h2 id="works-title" class="p-HomeWorks__kicker"><SplitText text="Works" reveal="scroll" /></h2>
     </div>
     {
       featuredWorks.length > 0 ? (
@@ -35,17 +40,17 @@ const featuredWorks = works.slice(0, 5);
         <p class="p-HomeWorks__emptyState">works はまだ登録されていません。</p>
       )
     }
-    <a class="p-HomeWorks__viewAll" href="/works">
+    <a class="p-HomeWorks__viewAll" href="/works" data-reveal="scroll">
       View all
       <span aria-hidden="true">→</span>
     </a>
   </section>
   <section class="p-HomeAbout" aria-labelledby="about-title" data-stage="about">
     <div class="p-HomeAbout__heading">
-      <h2 id="about-title" class="p-HomeAbout__kicker">About</h2>
+      <h2 id="about-title" class="p-HomeAbout__kicker"><SplitText text="About" reveal="scroll" /></h2>
     </div>
     <dl class="p-HomeAbout__body">
-      <div class="p-HomeAbout__item">
+      <div class="p-HomeAbout__item" data-reveal="scroll">
         <dt class="p-HomeAbout__label">Language</dt>
         <dd>
           <ul class="p-HomeAbout__list">
@@ -56,7 +61,7 @@ const featuredWorks = works.slice(0, 5);
           </ul>
         </dd>
       </div>
-      <div class="p-HomeAbout__item">
+      <div class="p-HomeAbout__item" data-reveal="scroll">
         <dt class="p-HomeAbout__label">Framework</dt>
         <dd>
           <ul class="p-HomeAbout__list">
@@ -67,7 +72,7 @@ const featuredWorks = works.slice(0, 5);
           </ul>
         </dd>
       </div>
-      <div class="p-HomeAbout__item">
+      <div class="p-HomeAbout__item" data-reveal="scroll">
         <dt class="p-HomeAbout__label">OS</dt>
         <dd>
           <ul class="p-HomeAbout__list">
@@ -75,7 +80,7 @@ const featuredWorks = works.slice(0, 5);
           </ul>
         </dd>
       </div>
-      <div class="p-HomeAbout__item">
+      <div class="p-HomeAbout__item" data-reveal="scroll">
         <dt class="p-HomeAbout__label">Infrastructure</dt>
         <dd>
           <ul class="p-HomeAbout__list">
@@ -84,7 +89,7 @@ const featuredWorks = works.slice(0, 5);
           </ul>
         </dd>
       </div>
-      <div class="p-HomeAbout__item">
+      <div class="p-HomeAbout__item" data-reveal="scroll">
         <dt class="p-HomeAbout__label">Other</dt>
         <dd>
           <ul class="p-HomeAbout__list">

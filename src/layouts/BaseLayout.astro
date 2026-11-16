@@ -29,6 +29,16 @@ const { title = 'My Portfolio', stage = 'default' } = Astro.props;
       rel='stylesheet'
     />
     <ClientRouter />
+    <!-- 停止ボタンで止めた状態を、最初の描画より前に反映する（止めているのに出現アニメーションが再生されるのを防ぐ） -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem('motion-paused') === '1') {
+          document.documentElement.classList.add('is-motionPaused');
+        }
+      } catch {
+        // localStorage が使えない環境では、止めた状態を引き継がない
+      }
+    </script>
   </head>
   <body>
     <Stage />
@@ -39,6 +49,9 @@ const { title = 'My Portfolio', stage = 'default' } = Astro.props;
       </main>
     </div>
     <Analytics />
+    <script>
+      import '@/scripts/motion';
+    </script>
   </body>
 </html>
 

@@ -1,0 +1,26 @@
+---
+// 見出しを 1 文字ずつ動かすための文字分割。分割はサーバー側（ビルド時）で済ませる。
+// ブラウザで分割すると、JS の読み込みを待つ間に文字が見えたり消えたりするため。
+//
+// 読み上げには元の文字列（.u-srOnly）を使い、分割した見た目用の文字は読み上げから外す。
+interface Props {
+  text: string;
+  /** load: ページを開いたときに再生する / scroll: 画面に入ったときに再生する */
+  reveal?: 'load' | 'scroll';
+}
+
+const { text, reveal = 'load' } = Astro.props;
+
+// 単語の途中で改行されないよう、単語ごとにまとめる。日本語も単語単位に区切られる
+const wordSegmenter = new Intl.Segmenter('ja', { granularity: 'word' });
+const charSegmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' });
+
+let index = 0;
+const words = [...wordSegmenter.segment(text)].map(({ segment }) =>
+  /^\s+$/.test(segment)
+    ? { space: true as const }
+    : { space: false as const, chars: [...charSegmenter.segment(segment)].map((char) => ({ value: char.segment, index: index++ })) },
+);
+---
+
+<span class="u-srOnly">{text}</span><span class="c-SplitText" aria-hidden="true" data-reveal={reveal}>{words.map((word) => word.space ? ' ' : <span class="c-SplitText__word">{word.chars.map((char) => <span class="c-SplitText__char" style={`--i:${char.index}`}>{char.value}</span>)}</span>)}</span>
