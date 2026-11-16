@@ -89,6 +89,21 @@ const QUALITY_STEPS = [1, 0.75, 0.5];
 
 const follow = (rate: number, delta: number) => 1 - Math.exp(-rate * delta);
 
+interface SchedulerLike {
+  yield?: () => Promise<void>;
+}
+
+/**
+ * いったんブラウザへ処理を返す。初期化を小分けにして、操作への反応を長く止めないようにする
+ */
+const yieldToMain = () => {
+  const scheduler = (globalThis as { scheduler?: SchedulerLike }).scheduler;
+  if (scheduler?.yield) {
+    return scheduler.yield();
+  }
+  return new Promise<void>((resolve) => setTimeout(resolve, 0));
+};
+
 export const createStageRenderer = async (options: StageRendererOptions): Promise<StageRenderer | null> => {
   const { canvas, input } = options;
 
@@ -100,6 +115,7 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
   } catch {
     return null;
   }
+  await yieldToMain();
 
   const uniforms = createStageUniforms();
   const gradient = createGradient(uniforms);
@@ -264,14 +280,26 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     draw();
   };
 
+  // 準備（シェーダーのコンパイル）が済むまでは描かない
+  let prepared = false;
   const resizeObserver = new ResizeObserver(() => {
-    if (!applySize() || running) {
+    if (!applySize() || running || !prepared) {
       return;
     }
     renderStill();
   });
   resizeObserver.observe(canvas);
   applySize();
+
+  // シェーダーのコンパイルを、最初の描画の中で同期的に行わせず、先に非同期で済ませておく
+  await yieldToMain();
+  try {
+    await renderer.compileAsync(scene, camera);
+  } catch {
+    // 先にコンパイルできなくても、最初の描画のときにコンパイルされる
+  }
+  await yieldToMain();
+  prepared = true;
 
   const stop = () => {
     if (!running) {

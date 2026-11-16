@@ -37,17 +37,19 @@ html.is-pageTransition {
   }
 }
 
+// 始まりを完全な透明にしない。最初の描画の時点で文字が（薄く）見えている状態にして、
+// 「主要な内容が表示された時刻」（LCP）がアニメーションの分だけ遅れるのを防ぐ
 @keyframes split-rise {
   from {
-    opacity: 0;
-    rotate: 8deg;
-    translate: 0 0.55em;
+    opacity: 0.25;
+    rotate: 6deg;
+    translate: 0 0.4em;
   }
 }
 
 @keyframes reveal-rise {
   from {
-    opacity: 0;
-    translate: 0 1.5rem;
+    opacity: 0.25;
+    translate: 0 1.25rem;
   }
 }
