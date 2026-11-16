@@ -1,19 +1,52 @@
 ---
-const { work } = Astro.props;
+import type { Work } from '@/types/work';
 
-const id = work.id ?? work.contentId ?? work.slug ?? '';
-const image = work.images?.[0] ?? work.thumbnail;
+interface Props {
+  work: Work;
+  /**
+   * 画像の現れ方。
+   * load: ページを開いたときに CSS だけで現れる（最初の画面に見えるカード用。画像の表示を遅らせない）
+   * scroll: 画面に入ったときに、溶け出すように現れる
+   */
+  reveal?: 'load' | 'scroll';
+  /** reveal="load" のとき、現れる順番（0 から） */
+  order?: number;
+}
+
+const { work, reveal = 'scroll', order = 0 } = Astro.props;
+
+const id = work.id ?? '';
+const image = work.images?.[0] ?? work.image;
 const imageUrl = image?.url ?? '';
 const width = image?.width ?? 800;
 const height = image?.height ?? 600;
 const title = work.title ?? 'work title';
 ---
 
-<a class='c-WorkCard' href={id ? `/works/${id}` : '#'}>
+<!-- data-reveal は共通の出現アニメーション（CSS / GSAP）が拾う属性。scroll のカードは専用の演出で現すので付けない -->
+<a
+  class='c-WorkCard js-workCard'
+  href={id ? `/works/${id}` : '#'}
+  data-card-reveal={reveal}
+  data-reveal={reveal === 'load' ? 'load' : undefined}
+  style={`--reveal-order: ${order}`}
+>
   <div class='c-WorkCard__media'>
     {
       imageUrl ? (
-        <img src={imageUrl} alt={title} width={width} height={height} loading='lazy' />
+        <>
+          {/* crossorigin: 溶け出す演出でこの画像を WebGL のテクスチャに使うために必要 */}
+          <img
+            class='c-WorkCard__image js-workCardImage'
+            src={imageUrl}
+            alt={title}
+            width={width}
+            height={height}
+            loading={reveal === 'load' ? 'eager' : 'lazy'}
+            crossorigin='anonymous'
+          />
+          <canvas class='c-WorkCard__canvas js-workCardCanvas' aria-hidden='true' />
+        </>
       ) : (
         <div class='c-WorkCard__placeholder' />
       )
@@ -24,8 +57,17 @@ const title = work.title ?? 'work title';
   </div>
 </a>
 
+<script>
+  import '@/scripts/workCard';
+</script>
+
 <style lang='scss'>
   .c-WorkCard {
+    // ポインタの位置。中央が 0、端が ±1。src/scripts/workCard.ts が書き込む
+    --tilt-x: 0;
+    --tilt-y: 0;
+    --tilt-active: 0;
+
     position: relative;
     display: block;
     width: 100%;
@@ -34,8 +76,11 @@ const title = work.title ?? 'work title';
     background: var(--color-surface);
     border-radius: var(--radius);
     box-shadow: 0 1px 4px color-mix(in srgb, var(--color-dark) 40%, transparent);
+
+    // ポインタの方向へ、立体的に少し傾ける
+    transform: perspective(rem(900)) rotateX(calc(var(--tilt-y) * -5deg)) rotateY(calc(var(--tilt-x) * 5deg));
     transition:
-      transform 160ms ease,
+      transform 260ms ease-out,
       box-shadow 160ms ease;
 
     @include hover {
@@ -76,12 +121,46 @@ const title = work.title ?? 'work title';
       }
     }
 
-    img,
+    &__image,
     &__placeholder {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    &__image {
+      clip-path: inset(0);
+
+      // 傾けている間は、画像を少し拡大して逆方向へずらし、奥行きを出す
+      scale: calc(1 + var(--tilt-active) * 0.05);
+      translate: calc(var(--tilt-x) * -1.2%) calc(var(--tilt-y) * -1.2%);
+
+      // is-revealPending が外れたときに、下から現れる（シェーダーが使えないときの出現）
+      transition:
+        opacity 700ms ease,
+        clip-path 1000ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        scale 260ms ease-out,
+        translate 260ms ease-out;
+    }
+
+    // 画面に入るまで画像を隠しておく
+    &.is-revealPending &__image {
+      opacity: 0;
+      clip-path: inset(100% 0 0 0);
+    }
+
+    // 溶け出す演出を描く canvas。演出の間だけ画像の上に重ねる
+    &__canvas {
+      position: absolute;
+      inset: 0;
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    &.is-revealCanvas &__canvas {
+      display: block;
     }
 
     &__placeholder {

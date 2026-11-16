@@ -5,6 +5,7 @@
  */
 import { motionPreference } from '@/scripts/motion/preferences';
 import { createStageInput, isStageSceneName, stageScenes } from './presets';
+import type { StageRenderer } from './renderer';
 
 const IDLE_TIMEOUT_MS = 2000;
 /** ポインタが止まってから、渦を弱め始めるまでの時間 */
@@ -33,6 +34,11 @@ const whenIdle = () =>
     }
     setTimeout(resolve, 1);
   });
+
+let activeRenderer: StageRenderer | null = null;
+
+/** 描画側の準備ができていれば返す。まだ読み込み中、または使えない環境では null */
+export const getStageRenderer = () => activeRenderer;
 
 export const initStage = async (root: HTMLElement) => {
   const canvas = root.querySelector<HTMLCanvasElement>('.js-stageCanvas');
@@ -87,13 +93,17 @@ export const initStage = async (root: HTMLElement) => {
     input,
     onBeforeFrame: readPage,
     onFirstFrame: () => root.classList.add('is-ready'),
-    onLost: () => root.classList.remove('is-ready'),
+    onLost: () => {
+      activeRenderer = null;
+      root.classList.remove('is-ready');
+    },
     // ?renderer=webgl2 を付けて開くと、WebGPU が使える環境でもフォールバック側の描画を確認できる
     forceWebGL: new URLSearchParams(window.location.search).get('renderer') === 'webgl2',
   });
   if (!renderer) {
     return;
   }
+  activeRenderer = renderer;
 
   collectZones();
 

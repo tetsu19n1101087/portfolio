@@ -17,9 +17,10 @@ const works = await getWorks();
     {
       works.length > 0 ? (
         <ul class="p-WorksIndex__grid">
-          {works.map((work) => (
+          {works.map((work, index) => (
             <li class="p-WorksIndex__item">
-              <WorkCard work={work} />
+              {/* 最初の画面に見える上段は、読み込みを待たずに CSS で現す */}
+              <WorkCard work={work} reveal={index < 3 ? 'load' : 'scroll'} order={index + 2} />
             </li>
           ))}
         </ul>
@@ -45,7 +46,6 @@ const works = await getWorks();
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.1;
     color: var(--color-accent);
-    text-transform: capitalize;
     letter-spacing: rem(0.1);
   }
 

@@ -5,6 +5,8 @@
 import { screenUV } from 'three/tsl';
 import { Color, PerspectiveCamera, Scene, WebGPURenderer } from 'three/webgpu';
 import { createGradient, withGrain } from './background';
+import { createImageRevealLayer } from './imageReveal';
+import type { ImageRevealLayer, ImageRevealOptions } from './imageReveal';
 import { createOrb } from './orb';
 import type { OrbPose, StageInput, StageScene } from './presets';
 import { createStageUniforms } from './uniforms';
@@ -29,6 +31,17 @@ export interface StageRenderer {
   stop(): void;
   /** 1 フレームだけ描く。場面の値は途中経過を挟まず目標に合わせる */
   renderStill(): void;
+  /**
+   * 画像が溶け出すように現れる演出を、渡した canvas に描く。
+   * 使えない環境（WebGL2 に切り替わった場合など）では null を返す。呼び出し側は CSS の出現に切り替える
+   */
+  createImageReveal(options: ImageRevealOptions): Promise<ImageReveal | null>;
+  dispose(): void;
+}
+
+export interface ImageReveal {
+  /** 0 で何も見えず、1 で画像がすべて見える */
+  setProgress(value: number): void;
   dispose(): void;
 }
 
@@ -172,6 +185,11 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     uniforms.time.value += delta * flow;
   };
 
+  // 背景とは別の canvas に描く層。1 つのレンダラーで複数の canvas に描けるのは WebGPU のときだけ
+  const supportsLayers = (renderer.backend as { isWebGPUBackend?: boolean }).isWebGPUBackend === true;
+  const mainTarget = renderer.getCanvasTarget();
+  const layers = new Set<ImageRevealLayer>();
+
   let disposed = false;
   let running = false;
   let firstFrameDone = false;
@@ -181,6 +199,10 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
 
   const draw = () => {
     renderer.render(scene, camera);
+    if (layers.size > 0) {
+      layers.forEach((layer) => layer.render(renderer));
+      renderer.setCanvasTarget(mainTarget);
+    }
     if (!firstFrameDone) {
       firstFrameDone = true;
       options.onFirstFrame?.();
@@ -249,6 +271,8 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     stop();
     disposed = true;
     resizeObserver.disconnect();
+    layers.forEach((layer) => layer.dispose());
+    layers.clear();
     orb.dispose();
     void renderer.dispose();
   };
@@ -271,6 +295,35 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     },
     stop,
     renderStill,
+    async createImageReveal(layerOptions) {
+      // ループが止まっているときは描かれないので、作らない
+      if (!supportsLayers || disposed || !running) {
+        return null;
+      }
+      let layer: ImageRevealLayer;
+      try {
+        layer = await createImageRevealLayer(layerOptions);
+      } catch (error) {
+        // 画像を読み取れなかった場合など。呼び出し側は CSS の出現に切り替える
+        if (import.meta.env.DEV) {
+          console.warn('[stage] 画像の溶け出し演出を用意できなかった', error);
+        }
+        return null;
+      }
+      if (disposed) {
+        layer.dispose();
+        return null;
+      }
+      layers.add(layer);
+      return {
+        setProgress: (value) => layer.setProgress(value),
+        dispose() {
+          if (layers.delete(layer)) {
+            layer.dispose();
+          }
+        },
+      };
+    },
     dispose,
   };
 };
