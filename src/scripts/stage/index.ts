@@ -35,6 +35,9 @@ const whenIdle = () =>
     setTimeout(resolve, 1);
   });
 
+/** 背景へ渡す値。ページ遷移の演出など、外から書き換えるものもあるので公開する */
+export const stageInput = createStageInput();
+
 let activeRenderer: StageRenderer | null = null;
 
 /** 描画側の準備ができていれば返す。まだ読み込み中、または使えない環境では null */
@@ -47,7 +50,7 @@ export const initStage = async (root: HTMLElement) => {
     return;
   }
 
-  const input = createStageInput();
+  const input = stageInput;
 
   // data-stage を持つ要素。ページ遷移のたびに集め直す
   let zones: HTMLElement[] = [];

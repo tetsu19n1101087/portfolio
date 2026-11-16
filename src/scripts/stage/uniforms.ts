@@ -22,6 +22,10 @@ export const createStageUniforms = () => ({
   colorB: uniform(new Color(STAGE_BASE_COLOR)),
   /** 色の強さ。0 でベース色一色になる */
   intensity: uniform(0),
+  /** ページ遷移で背景が画面を覆っている度合い。0 で通常、1 で画面全体を覆う */
+  flood: uniform(0),
+  /** 覆いが広がり始める位置 */
+  floodOrigin: uniform(new Vector2(0.5, 0.5)),
   /** 球体の表面のうねりの大きさ */
   orbWobble: uniform(1),
   /** 球体の中心から見たポインタの向き */

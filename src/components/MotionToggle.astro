@@ -47,7 +47,9 @@
     color: var(--color-text);
     cursor: pointer;
     background: transparent;
-    border: 1px solid var(--color-border);
+
+    // 背景が動いて明るさが変わっても輪郭が見えるよう、文字色を薄めた色にする
+    border: 1px solid color-mix(in srgb, var(--color-text) 35%, transparent);
     border-radius: 50%;
     transition:
       color 160ms ease,

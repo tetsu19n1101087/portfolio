@@ -1,7 +1,22 @@
 /**
  * 背景の液体グラデーションを TSL（three.js のシェーダー記述）で組み立てる。
  */
-import { Fn, cos, dot, exp, fract, mix, mx_noise_float, pow, screenCoordinate, sin, smoothstep, vec2, vec3 } from 'three/tsl';
+import {
+  Fn,
+  cos,
+  dot,
+  exp,
+  fract,
+  length,
+  mix,
+  mx_noise_float,
+  pow,
+  screenCoordinate,
+  sin,
+  smoothstep,
+  vec2,
+  vec3,
+} from 'three/tsl';
 import type { Node } from 'three/webgpu';
 import type { StageUniforms } from './uniforms';
 
@@ -53,5 +68,13 @@ export const createGradient = (uniforms: StageUniforms) =>
     const strength = uniforms.intensity.mul(glow);
 
     const withA = mix(uniforms.base, uniforms.colorA, smoothstep(0.3, 0.9, fieldA).mul(strength));
-    return mix(withA, uniforms.colorB, smoothstep(0.42, 0.98, fieldB).mul(strength).mul(0.85));
+    const calm = mix(withA, uniforms.colorB, smoothstep(0.42, 0.98, fieldB).mul(strength).mul(0.85));
+
+    // ページ遷移: 起点から波が広がり、内側を明るく強い色で覆う。flood が 1 で画面全体を覆いきる
+    const fromOrigin = position.sub(uniforms.floodOrigin.sub(0.5).mul(ratio));
+    const reach = uniforms.flood.mul(3.4);
+    const distance = length(fromOrigin).add(fieldA.sub(0.5).mul(0.5));
+    const covered = smoothstep(reach.sub(0.6), reach, distance).oneMinus().mul(smoothstep(0, 0.06, uniforms.flood));
+    const surge = mix(uniforms.colorA, uniforms.colorB, fieldB).mul(2.4).add(vec3(0.01, 0.07, 0.08));
+    return mix(calm, surge, covered);
   });

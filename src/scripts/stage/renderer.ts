@@ -175,6 +175,11 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     uniforms.pointerForce.value += (force - uniforms.pointerForce.value) * (snap ? 1 : follow(FOLLOW.pointerForce, delta));
     uniforms.scroll.value += (input.scroll - uniforms.scroll.value) * (snap ? 1 : follow(FOLLOW.scroll, delta));
 
+    // ページ遷移の覆い。呼び出し側が時間をかけて値を動かすので、ここでは追従させずそのまま写す
+    const flood = snap ? 0 : input.flood;
+    uniforms.flood.value = flood;
+    uniforms.floodOrigin.value.set(input.floodOrigin[0], input.floodOrigin[1]);
+
     // 球体: 画面上の位置（-1〜1）を、カメラから見た 3D 空間の位置へ直す
     const pointerX = uniforms.pointer.value.x * 2 - 1;
     const pointerY = 1 - uniforms.pointer.value.y * 2;
@@ -182,7 +187,9 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     const orbX = pose.x + (pointerX - pose.x) * pull;
     const orbY = pose.y + (pointerY - pose.y) * pull;
     orb.mesh.position.set(orbX * VIEW_HALF_HEIGHT * aspect, orbY * VIEW_HALF_HEIGHT, 0);
-    orb.mesh.scale.setScalar(Math.max(pose.size * 2 * VIEW_HALF_HEIGHT, 0.0001));
+    // 覆っている間は、球体も膨らませて大きくうねらせる
+    orb.mesh.scale.setScalar(Math.max(pose.size * 2 * VIEW_HALF_HEIGHT * (1 + flood * 0.3), 0.0001));
+    uniforms.orbWobble.value = 1 + flood * 1.4;
 
     // ポインタが球体に近いほど、その側を強くへこませる。距離は球体の半径を 1 として測る
     const radius = Math.max(pose.size * 2, 0.0001);
@@ -192,7 +199,7 @@ export const createStageRenderer = async (options: StageRendererOptions): Promis
     uniforms.orbPointer.value.set(towardX, towardY, 0.9).normalize();
     uniforms.orbDent.value = uniforms.pointerForce.value * Math.exp(-distance * distance * 0.35);
 
-    uniforms.time.value += delta * flow;
+    uniforms.time.value += delta * flow * (1 + flood * 3);
   };
 
   // 背景とは別の canvas に描く層。1 つのレンダラーで複数の canvas に描けるのは WebGPU のときだけ

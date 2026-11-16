@@ -97,6 +97,10 @@ export interface StageInput {
   pointerActive: number;
   /** スクロール量。画面の高さを 1 とする */
   scroll: number;
+  /** ページ遷移で背景が画面を覆っている度合い。0 で通常、1 で画面全体を覆う */
+  flood: number;
+  /** 覆いが広がり始める位置。画面左上を [0, 0]、右下を [1, 1] とする */
+  floodOrigin: [number, number];
 }
 
 export const createStageInput = (): StageInput => ({
@@ -104,4 +108,6 @@ export const createStageInput = (): StageInput => ({
   pointer: [0.5, 0.5],
   pointerActive: 0,
   scroll: 0,
+  flood: 0,
+  floodOrigin: [0.5, 0.5],
 });

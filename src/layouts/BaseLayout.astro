@@ -15,7 +15,8 @@ interface Props {
 const { title = 'My Portfolio', stage = 'default' } = Astro.props;
 ---
 
-<html lang='ja'>
+<!-- ページ遷移の見せ方は src/scripts/motion/pageTransition.ts で作るので、Astro 標準のフェードは切る -->
+<html lang='ja' transition:animate='none'>
   <head>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -51,6 +52,7 @@ const { title = 'My Portfolio', stage = 'default' } = Astro.props;
     <Analytics />
     <script>
       import '@/scripts/motion';
+      import '@/scripts/motion/pageTransition';
     </script>
   </body>
 </html>

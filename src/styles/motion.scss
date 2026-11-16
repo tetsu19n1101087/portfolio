@@ -29,6 +29,14 @@
   }
 }
 
+// ページ遷移で背景が画面を覆っている間は、新しいページの出現アニメーションを始めずに待たせる
+html.is-pageTransition {
+  [data-reveal='load'],
+  .c-SplitText[data-reveal='load'] .c-SplitText__char {
+    animation-play-state: paused;
+  }
+}
+
 @keyframes split-rise {
   from {
     opacity: 0;
