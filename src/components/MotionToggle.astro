@@ -1,0 +1,89 @@
+---
+// アニメーションの一時停止ボタン（WCAG 2.2.2 一時停止、停止、非表示）。
+// 「動きを減らす」設定のときは最初から何も動かないので出さない（CSS で隠し、切り替わったら JS でも合わせる）。
+// 後から現れるとナビの位置がずれるので、最初から表示しておく。
+---
+
+<button type="button" class="c-MotionToggle js-motionToggle">
+  <svg class="c-MotionToggle__icon c-MotionToggle__icon--pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path>
+  </svg>
+  <svg class="c-MotionToggle__icon c-MotionToggle__icon--play" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M8 5v14l11-7z"></path>
+  </svg>
+  <span class="u-srOnly js-motionToggleLabel">アニメーションを停止</span>
+</button>
+
+<script>
+  import { motionPreference } from '@/scripts/motion/preferences';
+
+  // ヘッダーごとページ遷移をまたいで使い続けるので、初期化は 1 回でよい
+  document.querySelectorAll<HTMLButtonElement>('.js-motionToggle').forEach((button) => {
+    const label = button.querySelector<HTMLElement>('.js-motionToggleLabel');
+
+    // 名前を「停止 / 再生」で切り替える。aria-pressed は併用しない（「押された再生ボタン」と読まれるため）
+    const sync = () => {
+      button.hidden = motionPreference.reduced;
+      button.dataset.state = motionPreference.paused ? 'paused' : 'playing';
+      if (label) {
+        label.textContent = motionPreference.paused ? 'アニメーションを再生' : 'アニメーションを停止';
+      }
+    };
+
+    button.addEventListener('click', () => {
+      motionPreference.setPaused(!motionPreference.paused);
+    });
+    motionPreference.subscribe(sync);
+    sync();
+  });
+</script>
+
+<style lang="scss">
+  .c-MotionToggle {
+    display: grid;
+    place-items: center;
+    width: rem(40);
+    height: rem(40);
+    padding: 0;
+    color: var(--color-text);
+    cursor: pointer;
+    background: transparent;
+
+    // 背景が動いて明るさが変わっても輪郭が見えるよう、文字色を薄めた色にする
+    border: 1px solid color-mix(in srgb, var(--color-text) 35%, transparent);
+    border-radius: 50%;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease;
+
+    // hidden 属性より display: grid が勝ってしまうため、明示的に消す
+    &[hidden] {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      display: none;
+    }
+
+    @include hover {
+      color: var(--color-accent-hover);
+      border-color: var(--color-accent-hover);
+    }
+
+    &__icon {
+      fill: currentcolor;
+
+      &--play {
+        display: none;
+      }
+    }
+
+    &[data-state='paused'] &__icon--pause {
+      display: none;
+    }
+
+    &[data-state='paused'] &__icon--play {
+      display: block;
+    }
+  }
+</style>

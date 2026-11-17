@@ -1,21 +1,118 @@
 ---
+import MotionToggle from '@/components/MotionToggle.astro';
 ---
 
-<header class='l-Header'>
+<header class='l-Header js-header' transition:persist='header'>
   <div class='l-Header__inner'>
     <a class='l-Header__brand' href='/'>Tetsuro Tsunehara</a>
     <nav class='l-Header__nav' aria-label='メインナビゲーション'>
       <a class='l-Header__link' href='/works'>Works</a>
+      <MotionToggle />
     </nav>
   </div>
 </header>
 
+<script>
+  // ページ最上部では透明、スクロールすると背景を敷く。下へ進むと隠れ、上へ戻ると現れる。
+  // ヘッダーはページ遷移をまたいで使い続けるので、初期化は 1 回でよい
+  const header = document.querySelector<HTMLElement>('.js-header');
+
+  if (header) {
+    /** 背景を敷き始めるスクロール量 */
+    const SCROLLED_AT = 8;
+    /** 向きが変わったとみなす最小の移動量。慣性の小さな揺れで開閉を繰り返さないため */
+    const DIRECTION_THRESHOLD = 6;
+
+    const headerHeight = header.offsetHeight;
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const y = window.scrollY;
+      header.classList.toggle('is-scrolled', y > SCROLLED_AT);
+
+      const moved = y - lastY;
+      if (Math.abs(moved) < DIRECTION_THRESHOLD) {
+        return;
+      }
+      header.classList.toggle('is-hidden', moved > 0 && y > headerHeight);
+      lastY = y;
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) {
+          return;
+        }
+        ticking = true;
+        requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+
+    // ページが替わったら、必ず見える状態から始める
+    document.addEventListener('astro:after-swap', () => {
+      lastY = window.scrollY;
+      header.classList.remove('is-hidden');
+      header.classList.toggle('is-scrolled', lastY > SCROLLED_AT);
+    });
+
+    update();
+  }
+</script>
+
 <style lang='scss'>
   .l-Header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 10;
     display: grid;
     align-content: center;
-    min-height: rem(72);
-    padding: rem(12) 0;
+    min-height: var(--header-height);
+    padding: rem(12) rem(24);
+    transition: translate 320ms ease;
+
+    @include min-screen(md) {
+      padding-inline: rem(48);
+    }
+
+    @include min-screen(lg) {
+      padding-inline: rem(96);
+    }
+
+    // 位置の移動は動きとして大きいので、「動きを減らす」設定では瞬時に切り替える
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    // スクロール後に敷く半透明の背景。ぼかしごと不透明度で出し入れする
+    &::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: '';
+      background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+      opacity: 0;
+      backdrop-filter: blur(#{rem(14)});
+      transition: opacity 240ms ease;
+    }
+
+    &.is-scrolled::before {
+      opacity: 1;
+    }
+
+    &.is-hidden {
+      translate: 0 -100%;
+    }
+
+    // キーボードで中のリンクやボタンに移動したときは、隠れていても必ず見せる。
+    // :focus-within だとマウスで押した後も当てはまり続け、スクロールしても隠れなくなる
+    &:has(:focus-visible) {
+      translate: 0 0;
+    }
 
     &__inner {
       display: flex;

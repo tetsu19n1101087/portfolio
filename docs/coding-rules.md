@@ -31,6 +31,7 @@ src/styles/
 ├── variables.scss       # CSSカスタムプロパティ
 ├── base.scss            # html / body など
 ├── utilities.scss       # .u-srOnly などのユーティリティ
+├── motion.scss          # 出現アニメーションの共通スタイル（data-reveal）
 └── develop/             # 出力を持たない道具（追加データとして自動注入）
     ├── _index.scss      # @forward で集約
     ├── breakpoint.scss  # $breakpoints / min-screen()
@@ -39,7 +40,9 @@ src/styles/
 ```
 
 ### 2-2. `develop/` （出力を持たない道具）
-`astro.config.mjs` の `additionalData` で全SCSSに自動注入されている。各コンポーネント側で `@use` を書く必要はない。
+`astro.config.mjs` の `additionalData` で、各コンポーネントの `<style lang="scss">` と `global.scss` に自動注入されている。各コンポーネント側で `@use` を書く必要はない。
+
+ただし、`global.scss` から `@use` で読み込まれるファイル（`base.scss`・`motion.scss` など）には注入されない。これらのファイルでは `rem()` や `min-screen()` が使えないので、値を直接書く。
 
 #### ① サイズ指定は `rem()` を使う
 px 値をそのまま書かず、`rem()` 計算関数を使う。
@@ -96,6 +99,10 @@ SPの値をベースに書き、`@include min-screen(<name>)` で広い画面の
 - **SCSS変数（`develop/`）**: ビルド時に計算・展開される値（ブレークポイント、計算用定数など）
 - **CSSカスタムプロパティ（`variables.scss`）**: 実行時に参照・上書きされる値（テーマカラー、フォントファミリー、ギャップなど）
 
+配色はダーク単一とする。色はコンポーネントに直接書かず、`variables.scss` のトークンを参照する。半透明の色が必要なときは `color-mix(in srgb, var(--color-dark) 40%, transparent)` のようにトークンから作る。
+
+`variables.scss` は `yarn tokens:pull` を実行すると Figma の値で丸ごと上書きされる。色を変えるときは Figma の Design Tokens も同じ値に更新する。
+
 #### ⑤ クラス命名規則 (FLOCSS + BEM)
 - FLOCSS 接頭辞（`l-`, `c-`, `p-`, `u-`, `is-`, `js-`）またはケバブケース＋BEM記法を使用する。
 - Stylelint（`selector-class-pattern`）により、Block は UpperCamelCase（例: `.p-Card`）、Element は `__lowerCamel`、Modifier は `--lowerCamel` が強制される。
@@ -139,7 +146,71 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 5. 記事下書き（drafts）執筆規約
+## 5. アニメーション / WebGL
+
+全ページの背景に WebGL の描画があり、見出しや画像が動きを伴って現れる。演出を足すときは、次の決まりに従う。
+
+### 5-1. 構成
+
+```
+src/scripts/
+├── motion/
+│   ├── preferences.ts     # 動かしてよいかの判定（停止ボタン・「動きを減らす」設定）
+│   ├── index.ts           # スクロールに連動する DOM のアニメーション（GSAP + ScrollTrigger）
+│   └── pageTransition.ts  # ページ遷移の演出
+├── stage/                 # 全ページ共通の背景（three.js）
+│   ├── index.ts           # 入口。three.js には依存しない
+│   ├── presets.ts         # 場面ごとの色・流れ・球体の位置
+│   ├── renderer.ts        # 描画本体。ここから先だけが three.js に依存する
+│   ├── background.ts      # 液体グラデーションのシェーダー
+│   ├── orb.ts             # 球体のシェーダー
+│   ├── imageReveal.ts     # 作品カードの画像が溶け出す演出
+│   └── carouselDistortion.ts  # カルーセルが動く間のゆがみ
+├── workCard.ts            # 作品カードの出現と傾き
+└── carousel.ts            # カルーセル
+```
+
+### 5-2. 動かしてよいかは必ず `motionPreference` で判定する
+
+動きを止める理由は 2 つある。利用者がヘッダーの停止ボタンを押した場合と、OS で「視差効果を減らす」を選んでいる場合である。どちらも `src/scripts/motion/preferences.ts` の `motionPreference` にまとめてある。
+
+- 動きを足すスクリプトは、`motionPreference.allowed` が `true` のときだけ動かす。`subscribe()` で変化を受け取り、途中で止められたら最終状態へ戻す。
+- 5 秒を超えて自動で動き続けるものを足したら、停止ボタンで止まることを確認する（WCAG 2.2.2 一時停止、停止、非表示）。
+- CSS だけのアニメーションは `@media (prefers-reduced-motion: no-preference)` の中に書き、`html:not(.is-motionPaused)` を条件に付ける。動かさないときに要素が隠れたままにならないよう、通常の状態を最終状態にしておく。
+- 「動きを減らす」設定のとき、背景は静止した 1 フレームだけを描く。
+
+### 5-3. 最初の画面の表示を遅らせない
+
+- three.js と GSAP は、最初の描画を妨げない形で読み込む。three.js は、ページの読み込みと手すきを待ってから動的 import する。
+- 最初の画面に見える見出しや要素は、`data-reveal="load"` を付けて CSS だけで動かす。JS の読み込みを待って隠したり出したりしない（最大コンテンツの描画が遅れるため）。
+- スクロールで現れる要素は `data-reveal="scroll"` を付ける。すでに画面内にある要素は対象から外れ、そのまま表示される。
+- 見出しを 1 文字ずつ動かすときは `SplitText.astro` を使う。文字の分割はビルド時に済ませ、読み上げには元の文字列を使う。分割した文字には `text-transform: capitalize` が 1 文字ごとに効くので、併用しない。
+
+### 5-4. スクロール
+
+慣性スクロール（スクロールを JS で乗っ取って滑らかにする仕組み）は入れない。キーボード操作やページ内リンクの動きを変えないためである。スクロールに連動させるときは、ブラウザ標準のスクロールに GSAP の ScrollTrigger を合わせる。
+
+### 5-5. 背景（three.js）
+
+- レンダラーは WebGPURenderer を 1 つだけ作り、ページ遷移をまたいで使い回す。WebGPU が使えない環境では、three.js が自動で WebGL2 に切り替える。どちらも使えない環境では、CSS の静的な背景が見える。
+- シェーダーは TSL で書く。WebGPU と WebGL2 の両方で同じ見た目になる。
+- 背景の色や球体の位置を場所ごとに変えるときは、`presets.ts` に場面を足し、対象の要素に `data-stage="<場面名>"` を付ける。ページ全体の場面は `BaseLayout` の `stage` で指定する。
+- 文字の背後が明るくなりすぎないよう、場面の色は暗めにする。色は球体の位置で最も明るくなり、離れるほど暗くなる。
+- 背景とは別の canvas に描く演出（作品カード、カルーセル）は、同じレンダラーの描き先を切り替えて描く。この切り替えは WebGPU でしか使えないので、使えないときの見せ方（CSS の出現、演出なし）を必ず用意する。
+- 画像をテクスチャにするときは、`<img>` に `crossorigin="anonymous"` を付け、表示する大きさに縮めた ImageBitmap を作って渡す。`<img>` をそのまま渡すと、表示上の大きさでテクスチャが確保され、元画像の左上だけが切り取られる。
+- URL に `?renderer=webgl2` を付けて開くと、WebGPU が使える環境でも WebGL2 側の描画を確認できる。
+
+### 5-6. ページ遷移
+
+Astro の ClientRouter でページの中身だけを入れ替えている。次の点に注意する。
+
+- `<script>` は最初の 1 回しか実行されない。ページごとの初期化は `astro:page-load` で行い、`astro:before-swap` で片付ける。
+- 背景（`Stage.astro`）とヘッダーは `transition:persist` でページをまたいで同じ要素を使い続ける。これらの初期化は 1 回でよい。
+- `<html>` の属性はページごとに置き換わる。`<html>` に付けたクラスは `astro:after-swap` で付け直す。
+
+---
+
+## 6. 記事下書き（drafts）執筆規約
 
 `drafts/` 配下で記事・実績紹介などの Markdown 下書きを作成・編集する際は、詳細ルール（`docs/draft-rules.md`）に従うこと。
 
@@ -151,15 +222,16 @@ Astro の `<script>` は `type="module"`（defer相当）として出力され�
 
 ---
 
-## 6. 依存関係とツールチェーンの注意点
+## 7. 依存関係とツールチェーンの注意点
 
 - **Yarn Berry + Astro 7**: `@astrojs/check` 等が要求する `@emnapi/runtime` は peerDependency のため、Yarn Berry（nodeLinker）環境では `devDependencies` に明示追加して解決する。
 - **Vercel アダプターの互換性**: Astro 7 には `@astrojs/vercel: ^11.x` を採用する。
 - **テレメトリ抑止**: CI やサンドボックス環境で書き込みエラーが出る場合は、コマンド実行時に `ASTRO_TELEMETRY_DISABLED=1` を指定する。
+- **three.js と GSAP はバージョンを固定する**: `three`・`@types/three`・`gsap` は `^` を付けずに固定している。three.js の WebGPURenderer と TSL は毎月のリリースで API の改名や挙動の変更が入るため、更新するときは移行ガイドを確認し、WebGPU と WebGL2 の両方で表示を確かめる。`three` と `@types/three` は同じバージョンに揃える。
 
 ---
 
-## 7. 品質検証コマンド
+## 8. 品質検証コマンド
 
 コード変更後は以下のコマンドで品質を検査する。
 
@@ -179,7 +251,7 @@ yarn verify
 
 ---
 
-## 8. コミット規約
+## 9. コミット規約
 
 コミットメッセージは [Conventional Commits](https://www.conventionalcommits.org/ja/v1.0.0/) 形式に従い、**プレフィックスの後ろ（説明部分）は日本語で記述**する。
 

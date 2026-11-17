@@ -4,7 +4,8 @@ import tseslint from 'typescript-eslint';
 import astro from 'eslint-plugin-astro';
 
 export default defineConfig([
-  globalIgnores(['dist/', '.astro/', '.vercel/', '.next/']),
+  // .claude/ は作業用の worktree が入る場所。別の tsconfig を拾って解析に失敗するため除外する
+  globalIgnores(['dist/', '.astro/', '.vercel/', '.next/', '.claude/']),
   js.configs.recommended,
   tseslint.configs.recommended,
   astro.configs['flat/recommended'],

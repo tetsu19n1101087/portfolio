@@ -4,6 +4,7 @@ export const prerender = false;
 import { getWorkById } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Carousel from '@/components/Carousel.astro';
+import SplitText from '@/components/SplitText.astro';
 
 const { id } = Astro.params;
 const work = await getWorkById(id!);
@@ -14,11 +15,13 @@ const heroImage = work.image ?? work.images?.[0];
 const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 ---
 
-<BaseLayout title={`${work.title} | Tetsuro Tsunehara`}>
+<BaseLayout title={`${work.title} | Tetsuro Tsunehara`} stage="workDetail">
   <article class="p-WorkDetail">
     <div class="p-WorkDetail__header">
-      <h1 class="p-WorkDetail__title">{work.title}</h1>
-      <div class="p-WorkDetail__meta">
+      <h1 class="p-WorkDetail__title"><SplitText text={work.title} /></h1>
+      <div class="p-WorkDetail__meta" data-reveal="load" style="
+
+--reveal-order: 2">
         <time class="p-WorkDetail__date">{work.date}</time>
         {
           work.tags.length > 0 && (
@@ -32,7 +35,9 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       </div>
     </div>
     <div class="p-WorkDetail__body">
-      <div class="p-WorkDetail__hero">
+      <div class="p-WorkDetail__hero" data-reveal="load" style="
+
+--reveal-order: 3">
         {
           work.images && work.images.length > 0 ? (
             <Carousel images={work.images} />
@@ -43,7 +48,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
       </div>
       {
         (work.demoLink || work.codeLink) && (
-          <dl class="p-WorkDetail__links">
+          <dl class="p-WorkDetail__links" data-reveal="scroll">
             {
               work.demoLink && (
                 <div class="p-WorkDetail__linkItem">
@@ -113,7 +118,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     align-items: center;
     width: fit-content;
     font-size: rem(14);
-    color: #6b7280;
+    color: var(--color-text-muted);
     transition: color 160ms ease;
 
     @include hover {
@@ -146,7 +151,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
 
   .p-WorkDetail__date {
     font-size: rem(14);
-    color: #6b7280;
+    color: var(--color-text-muted);
   }
 
   .p-WorkDetail__tags {
@@ -163,7 +168,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     font-size: rem(12);
     font-weight: 600;
     color: var(--color-accent);
-    background: rgb(14 165 164 / 8%);
+    background: color-mix(in srgb, var(--color-accent) 14%, transparent);
     border-radius: 999px;
   }
 
@@ -184,7 +189,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     padding-left: rem(16);
     font-size: rem(16);
     line-height: 1.8;
-    color: #4b5563;
+    color: var(--color-text-muted);
     border-left: 3px solid var(--color-accent);
   }
 
@@ -205,7 +210,7 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     :global(h2) {
       padding-bottom: rem(8);
       font-size: rem(24);
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--color-border);
     }
 
     :global(p) {
@@ -231,8 +236,8 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     :global(blockquote) {
       padding: rem(12) rem(16);
       margin: rem(16) 0;
-      color: #6b7280;
-      background: #f9fafb;
+      color: var(--color-text-muted);
+      background: var(--color-surface);
       border-left: 4px solid var(--color-accent);
       border-radius: 0 var(--radius) var(--radius) 0;
 
@@ -254,12 +259,12 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     :global(td) {
       padding: rem(8) rem(12);
       text-align: left;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--color-border);
     }
 
     :global(th) {
       font-weight: 600;
-      background: #f9fafb;
+      background: var(--color-surface);
     }
 
     :global(pre) {
@@ -274,15 +279,17 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     :global(code:not(pre code)) {
       padding: rem(2) rem(6);
       font-size: rem(14);
-      color: #eb5757;
-      background: rgb(2 6 23 / 5%);
+
+      // 暗い背景で読める明るさの赤。インラインコード専用でトークン化していない
+      color: #f87171;
+      background: color-mix(in srgb, var(--color-text) 8%, transparent);
       border-radius: rem(4);
     }
 
     :global(hr) {
       margin: rem(32) 0;
       border: 0;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--color-border);
     }
 
     :global(img) {
@@ -359,12 +366,13 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
   }
 
   :global(.c-Carousel__view) {
+    position: relative;
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    background: #f3f4f6;
+    background: var(--color-surface);
     border-radius: calc(var(--radius) * 2);
-    box-shadow: 0 4px 20px rgb(2 6 23 / 8%);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-dark) 50%, transparent);
   }
 
   :global(.c-Carousel__track) {
@@ -380,5 +388,23 @@ const displayDemoUrl = work.demoLink ? work.demoLink.replace(/^https?:\/\//, '')
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  // 動いている間のゆがみを描く canvas。演出の間だけ見せ、その間は元の画像を透明にする
+  :global(.c-Carousel__canvas) {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  :global(.c-Carousel__view.is-distorting .c-Carousel__canvas) {
+    visibility: visible;
+  }
+
+  :global(.c-Carousel__view.is-distorting .c-Carousel__track) {
+    opacity: 0;
   }
 </style>

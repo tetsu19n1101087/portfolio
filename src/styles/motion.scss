@@ -1,0 +1,56 @@
+// 出現アニメーションの共通スタイル。
+// data-reveal="load"   ページを開いたときに CSS だけで再生する（最初の画面に見える要素用）
+// data-reveal="scroll" 画面に入ったときに GSAP で再生する（src/scripts/motion/index.ts）
+// どちらも、動かさないとき（JS 無効・「動きを減らす」設定・停止ボタン）は最終状態のまま表示される。
+
+// 文字分割（SplitText.astro）。単語の途中では改行させない
+.c-SplitText__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.c-SplitText__char {
+  display: inline-block;
+}
+
+// is-revealDone: このページで一度でも動きを止めた印。再生に戻しても、出現をやり直さない
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.is-motionPaused, .is-revealDone) {
+    // 1 文字ずつ、下から起き上がるように現れる
+    .c-SplitText[data-reveal='load'] .c-SplitText__char {
+      animation: split-rise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation-delay: calc(var(--i, 0) * 28ms + 80ms);
+    }
+
+    // まとまりごと、下から浮かび上がる。--reveal-order で順番をずらす
+    [data-reveal='load']:not(.c-SplitText) {
+      animation: reveal-rise 800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--reveal-order, 0) * 120ms + 240ms);
+    }
+  }
+}
+
+// ページ遷移で背景が画面を覆っている間は、新しいページの出現アニメーションを始めずに待たせる
+html.is-pageTransition {
+  [data-reveal='load'],
+  .c-SplitText[data-reveal='load'] .c-SplitText__char {
+    animation-play-state: paused;
+  }
+}
+
+// 始まりを完全な透明にしない。最初の描画の時点で文字が（薄く）見えている状態にして、
+// 「主要な内容が表示された時刻」（LCP）がアニメーションの分だけ遅れるのを防ぐ
+@keyframes split-rise {
+  from {
+    opacity: 0.25;
+    rotate: 6deg;
+    translate: 0 0.4em;
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0.25;
+    translate: 0 1.25rem;
+  }
+}

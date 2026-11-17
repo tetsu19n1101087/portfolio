@@ -9,6 +9,7 @@
 - **フレームワーク**: Astro 7.x（`@astrojs/vercel` / Vercel ISR / SSR）
 - **言語**: TypeScript 6.x
 - **スタイル**: SCSS 二層構成 / FLOCSS + BEM
+- **アニメーション**: three.js（WebGPURenderer + TSL）の背景 / GSAP + ScrollTrigger
 - **CMS**: microCMS (`microcms-js-sdk`)
 - **パッケージマネージャ**: Yarn 4.x (Berry)
 
@@ -16,7 +17,7 @@
 
 ## 2. 実装・執筆時の重要ルール
 
-実装の詳細な規約（CSS設計、アクセシビリティ、JS、依存関係の注意など）はすべて **`docs/coding-rules.md`** を参照すること。
+実装の詳細な規約（CSS設計、アクセシビリティ、JS、アニメーションと WebGL、依存関係の注意など）はすべて **`docs/coding-rules.md`** を参照すること。
 記事の文章作成・下書きを行う際は、必ず **`docs/draft-rules.md`** を参照すること（太字禁止などのルールあり）。
 
 特に以下の点は重要：

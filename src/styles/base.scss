@@ -1,3 +1,15 @@
+// ダーク単一のテーマ。スクロールバーなどブラウザ標準の UI も暗色に揃える
+html {
+  // 画面上部に固定するヘッダーの高さ（72px）。
+  // このファイルは @use で読み込まれるため develop/ の rem() が使えず、値を直接書く
+  --header-height: 4.5rem;
+
+  color-scheme: dark;
+
+  // キーボード操作やページ内リンクで移動した先が、固定ヘッダーの下に隠れないようにする
+  scroll-padding-top: var(--header-height);
+}
+
 html,
 body {
   font-family: var(--font-sans);

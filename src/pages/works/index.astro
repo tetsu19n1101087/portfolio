@@ -3,22 +3,24 @@ export const prerender = false;
 
 import { getWorks } from '@/lib/works';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import SplitText from '@/components/SplitText.astro';
 import WorkCard from '@/components/WorkCard.astro';
 
 const works = await getWorks();
 ---
 
-<BaseLayout title="Works | My Portfolio">
+<BaseLayout title="Works | My Portfolio" stage="worksIndex">
   <section class="p-WorksIndex" aria-labelledby="works-heading">
     <div class="p-WorksIndex__heading">
-      <h1 id="works-heading" class="p-WorksIndex__title">Works</h1>
+      <h1 id="works-heading" class="p-WorksIndex__title"><SplitText text="Works" /></h1>
     </div>
     {
       works.length > 0 ? (
         <ul class="p-WorksIndex__grid">
-          {works.map((work) => (
+          {works.map((work, index) => (
             <li class="p-WorksIndex__item">
-              <WorkCard work={work} />
+              {/* 最初の画面に見える上段は、読み込みを待たずに CSS で現す */}
+              <WorkCard work={work} reveal={index < 3 ? 'load' : 'scroll'} order={index + 2} />
             </li>
           ))}
         </ul>
@@ -44,7 +46,6 @@ const works = await getWorks();
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.1;
     color: var(--color-accent);
-    text-transform: capitalize;
     letter-spacing: rem(0.1);
   }
 
@@ -73,7 +74,7 @@ const works = await getWorks();
 
   .p-WorksIndex__empty {
     padding: rem(16) 0;
-    color: #6b7280;
+    color: var(--color-text-muted);
   }
 
   .p-WorksIndex__back {
@@ -82,7 +83,7 @@ const works = await getWorks();
     align-items: center;
     padding-top: rem(24);
     font-size: rem(14);
-    color: #6b7280;
+    color: var(--color-text-muted);
     transition: color 160ms ease;
 
     @include hover {

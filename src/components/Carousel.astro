@@ -15,11 +15,20 @@ const { images } = Astro.props;
       {
         images.map((image, i) => (
           <div class='c-Carousel__item'>
-            <img src={image.url} alt={`${i + 1}`} width={image.width ?? 800} height={image.height ?? 600} loading='lazy' />
+            {/* crossorigin: 動いている間のゆがみ演出で、この画像を WebGL のテクスチャに使うために必要 */}
+            <img
+              src={image.url}
+              alt={`${i + 1}`}
+              width={image.width ?? 800}
+              height={image.height ?? 600}
+              loading='lazy'
+              crossorigin='anonymous'
+            />
           </div>
         ))
       }
     </div>
+    <canvas class='c-Carousel__canvas js-carouselCanvas' aria-hidden='true'></canvas>
   </div>
   <!-- <button class='btn btn-next' aria-label='Next'> › </button> -->
 </div>
